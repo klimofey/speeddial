@@ -47,4 +47,6 @@ export const DEFAULT_SETTINGS: Settings = {
   screenshotTemplate: '',
   showRecent: true,
   suggestProvider: 'duckduckgo',
+  clockFormat: '24h',
+  worldClocks: [],
 };

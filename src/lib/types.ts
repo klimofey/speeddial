@@ -5,6 +5,12 @@ export type SearchEngine = 'google' | 'duckduckgo' | 'bing';
 export type CardSize = 'sm' | 'md' | 'lg';
 export type SuggestProvider = 'off' | 'duckduckgo' | 'google';
 
+export interface WorldClock {
+  id: string;
+  timeZone: string;
+  label: string;
+}
+
 export interface Dial {
   id: string;
   url: string;
@@ -39,6 +45,8 @@ export interface Settings {
   screenshotTemplate: string;    // e.g. "https://service.example/{url}"
   showRecent: boolean;
   suggestProvider: SuggestProvider;
+  clockFormat: '24h' | '12h';
+  worldClocks: WorldClock[];
 }
 
 export interface StoredImage {
