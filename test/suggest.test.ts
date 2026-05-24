@@ -19,7 +19,7 @@ describe('fetchSuggestions', () => {
   });
 
   it('hits the duckduckgo endpoint', async () => {
-    const f = vi.fn(async () => ({ ok: true, json: async () => ['x', ['x1']] }));
+    const f = vi.fn(async (_url: string) => ({ ok: true, json: async () => ['x', ['x1']] }));
     vi.stubGlobal('fetch', f);
     await fetchSuggestions('duckduckgo', 'x y');
     expect(f.mock.calls[0][0]).toContain('duckduckgo.com/ac/');
@@ -27,7 +27,7 @@ describe('fetchSuggestions', () => {
   });
 
   it('hits the google endpoint', async () => {
-    const f = vi.fn(async () => ({ ok: true, json: async () => ['x', ['x1']] }));
+    const f = vi.fn(async (_url: string) => ({ ok: true, json: async () => ['x', ['x1']] }));
     vi.stubGlobal('fetch', f);
     await fetchSuggestions('google', 'x');
     expect(f.mock.calls[0][0]).toContain('suggestqueries.google.com/complete/search');
