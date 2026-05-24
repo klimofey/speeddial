@@ -1,0 +1,8 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg, #f4f5f7);
+  color: var(--fg, #1a1a1a);
+}
+#app { min-height: 100vh; }
