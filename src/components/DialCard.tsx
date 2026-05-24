@@ -22,7 +22,10 @@ export function DialCard({ dial, settings, onEdit, onDelete, editing = false, on
     return () => { alive = false; };
   }, [dial, settings]);
 
-  const onImgError = () => setPreview(letterFallback(dial));
+  const onImgError = () => {
+    if (preview?.kind === 'favicon' && preview.next) setPreview({ kind: 'favicon', src: preview.next });
+    else setPreview(letterFallback(dial));
+  };
 
   // Drag the corner handle: every RESIZE_STEP_PX of movement changes the span by
   // one cell (no DOM measurement needed, so it is robust and testable).

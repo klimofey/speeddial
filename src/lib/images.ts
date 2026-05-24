@@ -4,12 +4,26 @@ import { colorForKey, initialFor } from './color';
 
 export type Preview =
   | { kind: 'image'; src: string }
-  | { kind: 'favicon'; src: string }
+  | { kind: 'favicon'; src: string; next?: string }
   | { kind: 'letter'; letter: string; color: string };
 
 export function faviconUrl(pageUrl: string, size = 64): string {
   const base = chrome.runtime.getURL('/_favicon/');
   return `${base}?pageUrl=${encodeURIComponent(pageUrl)}&size=${size}`;
+}
+
+export function appleTouchIconUrl(pageUrl: string): string {
+  try {
+    return new URL('/apple-touch-icon.png', pageUrl).href;
+  } catch {
+    return '';
+  }
+}
+
+// Crisp-first favicon preview: apple-touch-icon, falling back to a 128px favicon.
+function faviconPreview(pageUrl: string): Preview {
+  const fav = faviconUrl(pageUrl, 128);
+  return { kind: 'favicon', src: appleTouchIconUrl(pageUrl) || fav, next: fav };
 }
 
 // Reads a File into a data URL (used by the upload flow in CardEditor).
@@ -50,13 +64,13 @@ export async function resolvePreview(dial: Dial, settings: Settings): Promise<Pr
     if (settings.useScreenshots && settings.screenshotTemplate) {
       return { kind: 'image', src: settings.screenshotTemplate.replace('{url}', encodeURIComponent(dial.url)) };
     }
-    return { kind: 'favicon', src: faviconUrl(dial.url) };
+    return faviconPreview(dial.url);
   }
   if (dial.imageRef !== 'favicon') {
     const img = await getImage(dial.imageRef);
     if (img) return { kind: 'image', src: img.data };
   }
-  return { kind: 'favicon', src: faviconUrl(dial.url) };
+  return faviconPreview(dial.url);
 }
 
 export function letterFallback(dial: Dial): Preview {
