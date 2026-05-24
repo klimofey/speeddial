@@ -33,3 +33,28 @@ const local = createArea();
 export const mockChrome = { sync, local };
 
 beforeEach(() => { sync._reset(); local._reset(); vi.clearAllMocks(); });
+
+// jsdom in this version ships a Blob without text()/arrayBuffer(); polyfill them
+// for tests that serialize/parse Blobs. Real browsers provide these natively.
+if (typeof Blob !== 'undefined') {
+  if (typeof Blob.prototype.text !== 'function') {
+    Blob.prototype.text = function (): Promise<string> {
+      return new Promise<string>((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result as string);
+        r.onerror = () => reject(r.error);
+        r.readAsText(this as unknown as Blob);
+      });
+    };
+  }
+  if (typeof Blob.prototype.arrayBuffer !== 'function') {
+    Blob.prototype.arrayBuffer = function (): Promise<ArrayBuffer> {
+      return new Promise<ArrayBuffer>((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result as ArrayBuffer);
+        r.onerror = () => reject(r.error);
+        r.readAsArrayBuffer(this as unknown as Blob);
+      });
+    };
+  }
+}
