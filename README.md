@@ -5,6 +5,7 @@ trackers, no telemetry. External requests happen only when you explicitly add an
 image by URL or opt into the screenshot service.
 
 ## Features
+- Resizable dashboard grid: an **Edit** mode to drag-reorder, resize (grid spans), and remove cards; auto-packing and responsive
 - Drag-and-drop cards (SortableJS)
 - Per-card previews: site icon, letter+color, uploaded image, or image URL
 - Optional screenshot previews (off by default; warns before sending URLs out)
