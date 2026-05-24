@@ -43,7 +43,9 @@ export async function setSettings(settings: Settings): Promise<void> {
 
 export async function getDials(): Promise<Dial[]> {
   const dials = await getSynced<Dial[]>(K_DIALS, []);
-  return [...dials].sort((a, b) => a.order - b.order);
+  return [...dials]
+    .sort((a, b) => a.order - b.order)
+    .map((d) => ({ ...d, size: d.size ?? { w: 1, h: 1 } }));
 }
 
 export async function setDials(dials: Dial[]): Promise<void> {

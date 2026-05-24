@@ -18,6 +18,7 @@ export interface Dial {
   imageRef: ImageRef;
   color: string; // used for the 'letter' preview mode
   order: number;
+  size?: { w: number; h: number }; // grid span in cells; defaults to 1x1
 }
 
 export interface Theme {

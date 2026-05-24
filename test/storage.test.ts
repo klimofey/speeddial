@@ -50,4 +50,14 @@ describe('storage', () => {
     mockChrome.sync.set.mockRejectedValueOnce(new Error('Missing host permission'));
     await expect(storage.setDials([dial('a', 0)])).rejects.toThrow(/permission/i);
   });
+
+  it('defaults a missing dial size to 1x1 and preserves an existing size', async () => {
+    await chrome.storage.sync.set({ dials: [
+      { id: 'a', url: 'https://a.com', title: 'a', imageRef: 'favicon', color: '#000', order: 0 },
+      { id: 'b', url: 'https://b.com', title: 'b', imageRef: 'favicon', color: '#000', order: 1, size: { w: 2, h: 2 } },
+    ] });
+    const got = await storage.getDials();
+    expect(got[0].size).toEqual({ w: 1, h: 1 });
+    expect(got[1].size).toEqual({ w: 2, h: 2 });
+  });
 });
