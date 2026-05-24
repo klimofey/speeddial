@@ -25,12 +25,17 @@ function createArea() {
 const sync = createArea();
 const local = createArea();
 
+const history = { search: vi.fn(async () => [] as Array<{ url?: string; title?: string; lastVisitTime?: number; visitCount?: number }>) };
+const permissions = { request: vi.fn(async () => true), contains: vi.fn(async () => false) };
+
 (globalThis as unknown as { chrome: unknown }).chrome = {
   storage: { sync, local, onChanged: { addListener: vi.fn(), removeListener: vi.fn() } },
   runtime: { getURL: (p: string) => 'chrome-extension://test' + p },
+  history,
+  permissions,
 };
 
-export const mockChrome = { sync, local };
+export const mockChrome = { sync, local, history, permissions };
 
 beforeEach(() => { sync._reset(); local._reset(); vi.clearAllMocks(); });
 

@@ -45,4 +45,6 @@ export const DEFAULT_SETTINGS: Settings = {
   background: { type: 'theme', value: '' },
   useScreenshots: false,
   screenshotTemplate: '',
+  showRecent: true,
+  suggestProvider: 'duckduckgo',
 };

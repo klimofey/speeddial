@@ -3,6 +3,7 @@ export const SCHEMA_VERSION = 1;
 export type ImageRef = 'favicon' | 'letter' | string; // any other string = key into local.images
 export type SearchEngine = 'google' | 'duckduckgo' | 'bing';
 export type CardSize = 'sm' | 'md' | 'lg';
+export type SuggestProvider = 'off' | 'duckduckgo' | 'google';
 
 export interface Dial {
   id: string;
@@ -36,6 +37,8 @@ export interface Settings {
   background: Background;
   useScreenshots: boolean;       // off by default; sends URLs to a 3rd party when on
   screenshotTemplate: string;    // e.g. "https://service.example/{url}"
+  showRecent: boolean;
+  suggestProvider: SuggestProvider;
 }
 
 export interface StoredImage {
