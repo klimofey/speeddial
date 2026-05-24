@@ -69,6 +69,7 @@ export function SearchBar({ engine, suggestProvider, onFilter }: Props) {
         value={value}
         onInput={onInput}
         onKeyDown={onKeyDown}
+        onBlur={() => { setSuggestions([]); setActive(-1); }}
       />
       {suggestions.length > 0 && (
         <ul class="suggestions">

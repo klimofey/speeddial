@@ -52,4 +52,14 @@ describe('SearchBar suggestions', () => {
     fireEvent.keyDown(input, { key: 'Escape' });
     expect(screen.queryByText('cats')).toBeNull();
   });
+
+  it('closes suggestions when the input loses focus (outside click)', async () => {
+    vi.spyOn(suggest, 'fetchSuggestions').mockResolvedValue(['cats']);
+    render(<SearchBar engine="google" suggestProvider="duckduckgo" onFilter={() => {}} />);
+    const input = screen.getByRole('textbox');
+    fireEvent.input(input, { target: { value: 'ca' } });
+    await waitFor(() => screen.getByText('cats'));
+    fireEvent.blur(input);
+    expect(screen.queryByText('cats')).toBeNull();
+  });
 });
