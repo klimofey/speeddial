@@ -46,3 +46,20 @@ export async function scrapeImages(pageUrl: string): Promise<string[]> {
   }
   return out;
 }
+
+// Domain-derived icon URLs from keyless services. No fetch and no host permission
+// (these are rendered as <img src>). Each may 404; the gallery hides broken ones.
+export function iconSources(pageUrl: string): string[] {
+  let host: string;
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    return [];
+  }
+  if (!host) return [];
+  return [
+    `https://www.google.com/s2/favicons?domain=${host}&sz=256`,
+    `https://icons.duckduckgo.com/ip3/${host}.ico`,
+    `https://icon.horse/icon/${host}`,
+  ];
+}

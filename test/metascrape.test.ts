@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { scrapeImages } from '../src/lib/metascrape';
+import { scrapeImages, iconSources } from '../src/lib/metascrape';
 
 afterEach(() => vi.unstubAllGlobals());
 function stubHtml(html: string, ok = true) {
@@ -46,5 +46,18 @@ describe('scrapeImages', () => {
   it('returns [] on fetch error', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('net'); }));
     expect(await scrapeImages('https://s.com')).toEqual([]);
+  });
+});
+
+describe('iconSources', () => {
+  it('builds three keyless icon-service URLs from the host', () => {
+    expect(iconSources('https://translate.google.com/path?x=1')).toEqual([
+      'https://www.google.com/s2/favicons?domain=translate.google.com&sz=256',
+      'https://icons.duckduckgo.com/ip3/translate.google.com.ico',
+      'https://icon.horse/icon/translate.google.com',
+    ]);
+  });
+  it('returns [] for an invalid URL', () => {
+    expect(iconSources('not a url')).toEqual([]);
   });
 });
