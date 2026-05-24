@@ -18,6 +18,7 @@ function Board() {
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
   const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
+  const [recentLoading, setRecentLoading] = useState(true);
 
   // Apply theme + image background whenever settings change.
   useEffect(() => {
@@ -39,10 +40,16 @@ function Board() {
     return () => mq.removeEventListener('change', handler);
   }, [settings]);
 
-  // Load recent sites (excluding already-pinned) when enabled.
+  // Load recent sites (excluding already-pinned) when enabled. `recentLoading`
+  // keeps the skeleton up until the first result, so the row reserves its space
+  // instead of popping in and shoving the grid down.
   useEffect(() => {
-    if (!ready || !settings.showRecent) { setRecentSites([]); return; }
-    void getRecentSites({ excludeUrls: dials.map((d) => d.url) }).then(setRecentSites);
+    if (!ready || !settings.showRecent) { setRecentSites([]); setRecentLoading(false); return; }
+    setRecentLoading(true);
+    void getRecentSites({ excludeUrls: dials.map((d) => d.url) }).then((sites) => {
+      setRecentSites(sites);
+      setRecentLoading(false);
+    });
   }, [ready, settings.showRecent, dials]);
 
   if (!ready) return null;
@@ -73,7 +80,9 @@ function Board() {
         )}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
-      {!filter && <RecentRow sites={recentSites} onPin={onPinRecent} />}
+      {!filter && settings.showRecent && (
+        <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
+      )}
       <DialGrid dials={visible} settings={settings} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} />
       <button class="add-card" onClick={() => setEditing(null)}>+ Add card</button>
 

@@ -4,10 +4,30 @@ import { faviconUrl } from '../lib/images';
 interface Props {
   sites: RecentSite[];
   onPin: (site: RecentSite) => void;
+  loading?: boolean;
 }
 
-export function RecentRow({ sites, onPin }: Props) {
+const SKELETON_COUNT = 6;
+
+export function RecentRow({ sites, onPin, loading = false }: Props) {
+  if (loading) {
+    return (
+      <div class="recent-row">
+        <div class="recent-label">Recent</div>
+        <div class="recent-tiles">
+          {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+            <div class="recent-tile recent-tile--skeleton" key={i} aria-hidden="true">
+              <span class="recent-skeleton-dot" />
+              <span class="recent-skeleton-bar" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (!sites.length) return null;
+
   return (
     <div class="recent-row">
       <div class="recent-label">Recent</div>

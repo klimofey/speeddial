@@ -26,4 +26,15 @@ describe('RecentRow', () => {
     fireEvent.click(screen.getByLabelText('Pin A'));
     expect(onPin).toHaveBeenCalledWith(sites[0]);
   });
+
+  it('renders skeleton placeholders while loading (even with no sites yet)', () => {
+    const { container } = render(<RecentRow sites={[]} loading onPin={() => {}} />);
+    expect(container.querySelector('.recent-row')).toBeTruthy();
+    expect(container.querySelectorAll('.recent-tile--skeleton').length).toBeGreaterThan(0);
+  });
+
+  it('renders nothing when not loading and empty', () => {
+    const { container } = render(<RecentRow sites={[]} loading={false} onPin={() => {}} />);
+    expect(container.querySelector('.recent-row')).toBeNull();
+  });
 });
