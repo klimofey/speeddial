@@ -1,7 +1,9 @@
 import { useState } from 'preact/hooks';
-import { Settings as SettingsType, Theme, SearchEngine, CardSize } from '../lib/types';
+import { Settings as SettingsType, Theme, SearchEngine, CardSize, Background } from '../lib/types';
 import { ThemePicker } from './ThemePicker';
 import { buildSnapshot, serialize, parseSnapshot, restoreSnapshot } from '../lib/backup';
+import { fileToDataUrl } from '../lib/images';
+import { setImage } from '../lib/storage';
 
 interface Props {
   settings: SettingsType;
@@ -38,6 +40,23 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
 
   const addCustom = (theme: Theme) => onChange({ customThemes: [...settings.customThemes, theme], activeThemeId: theme.id });
 
+  const setBackgroundType = (type: Background['type']) => {
+    const value =
+      type === 'color' ? '#1a1a1a'
+      : type === 'gradient' ? 'linear-gradient(135deg,#6a5acd,#ec4899)'
+      : '';
+    onChange({ background: { type, value } });
+  };
+
+  const onBgFile = async (e: Event) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const data = await fileToDataUrl(file);
+    const ref = 'bg-' + Date.now().toString(36);
+    await setImage(ref, { data, source: 'upload' });
+    onChange({ background: { type: 'imageRef', value: ref } });
+  };
+
   return (
     <div class="modal-backdrop" onClick={onClose}>
       <div class="modal settings" onClick={(e) => e.stopPropagation()}>
@@ -45,6 +64,27 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
 
         <label>Theme</label>
         <ThemePicker settings={settings} onPick={(id) => onChange({ activeThemeId: id })} onAddCustom={addCustom} />
+
+        <label for="se-bg">Background</label>
+        <select id="se-bg" value={settings.background.type}
+          onChange={(e) => setBackgroundType((e.target as HTMLSelectElement).value as Background['type'])}>
+          <option value="theme">Theme default</option>
+          <option value="color">Solid color</option>
+          <option value="gradient">Gradient</option>
+          <option value="imageRef">Image</option>
+        </select>
+        {settings.background.type === 'color' && (
+          <input type="color" aria-label="Background color" value={settings.background.value || '#000000'}
+            onInput={(e) => onChange({ background: { type: 'color', value: (e.target as HTMLInputElement).value } })} />
+        )}
+        {settings.background.type === 'gradient' && (
+          <input aria-label="Background gradient" placeholder="linear-gradient(135deg,#6a5acd,#ec4899)"
+            value={settings.background.value}
+            onInput={(e) => onChange({ background: { type: 'gradient', value: (e.target as HTMLInputElement).value } })} />
+        )}
+        {settings.background.type === 'imageRef' && (
+          <input type="file" accept="image/*" aria-label="Background image" onChange={onBgFile} />
+        )}
 
         <label for="se-engine">Search engine</label>
         <select id="se-engine" value={settings.searchEngine}
