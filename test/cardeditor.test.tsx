@@ -3,6 +3,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/preact';
 import { CardEditor } from '../src/components/CardEditor';
 import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
+vi.mock('../src/lib/permissions', () => ({ ensureOriginPermission: vi.fn(async () => true) }));
+vi.mock('../src/lib/metascrape', () => ({ scrapeBestImage: vi.fn(async () => 'https://cdn.example/hero.png') }));
+
 describe('CardEditor', () => {
   it('disables save when URL is empty', () => {
     render(<CardEditor settings={DEFAULT_SETTINGS} onSave={() => {}} onClose={() => {}} />);
@@ -31,5 +34,15 @@ describe('CardEditor', () => {
     expect(onSave).not.toHaveBeenCalled();
     expect((screen.getByText('Save') as HTMLButtonElement).disabled).toBe(false);
     vi.unstubAllGlobals();
+  });
+
+  it('finds a better image and saves it as the card image', async () => {
+    const onSave = vi.fn();
+    render(<CardEditor settings={DEFAULT_SETTINGS} onSave={onSave} onClose={() => {}} />);
+    fireEvent.input(screen.getByLabelText('URL'), { target: { value: 'https://github.com' } });
+    fireEvent.click(screen.getByText('Find better image'));
+    await waitFor(() => expect(screen.getByText(/Found a better image/)).toBeTruthy());
+    fireEvent.click(screen.getByText('Save'));
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ imageRef: expect.stringMatching(/^meta-/) }));
   });
 });

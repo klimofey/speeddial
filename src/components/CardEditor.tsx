@@ -3,6 +3,8 @@ import { Dial, Settings, ImageRef } from '../lib/types';
 import { fileToDataUrl, cacheImageFromUrl } from '../lib/images';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
+import { ensureOriginPermission } from '../lib/permissions';
+import { scrapeBestImage } from '../lib/metascrape';
 
 interface Props {
   settings: Settings;
@@ -31,6 +33,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [scrapeMsg, setScrapeMsg] = useState('');
 
   const canSave = url.trim().length > 0 && !busy;
 
@@ -42,6 +45,22 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     const ref = 'up-' + Date.now().toString(36);
     await setImage(ref, { data, source: 'upload' });
     setUploadRef(ref);
+    setBusy(false);
+  };
+
+  const findBetterImage = async () => {
+    const finalUrl = normalizeUrl(url);
+    setBusy(true);
+    setScrapeMsg('Searching…');
+    const ok = await ensureOriginPermission(finalUrl);
+    if (!ok) { setBusy(false); setScrapeMsg('Permission denied — keeping the current preview.'); return; }
+    const img = await scrapeBestImage(finalUrl);
+    if (!img) { setBusy(false); setScrapeMsg('No better image found.'); return; }
+    const ref = 'meta-' + Date.now().toString(36);
+    await setImage(ref, { data: img, source: 'url', srcUrl: img });
+    setUploadRef(ref);
+    setMode('upload');
+    setScrapeMsg('Found a better image ✓');
     setBusy(false);
   };
 
@@ -102,6 +121,10 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
           {settings.useScreenshots && <option value="screenshot">Screenshot</option>}
         </select>
 
+        {url.trim() && (
+          <button type="button" class="ce-find" onClick={findBetterImage} disabled={busy}>Find better image</button>
+        )}
+        {scrapeMsg && <p class="settings-msg">{scrapeMsg}</p>}
         {mode === 'upload' && <input type="file" accept="image/*" aria-label="Upload image" onChange={onFile} />}
         {mode === 'url' && (
           <input aria-label="Image URL" value={imageUrl} placeholder="https://.../image.png"

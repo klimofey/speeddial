@@ -106,3 +106,6 @@ body {
 .edit-toggle { position: fixed; top: 16px; right: 62px; border: var(--card-border); cursor: pointer;
   background: var(--card-bg); color: var(--card-fg); box-shadow: var(--card-shadow);
   height: 38px; padding: 0 16px; border-radius: 19px; font-size: 13px; }
+.ce-find { align-self: flex-start; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--muted, #ccc);
+  background: transparent; color: inherit; cursor: pointer; font-size: 12px; }
+.ce-find:disabled { opacity: .5; cursor: not-allowed; }
