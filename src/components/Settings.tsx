@@ -1,7 +1,8 @@
 import { useState } from 'preact/hooks';
-import { Settings as SettingsType, Theme, SearchEngine, CardSize, Background } from '../lib/types';
+import { Settings as SettingsType, Theme, SearchEngine, CardSize, Background, SuggestProvider } from '../lib/types';
 import { ThemePicker } from './ThemePicker';
 import { buildSnapshot, serialize, parseSnapshot, restoreSnapshot } from '../lib/backup';
+import { ensureGooglePermission } from '../lib/permissions';
 import { fileToDataUrl } from '../lib/images';
 import { setImage } from '../lib/storage';
 
@@ -39,6 +40,16 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
   };
 
   const addCustom = (theme: Theme) => onChange({ customThemes: [...settings.customThemes, theme], activeThemeId: theme.id });
+
+  const onSuggestChange = async (e: Event) => {
+    const v = (e.target as HTMLSelectElement).value as SuggestProvider;
+    if (v === 'google') {
+      const ok = await ensureGooglePermission();
+      onChange({ suggestProvider: ok ? 'google' : 'duckduckgo' });
+    } else {
+      onChange({ suggestProvider: v });
+    }
+  };
 
   const setBackgroundType = (type: Background['type']) => {
     const value =
@@ -122,6 +133,19 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
             value={settings.screenshotTemplate}
             onInput={(e) => onChange({ screenshotTemplate: (e.target as HTMLInputElement).value })} />
         )}
+
+        <label>
+          <input type="checkbox" checked={settings.showRecent}
+            onChange={(e) => onChange({ showRecent: (e.target as HTMLInputElement).checked })} /> Show recent sites
+        </label>
+
+        <label for="se-suggest">Search suggestions</label>
+        <select id="se-suggest" value={settings.suggestProvider} onChange={onSuggestChange}>
+          <option value="off">Off</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="google">Google</option>
+        </select>
+        <p class="settings-warn">⚠ Suggestions send what you type to the chosen provider. DuckDuckGo needs no extra permission; Google asks for one.</p>
 
         <label>Backup</label>
         <div class="settings-backup">

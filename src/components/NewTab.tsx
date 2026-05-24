@@ -8,12 +8,15 @@ import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
 import { CardEditor } from './CardEditor';
 import { Settings } from './Settings';
+import { getRecentSites, RecentSite } from '../lib/recent';
+import { RecentRow } from './RecentRow';
 
 function Board() {
   const { ready, dials, settings, addDial, updateDial, removeDial, reorderDials, updateSettings, reload } = useApp();
   const [filter, setFilter] = useState('');
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
+  const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
 
   // Apply theme + image background whenever settings change.
   useEffect(() => {
@@ -35,11 +38,21 @@ function Board() {
     return () => mq.removeEventListener('change', handler);
   }, [settings]);
 
+  // Load recent sites (excluding already-pinned) when enabled.
+  useEffect(() => {
+    if (!ready || !settings.showRecent) { setRecentSites([]); return; }
+    void getRecentSites({ excludeUrls: dials.map((d) => d.url) }).then(setRecentSites);
+  }, [ready, settings.showRecent, dials]);
+
   if (!ready) return null;
 
   const visible = filter
     ? dials.filter((d) => (d.title + ' ' + d.url).toLowerCase().includes(filter.toLowerCase()))
     : dials;
+
+  const onPinRecent = async (site: RecentSite) => {
+    await addDial({ url: site.url, title: site.title });
+  };
 
   const onSave = async (input: Omit<Dial, 'order'> & { order?: number }) => {
     if (input.id) await updateDial({ ...input, order: input.order ?? 0 } as Dial);
@@ -54,6 +67,7 @@ function Board() {
         {settings.showClock && <Clock name={settings.greetingName} />}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
+      {!filter && <RecentRow sites={recentSites} onPin={onPinRecent} />}
       <DialGrid dials={visible} settings={settings} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} />
       <button class="add-card" onClick={() => setEditing(null)}>+ Add card</button>
 
