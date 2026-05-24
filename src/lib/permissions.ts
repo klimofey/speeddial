@@ -8,3 +8,18 @@ export async function ensureGooglePermission(): Promise<boolean> {
     return false;
   }
 }
+
+export async function ensureOriginPermission(pageUrl: string): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
+  let pattern: string;
+  try {
+    pattern = new URL(pageUrl).origin + '/*';
+  } catch {
+    return false;
+  }
+  try {
+    return await chrome.permissions.request({ origins: [pattern] });
+  } catch {
+    return false;
+  }
+}

@@ -8,7 +8,7 @@ export default defineManifest({
   minimum_chrome_version: '110',
   permissions: ['storage', 'unlimitedStorage', 'favicon', 'history'],
   chrome_url_overrides: { newtab: 'index.html' },
-  optional_host_permissions: ['https://suggestqueries.google.com/*'],
+  optional_host_permissions: ['https://suggestqueries.google.com/*', 'https://*/*', 'http://*/*'],
   icons: {
     '16': 'icons/icon-16.png',
     '32': 'icons/icon-32.png',
