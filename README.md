@@ -31,3 +31,5 @@ npm run build    # outputs dist/
   profile). Falls back to local storage if the sync quota is exceeded.
 - Images & backgrounds: `chrome.storage.local` (stay on this device).
 - No analytics. No remote code. Default Content Security Policy is not relaxed.
+- Recent row: reads `chrome.history` locally to rank recently-popular sites; this data is never sent anywhere. Toggle off with "Show recent sites".
+- Search suggestions: when enabled, the text you type is sent to the chosen provider (DuckDuckGo by default; Google is opt-in and asks for a host permission at the moment you switch to it). Set suggestions to "Off" to disable.
