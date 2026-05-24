@@ -1,5 +1,6 @@
 import { RecentSite } from '../lib/recent';
 import { faviconUrl } from '../lib/images';
+import { t } from '../lib/i18n';
 
 interface Props {
   sites: RecentSite[];
@@ -13,7 +14,7 @@ export function RecentRow({ sites, onPin, loading = false }: Props) {
   if (loading) {
     return (
       <div class="recent-row">
-        <div class="recent-label">Recent</div>
+        <div class="recent-label">{t('recent')}</div>
         <div class="recent-tiles">
           {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
             <div class="recent-tile recent-tile--skeleton" key={i} aria-hidden="true">

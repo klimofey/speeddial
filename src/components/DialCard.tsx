@@ -1,6 +1,7 @@
 import { Dial, Settings } from '../lib/types';
 import { spanFromDelta } from '../lib/layout';
 import { CardThumb } from './CardThumb';
+import { t } from '../lib/i18n';
 
 interface Props {
   dial: Dial;
@@ -43,8 +44,8 @@ export function DialCard({ dial, settings, onEdit, onDelete, editing = false, on
         <span class="dial-title">{dial.title}</span>
       </a>
       <div class="dial-actions">
-        <button aria-label={`Edit ${dial.title}`} onClick={() => onEdit(dial)}>✎</button>
-        <button aria-label={`Delete ${dial.title}`} onClick={() => onDelete(dial.id)}>✕</button>
+        <button aria-label={`${t('edit')} ${dial.title}`} onClick={() => onEdit(dial)}>✎</button>
+        <button aria-label={`${t('delete')} ${dial.title}`} onClick={() => onDelete(dial.id)}>✕</button>
       </div>
       {editing && (
         <span class="dial-resize" aria-label={`Resize ${dial.title}`} role="button" onMouseDown={startResize} />

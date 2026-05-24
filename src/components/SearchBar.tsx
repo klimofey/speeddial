@@ -1,5 +1,6 @@
 import { useState, useRef } from 'preact/hooks';
 import { SearchEngine, SuggestProvider } from '../lib/types';
+import { t } from '../lib/i18n';
 import { fetchSuggestions } from '../lib/suggest';
 
 const ENGINES: Record<SearchEngine, (q: string) => string> = {
@@ -65,7 +66,7 @@ export function SearchBar({ engine, suggestProvider, onFilter }: Props) {
   return (
     <form class="searchbar" onSubmit={submit} autocomplete="off">
       <input
-        placeholder="Search the web or filter your cards…"
+        placeholder={t('search_placeholder')}
         value={value}
         onInput={onInput}
         onKeyDown={onKeyDown}

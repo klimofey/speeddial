@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'preact/hooks';
 import { formatTime } from '../lib/time';
+import { t } from '../lib/i18n';
 
-export function greeting(hour: number): string {
-  if (hour < 12) return 'Good morning';
-  if (hour < 18) return 'Good afternoon';
-  return 'Good evening';
+export function greeting(hour: number): 'greeting_morning' | 'greeting_afternoon' | 'greeting_evening' {
+  if (hour < 12) return 'greeting_morning';
+  if (hour < 18) return 'greeting_afternoon';
+  return 'greeting_evening';
 }
 
 export function Clock({ name, format }: { name: string | null; format: '24h' | '12h' }) {
@@ -14,7 +15,7 @@ export function Clock({ name, format }: { name: string | null; format: '24h' | '
     return () => clearInterval(t);
   }, []);
   const time = formatTime(now, { hour12: format === '12h' });
-  const hello = greeting(now.getHours()) + (name ? `, ${name}` : '');
+  const hello = t(greeting(now.getHours())) + (name ? `, ${name}` : '');
   return (
     <div class="clock">
       <div class="clock-time">{time}</div>

@@ -3,7 +3,7 @@ import { AppProvider, useApp } from '../state/AppState';
 import { applyTheme } from '../lib/themes';
 import { getImage } from '../lib/storage';
 import { Dial } from '../lib/types';
-import { setLang } from '../lib/i18n';
+import { setLang, t } from '../lib/i18n';
 import { Clock } from './Clock';
 import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
@@ -79,14 +79,14 @@ function Board() {
 
   return (
     <div class="board">
-      <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
-      <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? 'Done' : 'Edit'}</button>
+      <button class="settings-gear" aria-label={t('open_settings')} onClick={() => setShowSettings(true)}>⚙</button>
+      <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? t('done') : t('edit')}</button>
 
       <div class="header">
         {settings.showClock && (
           <div class={`clock-widget${editMode ? ' widget-edit' : ''}`}>
             {editMode && (
-              <button class="widget-gear" aria-label="Clock settings" onClick={() => setShowClockConfig(true)}>⚙</button>
+              <button class="widget-gear" aria-label={t('clock_settings')} onClick={() => setShowClockConfig(true)}>⚙</button>
             )}
             <div class="clock-row">
               <WorldClocks clocks={leftClocks} format={settings.clockFormat} />
@@ -101,7 +101,7 @@ function Board() {
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
       <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} />
-      <button class="add-card" onClick={() => setEditing(null)}>+ Add card</button>
+      <button class="add-card" onClick={() => setEditing(null)}>{t('add_card')}</button>
 
       {editing !== undefined && (
         <CardEditor settings={settings} initial={editing ?? undefined} onSave={onSave} onClose={() => setEditing(undefined)} />
@@ -112,9 +112,9 @@ function Board() {
       {showClockConfig && (
         <div class="modal-backdrop" onClick={() => setShowClockConfig(false)}>
           <div class="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Clock</h3>
+            <h3>{t('clock')}</h3>
             <ClockSettings settings={settings} onChange={updateSettings} />
-            <div class="modal-actions"><button onClick={() => setShowClockConfig(false)}>Close</button></div>
+            <div class="modal-actions"><button onClick={() => setShowClockConfig(false)}>{t('close')}</button></div>
           </div>
         </div>
       )}
