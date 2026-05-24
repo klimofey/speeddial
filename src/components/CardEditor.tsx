@@ -4,7 +4,7 @@ import { fileToDataUrl, cacheImageFromUrl } from '../lib/images';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
-import { scrapeImages } from '../lib/metascrape';
+import { scrapeImages, iconSources } from '../lib/metascrape';
 import { CardThumb } from './CardThumb';
 
 interface Props {
@@ -52,20 +52,21 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setBusy(false);
   };
 
-  const hostOf = (raw: string) => {
-    try { return new URL(normalizeUrl(raw)).host; } catch { return raw; }
+  const mergeUnique = (base: string[], more: string[]) => {
+    const out = [...base];
+    for (const u of more) if (!out.includes(u)) out.push(u);
+    return out;
   };
 
-  const doScrape = async () => {
+  const doScrape = async (base: string[]) => {
     setScrapeStep('searching');
-    setScrapeMsg('Searching…');
+    setScrapeMsg('Scanning the page…');
     setBusy(true);
     const imgs = await scrapeImages(normalizeUrl(url));
     setBusy(false);
     setScrapeStep('idle');
-    if (!imgs.length) { setCandidates([]); setScrapeMsg('No images found on the page.'); return; }
-    setCandidates(imgs);
-    setScrapeMsg(`Found ${imgs.length} images — pick one`);
+    setCandidates(mergeUnique(base, imgs));
+    setScrapeMsg(imgs.length ? `Found ${imgs.length} more on the page — pick one.` : 'No extra images on the page.');
   };
 
   const selectCandidate = async (imgUrl: string) => {
@@ -78,20 +79,22 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   };
 
   const findBetterImage = async () => {
-    setBusy(true);
     setScrapeMsg('');
+    setBusy(true);
+    const icons = iconSources(normalizeUrl(url));
+    setCandidates(icons);
     const granted = await hasOriginPermission(normalizeUrl(url));
     setBusy(false);
-    if (granted) { await doScrape(); return; }
+    if (granted) { await doScrape(icons); return; }
     setScrapeStep('need-perm');
-    setScrapeMsg(`SpeedDial needs one-time access to ${hostOf(url)}. Chrome will ask — click Allow.`);
+    setScrapeMsg('Pick an icon, or "Allow access" to scan the page for more.');
   };
 
   const allowAccess = async () => {
     setBusy(true);
     const granted = await ensureOriginPermission(normalizeUrl(url));
     setBusy(false);
-    if (granted) { await doScrape(); return; }
+    if (granted) { await doScrape(candidates); return; }
     setScrapeStep('denied');
     setScrapeMsg('Access denied. Click "Allow access" to try again, or grant it manually in chrome://extensions → SpeedDial → Details → Site access.');
   };
