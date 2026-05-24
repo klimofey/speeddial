@@ -84,7 +84,23 @@ When the user clicks **"Find better image"**:
 - Test: `recent.ts` already covers the `limit` option; no new logic. The center is
   CSS-only.
 
-## 7. Out of scope
+## 7. Clock as an editable widget block (edit affordance)
+
+The top row will become a widget row (just without links), so the clock should be
+edited like a widget — not via a separate "Clock" button next to Edit/Done.
+- Remove the `clock-config-btn` ("Clock") button from `NewTab`.
+- In **edit mode**, wrap the clock area in a `.widget-edit` block (dashed outline)
+  with a **⚙ gear** button in its top-right corner (`aria-label="Clock settings"`)
+  that opens the existing `ClockSettings` modal (`showClockConfig`).
+- Outside edit mode: no dashed box, no gear — just the clock.
+- CSS: `.widget-edit { position: relative; border: 1px dashed var(--muted);
+  border-radius: 16px; padding: 12px; }` and a small absolutely-positioned
+  `.widget-gear` top-right. Remove the old `.clock-config-btn` rule.
+- Test: in edit mode the gear (`getByLabelText('Clock settings')`) opens the config
+  (shows "Show clock"); update the existing NewTab test that clicked a "Clock"
+  button to click the gear instead.
+
+## 8. Out of scope
 
 - Keyed services (logo.dev/Clearbit) — avoided to keep zero-config.
 - Sorting candidates by resolution / fetching dimensions (user eyeballs the gallery).
