@@ -103,3 +103,6 @@ body {
 .dial-card.editing .dial-actions { display: flex; }
 .dial-resize { position: absolute; right: -6px; bottom: -6px; width: 16px; height: 16px;
   border-radius: 4px; background: var(--accent); cursor: nwse-resize; }
+.edit-toggle { position: fixed; top: 16px; right: 62px; border: var(--card-border); cursor: pointer;
+  background: var(--card-bg); color: var(--card-fg); box-shadow: var(--card-shadow);
+  height: 38px; padding: 0 16px; border-radius: 19px; font-size: 13px; }

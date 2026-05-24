@@ -13,10 +13,11 @@ import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
 
 function Board() {
-  const { ready, dials, settings, addDial, updateDial, removeDial, reorderDials, updateSettings, reload } = useApp();
+  const { ready, dials, settings, addDial, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload } = useApp();
   const [filter, setFilter] = useState('');
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
   const [recentLoading, setRecentLoading] = useState(true);
 
@@ -71,6 +72,7 @@ function Board() {
   return (
     <div class="board">
       <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
+      <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? 'Done' : 'Edit'}</button>
       <div class="header">
         {settings.showClock && (
           <>
@@ -83,7 +85,7 @@ function Board() {
       {!filter && settings.showRecent && (
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
-      <DialGrid dials={visible} settings={settings} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} />
+      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} />
       <button class="add-card" onClick={() => setEditing(null)}>+ Add card</button>
 
       {editing !== undefined && (

@@ -16,4 +16,11 @@ describe('NewTab', () => {
     fireEvent.click(screen.getByText('+ Add card'));
     expect(screen.getByText('Add card')).toBeTruthy();
   });
+
+  it('toggles edit mode via the Edit button', async () => {
+    render(<NewTab />);
+    await waitFor(() => screen.getByText('Edit'));
+    fireEvent.click(screen.getByText('Edit'));
+    expect(screen.getByText('Done')).toBeTruthy();
+  });
 });
