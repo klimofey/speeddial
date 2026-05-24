@@ -13,6 +13,7 @@ interface AppContextValue {
   updateDial: (dial: Dial) => Promise<void>;
   removeDial: (id: string) => Promise<void>;
   reorderDials: (orderedIds: string[]) => Promise<void>;
+  resizeDial: (id: string, size: { w: number; h: number }) => Promise<void>;
   updateSettings: (patch: Partial<Settings>) => Promise<void>;
   reload: () => Promise<void>;
 }
@@ -44,7 +45,7 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
   const addDial = useCallback(async (input: { url: string; title: string }) => {
     const next = [
       ...dials,
-      { id: uid(), url: input.url, title: input.title, imageRef: 'favicon' as const, color: '', order: dials.length },
+      { id: uid(), url: input.url, title: input.title, imageRef: 'favicon' as const, color: '', order: dials.length, size: { w: 1, h: 1 } },
     ];
     await persistDials(next);
   }, [dials, persistDials]);
@@ -63,6 +64,10 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
     await persistDials(next);
   }, [dials, persistDials]);
 
+  const resizeDial = useCallback(async (id: string, size: { w: number; h: number }) => {
+    await persistDials(dials.map((d) => (d.id === id ? { ...d, size } : d)));
+  }, [dials, persistDials]);
+
   const updateSettings = useCallback(async (patch: Partial<Settings>) => {
     const next = { ...settings, ...patch };
     setSettings(next);
@@ -70,7 +75,7 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
   }, [settings]);
 
   const value: AppContextValue = {
-    ready, dials, settings, addDial, updateDial, removeDial, reorderDials, updateSettings, reload,
+    ready, dials, settings, addDial, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
