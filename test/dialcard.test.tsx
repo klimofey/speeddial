@@ -50,18 +50,6 @@ describe('DialCard', () => {
     fireEvent.mouseUp(window);
   });
 
-  it('falls back apple-touch-icon -> favicon -> letter on image errors', async () => {
-    const { container } = render(
-      <DialCard dial={{ ...dial, imageRef: 'favicon', title: 'GitHub', url: 'https://github.com' }}
-        settings={DEFAULT_SETTINGS} onEdit={() => {}} onDelete={() => {}} />,
-    );
-    await waitFor(() => expect(container.querySelector('img')).toBeTruthy());
-    fireEvent.error(container.querySelector('img')!);
-    await waitFor(() => expect(container.querySelector('img')).toBeTruthy());
-    fireEvent.error(container.querySelector('img')!);
-    await waitFor(() => expect(screen.getByText('G')).toBeTruthy());
-  });
-
   it('prevents navigation on click while editing', () => {
     const { container } = render(<DialCard dial={dial} settings={DEFAULT_SETTINGS} editing onEdit={() => {}} onDelete={() => {}} onResize={() => {}} />);
     const link = container.querySelector('.dial-link') as HTMLElement;

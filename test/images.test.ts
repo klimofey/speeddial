@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as storage from '../src/lib/storage';
-import { faviconUrl, resolvePreview, cacheImageFromUrl, appleTouchIconUrl } from '../src/lib/images';
+import { faviconUrl, resolvePreview, cacheImageFromUrl } from '../src/lib/images';
 import { Dial, Settings } from '../src/lib/types';
 import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
@@ -49,14 +49,12 @@ describe('images', () => {
     expect(r2).toEqual({ kind: 'image', src: 'https://shot/https%3A%2F%2Fx.com' });
   });
 
-  it('builds an apple-touch-icon URL at the site origin', () => {
-    expect(appleTouchIconUrl('https://github.com/foo/bar')).toBe('https://github.com/apple-touch-icon.png');
-  });
-
-  it('favicon preview prefers apple-touch-icon with a favicon@128 fallback', async () => {
+  it('favicon preview uses a 128px Chrome favicon (no apple-touch)', async () => {
     const r = await resolvePreview(dial({ imageRef: 'favicon', url: 'https://github.com' }), settings);
-    expect(r).toMatchObject({ kind: 'favicon', src: 'https://github.com/apple-touch-icon.png' });
-    expect((r as { next?: string }).next).toContain('size=128');
+    expect(r.kind).toBe('favicon');
+    expect((r as { src: string }).src).toContain('/_favicon/');
+    expect((r as { src: string }).src).toContain('size=128');
+    expect((r as { src: string }).src).not.toContain('apple-touch-icon');
   });
 
   it('caches a fetched URL image into local storage', async () => {

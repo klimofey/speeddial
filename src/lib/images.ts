@@ -12,18 +12,10 @@ export function faviconUrl(pageUrl: string, size = 64): string {
   return `${base}?pageUrl=${encodeURIComponent(pageUrl)}&size=${size}`;
 }
 
-export function appleTouchIconUrl(pageUrl: string): string {
-  try {
-    return new URL('/apple-touch-icon.png', pageUrl).href;
-  } catch {
-    return '';
-  }
-}
-
-// Crisp-first favicon preview: apple-touch-icon, falling back to a 128px favicon.
+// Default favicon preview: Chrome's 128px favicon (returns a generic icon rather
+// than 404ing). Crisp alternatives are offered on demand in the editor gallery.
 function faviconPreview(pageUrl: string): Preview {
-  const fav = faviconUrl(pageUrl, 128);
-  return { kind: 'favicon', src: appleTouchIconUrl(pageUrl) || fav, next: fav };
+  return { kind: 'favicon', src: faviconUrl(pageUrl, 128) };
 }
 
 // Reads a File into a data URL (used by the upload flow in CardEditor).

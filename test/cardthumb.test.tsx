@@ -12,12 +12,10 @@ describe('CardThumb', () => {
     await waitFor(() => expect(screen.getByText('G')).toBeTruthy());
   });
 
-  it('renders an image for a favicon dial and cascades apple-touch -> favicon -> letter on error', async () => {
+  it('renders a favicon image and falls back to the letter on error', async () => {
     const { container } = render(
       <CardThumb dial={{ ...dial, imageRef: 'favicon' }} settings={DEFAULT_SETTINGS} />,
     );
-    await waitFor(() => expect(container.querySelector('img')).toBeTruthy());
-    fireEvent.error(container.querySelector('img')!);
     await waitFor(() => expect(container.querySelector('img')).toBeTruthy());
     fireEvent.error(container.querySelector('img')!);
     await waitFor(() => expect(screen.getByText('G')).toBeTruthy());
