@@ -17,6 +17,7 @@ image by URL or opt into the screenshot service.
 - Recent row: recently-popular sites from local history, with one-click pin to a card
 - Live search suggestions (DuckDuckGo by default; Google opt-in)
 - JSON / ZIP backup export & import
+- Interface in English, Russian, Spanish, German, French (switchable in Settings; defaults to your browser language)
 
 ## Develop
 ```bash
