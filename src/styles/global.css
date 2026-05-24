@@ -109,3 +109,8 @@ body {
 .ce-find { align-self: flex-start; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--muted, #ccc);
   background: transparent; color: inherit; cursor: pointer; font-size: 12px; }
 .ce-find:disabled { opacity: .5; cursor: not-allowed; }
+.clock-config-btn { right: 118px; }
+.clock-settings { display: flex; flex-direction: column; gap: 6px; }
+.clock-settings label { font-size: 12px; opacity: .8; }
+.clock-settings select, .clock-settings input { padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--muted, #ccc); background: var(--search-bg, #fff); color: inherit; }

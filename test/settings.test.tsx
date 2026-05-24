@@ -30,28 +30,10 @@ describe('Settings background picker', () => {
   });
 });
 
-describe('Settings clock options', () => {
-  it('emits clockFormat when the format select changes', () => {
-    const onChange = vi.fn();
-    render(<Settings settings={DEFAULT_SETTINGS} onChange={onChange} onClose={() => {}} onRestored={() => {}} />);
-    fireEvent.change(screen.getByLabelText('Clock format'), { target: { value: '12h' } });
-    expect(onChange).toHaveBeenCalledWith({ clockFormat: '12h' });
-  });
-
-  it('adds a world clock when a zone is chosen', () => {
-    const onChange = vi.fn();
-    render(<Settings settings={DEFAULT_SETTINGS} onChange={onChange} onClose={() => {}} onRestored={() => {}} />);
-    fireEvent.change(screen.getByLabelText('World clocks'), { target: { value: 'America/New_York' } });
-    expect(onChange).toHaveBeenCalledWith({
-      worldClocks: [expect.objectContaining({ timeZone: 'America/New_York', label: 'New York' })],
-    });
-  });
-
-  it('removes a world clock', () => {
-    const onChange = vi.fn();
-    const settings = { ...DEFAULT_SETTINGS, worldClocks: [{ id: 'a', timeZone: 'UTC', label: 'UTC' }] };
-    render(<Settings settings={settings} onChange={onChange} onClose={() => {}} onRestored={() => {}} />);
-    fireEvent.click(screen.getByLabelText('Remove UTC'));
-    expect(onChange).toHaveBeenCalledWith({ worldClocks: [] });
+describe('Settings without clock controls', () => {
+  it('no longer renders clock controls', () => {
+    render(<Settings settings={DEFAULT_SETTINGS} onChange={() => {}} onClose={() => {}} onRestored={() => {}} />);
+    expect(screen.queryByLabelText('Clock format')).toBeNull();
+    expect(screen.queryByLabelText('World clocks')).toBeNull();
   });
 });

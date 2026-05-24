@@ -23,4 +23,12 @@ describe('NewTab', () => {
     fireEvent.click(screen.getByText('Edit'));
     expect(screen.getByText('Done')).toBeTruthy();
   });
+
+  it('opens clock config from edit mode', async () => {
+    render(<NewTab />);
+    await waitFor(() => screen.getByText('Edit'));
+    fireEvent.click(screen.getByText('Edit'));
+    fireEvent.click(screen.getByText('Clock'));
+    expect(screen.getByLabelText('Show clock')).toBeTruthy();
+  });
 });

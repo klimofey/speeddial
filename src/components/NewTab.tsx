@@ -8,6 +8,7 @@ import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
 import { CardEditor } from './CardEditor';
 import { Settings } from './Settings';
+import { ClockSettings } from './ClockSettings';
 import { WorldClocks } from './WorldClocks';
 import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
@@ -18,6 +19,7 @@ function Board() {
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [showClockConfig, setShowClockConfig] = useState(false);
   const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
   const [recentLoading, setRecentLoading] = useState(true);
 
@@ -73,6 +75,7 @@ function Board() {
     <div class="board">
       <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? 'Done' : 'Edit'}</button>
+      {editMode && <button class="edit-toggle clock-config-btn" onClick={() => setShowClockConfig(true)}>Clock</button>}
       <div class="header">
         {settings.showClock && (
           <>
@@ -93,6 +96,15 @@ function Board() {
       )}
       {showSettings && (
         <Settings settings={settings} onChange={updateSettings} onClose={() => setShowSettings(false)} onRestored={() => { void reload(); }} />
+      )}
+      {showClockConfig && (
+        <div class="modal-backdrop" onClick={() => setShowClockConfig(false)}>
+          <div class="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Clock</h3>
+            <ClockSettings settings={settings} onChange={updateSettings} />
+            <div class="modal-actions"><button onClick={() => setShowClockConfig(false)}>Close</button></div>
+          </div>
+        </div>
       )}
     </div>
   );
