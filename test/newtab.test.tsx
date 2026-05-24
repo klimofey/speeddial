@@ -24,11 +24,12 @@ describe('NewTab', () => {
     expect(screen.getByText('Done')).toBeTruthy();
   });
 
-  it('opens clock config from edit mode', async () => {
+  it('opens clock config from the gear in edit mode', async () => {
     render(<NewTab />);
     await waitFor(() => screen.getByText('Edit'));
     fireEvent.click(screen.getByText('Edit'));
-    fireEvent.click(screen.getByText('Clock'));
+    expect(screen.queryByText('Clock')).toBeNull();
+    fireEvent.click(screen.getByLabelText('Clock settings'));
     expect(screen.getByLabelText('Show clock')).toBeTruthy();
   });
 });

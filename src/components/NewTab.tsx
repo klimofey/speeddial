@@ -78,13 +78,18 @@ function Board() {
     <div class="board">
       <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? 'Done' : 'Edit'}</button>
-      {editMode && <button class="edit-toggle clock-config-btn" onClick={() => setShowClockConfig(true)}>Clock</button>}
+
       <div class="header">
         {settings.showClock && (
-          <div class="clock-row">
-            <WorldClocks clocks={leftClocks} format={settings.clockFormat} />
-            <Clock name={settings.greetingName} format={settings.clockFormat} />
-            <WorldClocks clocks={rightClocks} format={settings.clockFormat} />
+          <div class={`clock-widget${editMode ? ' widget-edit' : ''}`}>
+            {editMode && (
+              <button class="widget-gear" aria-label="Clock settings" onClick={() => setShowClockConfig(true)}>⚙</button>
+            )}
+            <div class="clock-row">
+              <WorldClocks clocks={leftClocks} format={settings.clockFormat} />
+              <Clock name={settings.greetingName} format={settings.clockFormat} />
+              <WorldClocks clocks={rightClocks} format={settings.clockFormat} />
+            </div>
           </div>
         )}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
