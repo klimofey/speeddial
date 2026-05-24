@@ -117,3 +117,12 @@ body {
 .clock-row { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
 .clock-row .world-clocks { flex-direction: column; gap: 6px; margin-top: 0; }
 .ce-find-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ce-preview { align-self: center; width: 96px; height: 96px; margin-bottom: 6px; }
+.ce-preview .dial-thumb { width: 100%; height: 100%; }
+.ce-preview > img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius); }
+.ce-candidates { display: grid; grid-template-columns: repeat(auto-fill, 56px); gap: 8px;
+  max-height: 180px; overflow-y: auto; padding: 4px 0; }
+.ce-candidate { width: 56px; height: 56px; padding: 0; border: 2px solid transparent; border-radius: 8px;
+  background: var(--search-bg, #fff); cursor: pointer; overflow: hidden; }
+.ce-candidate.selected { border-color: var(--accent, #4285f4); }
+.ce-candidate img { width: 100%; height: 100%; object-fit: contain; }

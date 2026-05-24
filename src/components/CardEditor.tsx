@@ -4,7 +4,8 @@ import { fileToDataUrl, cacheImageFromUrl } from '../lib/images';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
-import { scrapeBestImage } from '../lib/metascrape';
+import { scrapeImages } from '../lib/metascrape';
+import { CardThumb } from './CardThumb';
 
 interface Props {
   settings: Settings;
@@ -35,6 +36,8 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   const [error, setError] = useState('');
   const [scrapeMsg, setScrapeMsg] = useState('');
   const [scrapeStep, setScrapeStep] = useState<'idle' | 'need-perm' | 'searching' | 'denied'>('idle');
+  const [candidates, setCandidates] = useState<string[]>([]);
+  const [selectedUrl, setSelectedUrl] = useState('');
 
   const canSave = url.trim().length > 0 && !busy;
 
@@ -54,19 +57,24 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   };
 
   const doScrape = async () => {
-    const finalUrl = normalizeUrl(url);
     setScrapeStep('searching');
     setScrapeMsg('Searching…');
     setBusy(true);
-    const img = await scrapeBestImage(finalUrl);
-    if (!img) { setBusy(false); setScrapeStep('idle'); setScrapeMsg('No better image found.'); return; }
-    const ref = 'meta-' + Date.now().toString(36);
-    await setImage(ref, { data: img, source: 'url', srcUrl: img });
-    setUploadRef(ref);
-    setMode('upload');
+    const imgs = await scrapeImages(normalizeUrl(url));
     setBusy(false);
     setScrapeStep('idle');
-    setScrapeMsg('Found a better image ✓');
+    if (!imgs.length) { setCandidates([]); setScrapeMsg('No images found on the page.'); return; }
+    setCandidates(imgs);
+    setScrapeMsg(`Found ${imgs.length} images — pick one`);
+  };
+
+  const selectCandidate = async (imgUrl: string) => {
+    const ref = 'meta-' + Date.now().toString(36);
+    await setImage(ref, { data: imgUrl, source: 'url', srcUrl: imgUrl });
+    setUploadRef(ref);
+    setMode('upload');
+    setSelectedUrl(imgUrl);
+    setScrapeMsg('Selected ✓');
   };
 
   const findBetterImage = async () => {
@@ -125,10 +133,26 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     }
   };
 
+  const previewImageRef =
+    mode === 'upload' && uploadRef ? uploadRef
+    : mode === 'url' ? 'favicon'
+    : mode;
+  const previewUrl = normalizeUrl(url) || 'https://example.com';
+  const previewDial: Dial = {
+    id: 'preview', url: previewUrl, title: title || 'preview',
+    imageRef: previewImageRef, color: initial?.color || colorForKey(previewUrl), order: 0,
+  };
+
   return (
     <div class="modal-backdrop" onClick={onClose}>
       <div class="modal" onClick={(e) => e.stopPropagation()}>
         <h3>{initial ? 'Edit card' : 'Add card'}</h3>
+
+        <div class="ce-preview">
+          {mode === 'url' && imageUrl.trim()
+            ? <img src={imageUrl} alt="" />
+            : <CardThumb dial={previewDial} settings={settings} />}
+        </div>
 
         <label for="ce-url">URL</label>
         <input id="ce-url" value={url} onInput={(e) => setUrl((e.target as HTMLInputElement).value)} placeholder="https://example.com" />
@@ -154,6 +178,23 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
           </div>
         )}
         {scrapeMsg && <p class="settings-msg">{scrapeMsg}</p>}
+        {candidates.length > 0 && (
+          <div class="ce-candidates">
+            {candidates.map((c) => (
+              <button
+                type="button"
+                key={c}
+                class={`ce-candidate${c === selectedUrl ? ' selected' : ''}`}
+                onClick={() => selectCandidate(c)}
+              >
+                <img src={c} alt="" onError={(e) => {
+                  const btn = (e.currentTarget as HTMLElement).parentElement as HTMLElement | null;
+                  if (btn) btn.style.display = 'none';
+                }} />
+              </button>
+            ))}
+          </div>
+        )}
         {mode === 'upload' && <input type="file" accept="image/*" aria-label="Upload image" onChange={onFile} />}
         {mode === 'url' && (
           <input aria-label="Image URL" value={imageUrl} placeholder="https://.../image.png"

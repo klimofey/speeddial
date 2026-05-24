@@ -7,7 +7,9 @@ vi.mock('../src/lib/permissions', () => ({
   hasOriginPermission: vi.fn(async () => false),
   ensureOriginPermission: vi.fn(async () => true),
 }));
-vi.mock('../src/lib/metascrape', () => ({ scrapeBestImage: vi.fn(async () => 'https://cdn.example/hero.png') }));
+vi.mock('../src/lib/metascrape', () => ({
+  scrapeImages: vi.fn(async () => ['https://cdn.example/a.png', 'https://cdn.example/b.png']),
+}));
 
 describe('CardEditor', () => {
   it('disables save when URL is empty', () => {
@@ -39,25 +41,29 @@ describe('CardEditor', () => {
     vi.unstubAllGlobals();
   });
 
-  it('grants access then finds a better image (two-step)', async () => {
+  it('after Allow access, shows a candidate gallery; picking one sets a meta- image', async () => {
     const onSave = vi.fn();
-    render(<CardEditor settings={DEFAULT_SETTINGS} onSave={onSave} onClose={() => {}} />);
+    const { container } = render(<CardEditor settings={DEFAULT_SETTINGS} onSave={onSave} onClose={() => {}} />);
     fireEvent.input(screen.getByLabelText('URL'), { target: { value: 'https://github.com' } });
     fireEvent.click(screen.getByText('Find better image'));
     await waitFor(() => screen.getByText('Allow access'));
     fireEvent.click(screen.getByText('Allow access'));
-    await waitFor(() => expect(screen.getByText(/Found a better image/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Found 2 images/)).toBeTruthy());
+    const thumbs = container.querySelectorAll('.ce-candidate');
+    expect(thumbs.length).toBe(2);
+    fireEvent.click(thumbs[0]);
+    await waitFor(() => expect(screen.getByText(/Selected/)).toBeTruthy());
     fireEvent.click(screen.getByText('Save'));
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ imageRef: expect.stringMatching(/^meta-/) }));
   });
 
-  it('skips the prompt when permission is already granted', async () => {
+  it('shows the gallery directly when permission is already granted', async () => {
     const perms = await import('../src/lib/permissions');
     (perms.hasOriginPermission as unknown as { mockResolvedValueOnce: (v: boolean) => void }).mockResolvedValueOnce(true);
     render(<CardEditor settings={DEFAULT_SETTINGS} onSave={() => {}} onClose={() => {}} />);
     fireEvent.input(screen.getByLabelText('URL'), { target: { value: 'https://github.com' } });
     fireEvent.click(screen.getByText('Find better image'));
-    await waitFor(() => expect(screen.getByText(/Found a better image/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Found 2 images/)).toBeTruthy());
     expect(screen.queryByText('Allow access')).toBeNull();
   });
 
@@ -70,5 +76,16 @@ describe('CardEditor', () => {
     await waitFor(() => screen.getByText('Allow access'));
     fireEvent.click(screen.getByText('Allow access'));
     await waitFor(() => expect(screen.getByText(/Access denied/)).toBeTruthy());
+  });
+
+  it('reports when no images are found', async () => {
+    const meta = await import('../src/lib/metascrape');
+    (meta.scrapeImages as unknown as { mockResolvedValueOnce: (v: string[]) => void }).mockResolvedValueOnce([]);
+    const perms = await import('../src/lib/permissions');
+    (perms.hasOriginPermission as unknown as { mockResolvedValueOnce: (v: boolean) => void }).mockResolvedValueOnce(true);
+    render(<CardEditor settings={DEFAULT_SETTINGS} onSave={() => {}} onClose={() => {}} />);
+    fireEvent.input(screen.getByLabelText('URL'), { target: { value: 'https://github.com' } });
+    fireEvent.click(screen.getByText('Find better image'));
+    await waitFor(() => expect(screen.getByText(/No images found/)).toBeTruthy());
   });
 });
