@@ -11,6 +11,8 @@ image by URL or opt into the screenshot service.
 - Switchable + custom themes (Light Minimal, Glass Gradient, Dark Neon)
 - Custom backgrounds (color, gradient, image)
 - Clock, greeting, and web search (Google / DuckDuckGo / Bing)
+- Recent row: recently-popular sites from local history, with one-click pin to a card
+- Live search suggestions (DuckDuckGo by default; Google opt-in)
 - JSON / ZIP backup export & import
 
 ## Develop
