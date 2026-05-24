@@ -6,3 +6,25 @@ body {
   color: var(--fg, #1a1a1a);
 }
 #app { min-height: 100vh; }
+
+.dial-grid { display: grid; gap: 16px; padding: 24px; max-width: 920px; margin: 0 auto;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+.dial-grid[data-size="sm"] { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+.dial-grid[data-size="lg"] { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+.dial-card { position: relative; }
+.dial-link { display: flex; flex-direction: column; align-items: center; gap: 8px;
+  text-decoration: none; color: var(--fg); }
+.dial-thumb { width: 100%; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden;
+  background: var(--card-bg); box-shadow: var(--card-shadow); border: var(--card-border);
+  backdrop-filter: var(--card-blur); display: flex; align-items: center; justify-content: center; }
+.dial-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.dial-thumb img.dial-favicon { width: 48%; height: 48%; object-fit: contain; }
+.dial-letter { font-size: 32px; font-weight: 700; color: #fff; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; }
+.dial-title { font-size: 13px; text-align: center; max-width: 100%; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.dial-actions { position: absolute; top: 4px; right: 4px; display: none; gap: 2px; }
+.dial-card:hover .dial-actions { display: flex; }
+.dial-actions button { border: none; border-radius: 8px; cursor: pointer;
+  background: rgba(0,0,0,.45); color: #fff; width: 22px; height: 22px; font-size: 11px; }
+.sortable-ghost { opacity: .4; }
