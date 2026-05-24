@@ -52,7 +52,7 @@ function Board() {
       <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
       <div class="header">
         {settings.showClock && <Clock name={settings.greetingName} />}
-        <SearchBar engine={settings.searchEngine} onFilter={setFilter} />
+        <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
       <DialGrid dials={visible} settings={settings} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} />
       <button class="add-card" onClick={() => setEditing(null)}>+ Add card</button>
