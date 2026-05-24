@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'preact/hooks';
 import { Dial, Settings } from '../lib/types';
-import { Preview, resolvePreview, letterFallback } from '../lib/images';
 import { spanFromDelta } from '../lib/layout';
+import { CardThumb } from './CardThumb';
 
 interface Props {
   dial: Dial;
@@ -13,22 +12,8 @@ interface Props {
 }
 
 export function DialCard({ dial, settings, onEdit, onDelete, editing = false, onResize }: Props) {
-  const [preview, setPreview] = useState<Preview | null>(null);
   const size = dial.size ?? { w: 1, h: 1 };
 
-  useEffect(() => {
-    let alive = true;
-    void resolvePreview(dial, settings).then((p) => { if (alive) setPreview(p); });
-    return () => { alive = false; };
-  }, [dial, settings]);
-
-  const onImgError = () => {
-    if (preview?.kind === 'favicon' && preview.next) setPreview({ kind: 'favicon', src: preview.next });
-    else setPreview(letterFallback(dial));
-  };
-
-  // Drag the corner handle: every RESIZE_STEP_PX of movement changes the span by
-  // one cell (no DOM measurement needed, so it is robust and testable).
   const startResize = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -54,13 +39,7 @@ export function DialCard({ dial, settings, onEdit, onDelete, editing = false, on
       style={{ gridColumn: `span ${size.w}`, gridRow: `span ${size.h}` }}
     >
       <a class="dial-link" href={dial.url} onClick={(e) => { if (editing) e.preventDefault(); }}>
-        <div class="dial-thumb">
-          {preview?.kind === 'image' && <img src={preview.src} alt="" onError={onImgError} />}
-          {preview?.kind === 'favicon' && <img class="dial-favicon" src={preview.src} alt="" onError={onImgError} />}
-          {preview?.kind === 'letter' && (
-            <span class="dial-letter" style={{ background: preview.color }}>{preview.letter}</span>
-          )}
-        </div>
+        <CardThumb dial={dial} settings={settings} />
         <span class="dial-title">{dial.title}</span>
       </a>
       <div class="dial-actions">
