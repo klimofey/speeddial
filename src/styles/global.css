@@ -28,3 +28,16 @@ body {
 .dial-actions button { border: none; border-radius: 8px; cursor: pointer;
   background: rgba(0,0,0,.45); color: #fff; width: 22px; height: 22px; font-size: 11px; }
 .sortable-ghost { opacity: .4; }
+
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center; z-index: 50; }
+.modal { background: var(--card-bg, #fff); color: var(--card-fg, #1a1a1a);
+  padding: 20px; border-radius: 14px; width: min(420px, 92vw); display: flex; flex-direction: column; gap: 8px; }
+.modal h3 { margin: 0 0 8px; }
+.modal label { font-size: 12px; opacity: .7; margin-top: 6px; }
+.modal input, .modal select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--muted, #ccc);
+  background: var(--search-bg, #fff); color: inherit; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.modal-actions button { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; }
+.modal-actions button:last-child { background: var(--accent, #4285f4); color: #fff; }
+.modal-actions button:disabled { opacity: .5; cursor: not-allowed; }
