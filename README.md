@@ -10,7 +10,8 @@ image by URL or opt into the screenshot service.
 - Optional screenshot previews (off by default; warns before sending URLs out)
 - Switchable + custom themes (Light Minimal, Glass Gradient, Dark Neon)
 - Custom backgrounds (color, gradient, image)
-- Clock, greeting, and web search (Google / DuckDuckGo / Bing)
+- Clock (12h/24h) with greeting, plus optional world clocks for any IANA time zones
+- Web search (Google / DuckDuckGo / Bing)
 - Recent row: recently-popular sites from local history, with one-click pin to a card
 - Live search suggestions (DuckDuckGo by default; Google opt-in)
 - JSON / ZIP backup export & import
