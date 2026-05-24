@@ -4,6 +4,7 @@ export type ImageRef = 'favicon' | 'letter' | string; // any other string = key 
 export type SearchEngine = 'google' | 'duckduckgo' | 'bing';
 export type CardSize = 'sm' | 'md' | 'lg';
 export type SuggestProvider = 'off' | 'duckduckgo' | 'google';
+export type Lang = 'en' | 'ru' | 'es' | 'de' | 'fr';
 
 export interface WorldClock {
   id: string;
@@ -46,6 +47,7 @@ export interface Settings {
   screenshotTemplate: string;    // e.g. "https://service.example/{url}"
   showRecent: boolean;
   suggestProvider: SuggestProvider;
+  language: Lang;
   clockFormat: '24h' | '12h';
   worldClocks: WorldClock[];
 }

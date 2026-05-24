@@ -1,4 +1,5 @@
 import { Settings, Theme, SCHEMA_VERSION } from './types';
+import { detectLang } from './i18n';
 
 export const BUILTIN_THEMES: Theme[] = [
   {
@@ -47,6 +48,7 @@ export const DEFAULT_SETTINGS: Settings = {
   screenshotTemplate: '',
   showRecent: true,
   suggestProvider: 'duckduckgo',
+  language: detectLang(),
   clockFormat: '24h',
   worldClocks: [],
 };
