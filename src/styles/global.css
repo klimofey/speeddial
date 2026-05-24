@@ -66,3 +66,15 @@ body {
 .import-btn { padding: 8px 16px; border-radius: 8px; background: var(--accent,#4285f4); color: #fff; cursor: pointer; }
 .settings-msg { font-size: 12px; }
 .ce-error { color: #e5484d; font-size: 12px; margin: 4px 0 0; }
+
+.recent-row { max-width: 920px; margin: 0 auto; padding: 4px 24px 0; }
+.recent-label { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; }
+.recent-tiles { display: flex; gap: 10px; flex-wrap: wrap; }
+.recent-tile { position: relative; display: flex; align-items: center; gap: 8px;
+  background: var(--card-bg); border: var(--card-border); box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-blur); border-radius: 999px; padding: 6px 12px 6px 10px; max-width: 200px; }
+.recent-link { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--fg); min-width: 0; }
+.recent-favicon { width: 18px; height: 18px; border-radius: 4px; flex: 0 0 auto; }
+.recent-title { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recent-pin { flex: 0 0 auto; border: none; cursor: pointer; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 13px; line-height: 1; }
