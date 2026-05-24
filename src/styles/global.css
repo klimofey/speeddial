@@ -65,3 +65,4 @@ body {
 .settings-backup { display: flex; gap: 8px; }
 .import-btn { padding: 8px 16px; border-radius: 8px; background: var(--accent,#4285f4); color: #fff; cursor: pointer; }
 .settings-msg { font-size: 12px; }
+.ce-error { color: #e5484d; font-size: 12px; margin: 4px 0 0; }

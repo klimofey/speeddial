@@ -30,6 +30,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     initial && !['favicon', 'letter', 'screenshot'].includes(initial.imageRef) ? initial.imageRef : null,
   );
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
 
   const canSave = url.trim().length > 0 && !busy;
 
@@ -69,11 +70,15 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
 
   const save = () => {
     setBusy(true);
+    setError('');
     const ref = resolveImageRef();
     if (typeof ref === 'string') {
       doSave(ref);
     } else {
-      ref.then(doSave);
+      ref.then(doSave).catch(() => {
+        setBusy(false);
+        setError('Could not load that image URL. Check the link and try again.');
+      });
     }
   };
 
@@ -103,6 +108,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
             onInput={(e) => setImageUrl((e.target as HTMLInputElement).value)} />
         )}
 
+        {error && <p class="ce-error">{error}</p>}
         <div class="modal-actions">
           <button onClick={onClose}>Cancel</button>
           <button disabled={!canSave} onClick={save}>Save</button>
