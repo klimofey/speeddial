@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/preact';
 import { DialGrid } from '../src/components/DialGrid';
 import { Dial } from '../src/lib/types';
 import { DEFAULT_SETTINGS } from '../src/lib/defaults';
+import Sortable from 'sortablejs';
 
 vi.mock('sortablejs', () => ({ default: { create: vi.fn(() => ({ destroy: vi.fn() })) } }));
 
@@ -25,5 +26,15 @@ describe('DialGrid', () => {
       <DialGrid dials={dials} settings={{ ...DEFAULT_SETTINGS, cardSize: 'lg' }} onEdit={() => {}} onDelete={() => {}} onReorder={() => {}} />,
     );
     expect(container.querySelector('.dial-grid')?.getAttribute('data-size')).toBe('lg');
+  });
+
+  it('does not initialize SortableJS when not editing', () => {
+    render(<DialGrid dials={dials} settings={DEFAULT_SETTINGS} onEdit={() => {}} onDelete={() => {}} onReorder={() => {}} />);
+    expect((Sortable.create as unknown as { mock: { calls: unknown[] } }).mock.calls.length).toBe(0);
+  });
+
+  it('initializes SortableJS when editing', () => {
+    render(<DialGrid dials={dials} settings={DEFAULT_SETTINGS} editing onEdit={() => {}} onDelete={() => {}} onReorder={() => {}} onResize={() => {}} />);
+    expect((Sortable.create as unknown as { mock: { calls: unknown[] } }).mock.calls.length).toBeGreaterThan(0);
   });
 });

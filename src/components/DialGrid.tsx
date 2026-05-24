@@ -9,13 +9,15 @@ interface Props {
   onEdit: (dial: Dial) => void;
   onDelete: (id: string) => void;
   onReorder: (orderedIds: string[]) => void;
+  editing?: boolean;
+  onResize?: (id: string, size: { w: number; h: number }) => void;
 }
 
-export function DialGrid({ dials, settings, onEdit, onDelete, onReorder }: Props) {
+export function DialGrid({ dials, settings, onEdit, onDelete, onReorder, editing = false, onResize }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || !editing) return;
     const sortable = Sortable.create(ref.current, {
       animation: 150,
       ghostClass: 'sortable-ghost',
@@ -28,12 +30,20 @@ export function DialGrid({ dials, settings, onEdit, onDelete, onReorder }: Props
       },
     });
     return () => sortable.destroy();
-  }, [onReorder]);
+  }, [editing, onReorder]);
 
   return (
     <div class="dial-grid" data-size={settings.cardSize} ref={ref}>
       {dials.map((dial) => (
-        <DialCard key={dial.id} dial={dial} settings={settings} onEdit={onEdit} onDelete={onDelete} />
+        <DialCard
+          key={dial.id}
+          dial={dial}
+          settings={settings}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          editing={editing}
+          onResize={onResize}
+        />
       ))}
     </div>
   );
