@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as storage from '../src/lib/storage';
-import { faviconUrl, resolvePreview, cacheImageFromUrl, fileToDataUrl } from '../src/lib/images';
+import { faviconUrl, resolvePreview, cacheImageFromUrl } from '../src/lib/images';
 import { Dial, Settings } from '../src/lib/types';
 import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
