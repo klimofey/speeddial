@@ -7,7 +7,7 @@ body {
 }
 #app { min-height: 100vh; }
 
-.dial-grid { display: grid; gap: 16px; padding: 24px; max-width: 920px; margin: 0 auto;
+.dial-grid { display: grid; gap: 16px; padding: 24px; max-width: min(1600px, 94vw); margin: 0 auto;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); grid-auto-rows: 120px; grid-auto-flow: dense; }
 .dial-grid[data-size="sm"] { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); grid-auto-rows: 92px; }
 .dial-grid[data-size="lg"] { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); grid-auto-rows: 156px; }
@@ -67,7 +67,7 @@ body {
 .settings-msg { font-size: 12px; }
 .ce-error { color: #e5484d; font-size: 12px; margin: 4px 0 0; }
 
-.recent-row { max-width: 920px; margin: 0 auto; padding: 4px 24px 0; }
+.recent-row { max-width: min(1600px, 94vw); margin: 0 auto; padding: 4px 24px 0; }
 .recent-label { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; }
 .recent-tiles { display: flex; gap: 10px; flex-wrap: wrap; }
 .recent-tile { position: relative; display: flex; align-items: center; gap: 8px;
