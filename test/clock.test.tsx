@@ -9,10 +9,21 @@ describe('greeting', () => {
 });
 
 describe('Clock', () => {
-  beforeEach(() => vi.useFakeTimers().setSystemTime(new Date('2026-05-24T09:00:00')));
+  beforeEach(() => vi.useFakeTimers().setSystemTime(new Date('2026-05-24T13:05:00')));
   afterEach(() => vi.useRealTimers());
+
   it('renders a greeting with the name', () => {
-    render(<Clock name="Alex" />);
-    expect(screen.getByText(/Good morning, Alex/)).toBeTruthy();
+    render(<Clock name="Alex" format="24h" />);
+    expect(screen.getByText(/Good afternoon, Alex/)).toBeTruthy();
+  });
+
+  it('renders 24h time without AM/PM', () => {
+    render(<Clock name={null} format="24h" />);
+    expect(screen.getByText('13:05')).toBeTruthy();
+  });
+
+  it('renders 12h time with PM', () => {
+    render(<Clock name={null} format="12h" />);
+    expect(screen.getByText('01:05 PM')).toBeTruthy();
   });
 });
