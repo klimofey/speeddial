@@ -114,3 +114,5 @@ body {
 .clock-settings label { font-size: 12px; opacity: .8; }
 .clock-settings select, .clock-settings input { padding: 8px 10px; border-radius: 8px;
   border: 1px solid var(--muted, #ccc); background: var(--search-bg, #fff); color: inherit; }
+.clock-row { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.clock-row .world-clocks { flex-direction: column; gap: 6px; margin-top: 0; }

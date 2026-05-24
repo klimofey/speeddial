@@ -10,6 +10,7 @@ import { CardEditor } from './CardEditor';
 import { Settings } from './Settings';
 import { ClockSettings } from './ClockSettings';
 import { WorldClocks } from './WorldClocks';
+import { splitWorldClocks } from '../lib/time';
 import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
 
@@ -57,6 +58,8 @@ function Board() {
 
   if (!ready) return null;
 
+  const { left: leftClocks, right: rightClocks } = splitWorldClocks(settings.worldClocks);
+
   const visible = filter
     ? dials.filter((d) => (d.title + ' ' + d.url).toLowerCase().includes(filter.toLowerCase()))
     : dials;
@@ -78,10 +81,11 @@ function Board() {
       {editMode && <button class="edit-toggle clock-config-btn" onClick={() => setShowClockConfig(true)}>Clock</button>}
       <div class="header">
         {settings.showClock && (
-          <>
+          <div class="clock-row">
+            <WorldClocks clocks={leftClocks} format={settings.clockFormat} />
             <Clock name={settings.greetingName} format={settings.clockFormat} />
-            <WorldClocks clocks={settings.worldClocks} format={settings.clockFormat} />
-          </>
+            <WorldClocks clocks={rightClocks} format={settings.clockFormat} />
+          </div>
         )}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
