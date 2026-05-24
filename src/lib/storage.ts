@@ -6,12 +6,20 @@ const K_DIALS = 'dials';
 const IMG_PREFIX = 'img:';
 
 // Write to sync; if the sync quota is exceeded, transparently fall back to local.
+// Non-quota errors (e.g. a missing permission) must surface rather than silently
+// degrading to a local-only write that looks like success.
 async function setSynced(key: string, value: unknown): Promise<void> {
   try {
     await chrome.storage.sync.set({ [key]: value });
-    await chrome.storage.local.remove(key); // clear any stale fallback copy
-  } catch {
-    await chrome.storage.local.set({ [key]: value });
+    // Best-effort cleanup of any stale local fallback. The sync write already
+    // succeeded, so a cleanup failure must not fail the overall write.
+    await chrome.storage.local.remove(key).catch(() => {});
+  } catch (err) {
+    if (err instanceof Error && /quota/i.test(err.message)) {
+      await chrome.storage.local.set({ [key]: value });
+    } else {
+      throw err;
+    }
   }
 }
 

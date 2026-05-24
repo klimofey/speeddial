@@ -45,4 +45,9 @@ describe('storage', () => {
     await storage.setDials([dial('a', 0)]);
     expect((await storage.getDials()).map((d) => d.id)).toEqual(['a']);
   });
+
+  it('rethrows non-quota errors from sync.set', async () => {
+    mockChrome.sync.set.mockRejectedValueOnce(new Error('Missing host permission'));
+    await expect(storage.setDials([dial('a', 0)])).rejects.toThrow(/permission/i);
+  });
 });
