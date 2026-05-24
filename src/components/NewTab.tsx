@@ -8,6 +8,7 @@ import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
 import { CardEditor } from './CardEditor';
 import { Settings } from './Settings';
+import { WorldClocks } from './WorldClocks';
 import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
 
@@ -64,7 +65,12 @@ function Board() {
     <div class="board">
       <button class="settings-gear" aria-label="Open settings" onClick={() => setShowSettings(true)}>⚙</button>
       <div class="header">
-        {settings.showClock && <Clock name={settings.greetingName} />}
+        {settings.showClock && (
+          <>
+            <Clock name={settings.greetingName} format={settings.clockFormat} />
+            <WorldClocks clocks={settings.worldClocks} format={settings.clockFormat} />
+          </>
+        )}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
       {!filter && <RecentRow sites={recentSites} onPin={onPinRecent} />}
