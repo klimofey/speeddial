@@ -26,6 +26,15 @@ function Board() {
     }
   }, [settings]);
 
+  // When the System theme is active, re-apply on OS light/dark changes (live).
+  useEffect(() => {
+    if (settings.activeThemeId !== 'system' || typeof matchMedia !== 'function') return;
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    const handler = () => applyTheme(settings);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [settings]);
+
   if (!ready) return null;
 
   const visible = filter

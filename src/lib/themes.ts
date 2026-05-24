@@ -5,7 +5,16 @@ export function allThemes(custom: Theme[]): Theme[] {
   return [...BUILTIN_THEMES, ...custom];
 }
 
+// True when the OS is set to dark mode. Safe to call where matchMedia is absent (tests/SSR).
+export function systemPrefersDark(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
 export function resolveTheme(settings: Settings): Theme {
+  if (settings.activeThemeId === 'system') {
+    const id = systemPrefersDark() ? 'dark-neon' : 'light-minimal';
+    return BUILTIN_THEMES.find((t) => t.id === id) ?? BUILTIN_THEMES[0];
+  }
   const list = allThemes(settings.customThemes);
   return list.find((t) => t.id === settings.activeThemeId) ?? BUILTIN_THEMES[0];
 }

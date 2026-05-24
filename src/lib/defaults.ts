@@ -36,7 +36,7 @@ export const BUILTIN_THEMES: Theme[] = [
 
 export const DEFAULT_SETTINGS: Settings = {
   schemaVersion: SCHEMA_VERSION,
-  activeThemeId: 'light-minimal',
+  activeThemeId: 'system',
   customThemes: [],
   searchEngine: 'google',
   cardSize: 'md',

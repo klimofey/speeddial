@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { resolveTheme, applyTheme, allThemes } from '../src/lib/themes';
 import { DEFAULT_SETTINGS, BUILTIN_THEMES } from '../src/lib/defaults';
 import { Theme } from '../src/lib/types';
@@ -31,5 +31,17 @@ describe('themes', () => {
     const el = document.createElement('div');
     applyTheme({ ...DEFAULT_SETTINGS, activeThemeId: 'dark-neon' }, el);
     expect(el.style.getPropertyValue('--bg')).toBe('#0d1117');
+  });
+
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('resolves the system theme to dark-neon when the OS prefers dark', () => {
+    vi.stubGlobal('matchMedia', (q: string) => ({ matches: true, media: q, addEventListener() {}, removeEventListener() {} }));
+    expect(resolveTheme({ ...DEFAULT_SETTINGS, activeThemeId: 'system' }).id).toBe('dark-neon');
+  });
+
+  it('resolves the system theme to light-minimal when the OS prefers light', () => {
+    vi.stubGlobal('matchMedia', (q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} }));
+    expect(resolveTheme({ ...DEFAULT_SETTINGS, activeThemeId: 'system' }).id).toBe('light-minimal');
   });
 });

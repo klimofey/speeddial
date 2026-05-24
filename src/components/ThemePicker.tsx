@@ -22,6 +22,14 @@ export function ThemePicker({ settings, onPick, onAddCustom }: Props) {
   return (
     <div class="theme-picker">
       <div class="theme-swatches">
+        <button
+          class={`theme-swatch${settings.activeThemeId === 'system' ? ' active' : ''}`}
+          style={{ background: 'linear-gradient(135deg,#f4f5f7 0 50%,#0d1117 50% 100%)' }}
+          title="System (follows your OS appearance)"
+          onClick={() => onPick('system')}
+        >
+          <span style={{ color: '#888' }}>System</span>
+        </button>
         {themes.map((t) => (
           <button
             key={t.id}
