@@ -8,13 +8,13 @@ body {
 #app { min-height: 100vh; }
 
 .dial-grid { display: grid; gap: 16px; padding: 24px; max-width: 920px; margin: 0 auto;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
-.dial-grid[data-size="sm"] { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
-.dial-grid[data-size="lg"] { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
-.dial-card { position: relative; }
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); grid-auto-rows: 120px; grid-auto-flow: dense; }
+.dial-grid[data-size="sm"] { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); grid-auto-rows: 92px; }
+.dial-grid[data-size="lg"] { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); grid-auto-rows: 156px; }
+.dial-card { position: relative; height: 100%; }
 .dial-link { display: flex; flex-direction: column; align-items: center; gap: 8px;
-  text-decoration: none; color: var(--fg); }
-.dial-thumb { width: 100%; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden;
+  text-decoration: none; color: var(--fg); height: 100%; }
+.dial-thumb { width: 100%; flex: 1 1 auto; min-height: 0; border-radius: var(--radius); overflow: hidden;
   background: var(--card-bg); box-shadow: var(--card-shadow); border: var(--card-border);
   backdrop-filter: var(--card-blur); display: flex; align-items: center; justify-content: center; }
 .dial-thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -100,3 +100,6 @@ body {
 .wc-item input { flex: 1; min-width: 0; }
 .wc-tz { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .wc-item button { border: none; background: rgba(0,0,0,.25); color: #fff; border-radius: 6px; width: 22px; height: 22px; cursor: pointer; flex: 0 0 auto; }
+.dial-card.editing .dial-actions { display: flex; }
+.dial-resize { position: absolute; right: -6px; bottom: -6px; width: 16px; height: 16px;
+  border-radius: 4px; background: var(--accent); cursor: nwse-resize; }
