@@ -29,6 +29,7 @@ const en: Dict = {
   world_clocks: 'World clocks', add_tz: 'Add a time zone…',
   greeting_morning: 'Good morning', greeting_afternoon: 'Good afternoon', greeting_evening: 'Good evening',
   search_placeholder: 'Search the web or filter your cards…', recent: 'Recent',
+  pin: 'Pin',
   open_settings: 'Open settings', clock_settings: 'Clock settings',
 };
 
@@ -59,6 +60,7 @@ const ru: Dict = {
   world_clocks: 'Мировые часы', add_tz: 'Добавить часовой пояс…',
   greeting_morning: 'Доброе утро', greeting_afternoon: 'Добрый день', greeting_evening: 'Добрый вечер',
   search_placeholder: 'Поиск в вебе или фильтр карточек…', recent: 'Недавние',
+  pin: 'Закрепить',
   open_settings: 'Открыть настройки', clock_settings: 'Настройки часов',
 };
 
@@ -89,6 +91,7 @@ const es: Dict = {
   world_clocks: 'Relojes mundiales', add_tz: 'Añadir zona horaria…',
   greeting_morning: 'Buenos días', greeting_afternoon: 'Buenas tardes', greeting_evening: 'Buenas noches',
   search_placeholder: 'Busca en la web o filtra tus tarjetas…', recent: 'Recientes',
+  pin: 'Anclar',
   open_settings: 'Abrir ajustes', clock_settings: 'Ajustes del reloj',
 };
 
@@ -119,6 +122,7 @@ const de: Dict = {
   world_clocks: 'Weltuhren', add_tz: 'Zeitzone hinzufügen…',
   greeting_morning: 'Guten Morgen', greeting_afternoon: 'Guten Tag', greeting_evening: 'Guten Abend',
   search_placeholder: 'Im Web suchen oder Karten filtern…', recent: 'Zuletzt',
+  pin: 'Anheften',
   open_settings: 'Einstellungen öffnen', clock_settings: 'Uhr-Einstellungen',
 };
 
@@ -149,6 +153,7 @@ const fr: Dict = {
   world_clocks: 'Horloges du monde', add_tz: 'Ajouter un fuseau horaire…',
   greeting_morning: 'Bonjour', greeting_afternoon: 'Bon après-midi', greeting_evening: 'Bonsoir',
   search_placeholder: 'Cherchez sur le web ou filtrez vos cartes…', recent: 'Récents',
+  pin: 'Épingler',
   open_settings: 'Ouvrir les paramètres', clock_settings: "Réglages de l'horloge",
 };
 

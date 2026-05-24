@@ -31,7 +31,7 @@ export function RecentRow({ sites, onPin, loading = false }: Props) {
 
   return (
     <div class="recent-row">
-      <div class="recent-label">Recent</div>
+      <div class="recent-label">{t('recent')}</div>
       <div class="recent-tiles">
         {sites.map((s) => (
           <div class="recent-tile" key={s.origin}>
@@ -39,7 +39,7 @@ export function RecentRow({ sites, onPin, loading = false }: Props) {
               <img class="recent-favicon" src={faviconUrl(s.url)} alt="" />
               <span class="recent-title">{s.title}</span>
             </a>
-            <button class="recent-pin" aria-label={`Pin ${s.title}`} onClick={() => onPin(s)}>+</button>
+            <button class="recent-pin" aria-label={`${t('pin')} ${s.title}`} onClick={() => onPin(s)}>+</button>
           </div>
         ))}
       </div>
