@@ -31,6 +31,10 @@ const en: Dict = {
   search_placeholder: 'Search the web or filter your cards…', recent: 'Recent',
   pin: 'Pin',
   open_settings: 'Open settings', clock_settings: 'Clock settings',
+  aria_bg_color: 'Background color', aria_bg_gradient: 'Background gradient',
+  aria_bg_image: 'Background image', aria_screenshot_tmpl: 'Screenshot service template',
+  theme_system: 'System', theme_system_title: 'System (follows your OS appearance)',
+  ph_example: 'Example',
 };
 
 const ru: Dict = {
@@ -62,6 +66,10 @@ const ru: Dict = {
   search_placeholder: 'Поиск в вебе или фильтр карточек…', recent: 'Недавние',
   pin: 'Закрепить',
   open_settings: 'Открыть настройки', clock_settings: 'Настройки часов',
+  aria_bg_color: 'Цвет фона', aria_bg_gradient: 'Градиент фона',
+  aria_bg_image: 'Картинка фона', aria_screenshot_tmpl: 'Шаблон скриншот-сервиса',
+  theme_system: 'Системная', theme_system_title: 'Системная (по теме ОС)',
+  ph_example: 'Пример',
 };
 
 const es: Dict = {
@@ -93,6 +101,10 @@ const es: Dict = {
   search_placeholder: 'Busca en la web o filtra tus tarjetas…', recent: 'Recientes',
   pin: 'Anclar',
   open_settings: 'Abrir ajustes', clock_settings: 'Ajustes del reloj',
+  aria_bg_color: 'Color de fondo', aria_bg_gradient: 'Degradado de fondo',
+  aria_bg_image: 'Imagen de fondo', aria_screenshot_tmpl: 'Plantilla del servicio de capturas',
+  theme_system: 'Sistema', theme_system_title: 'Sistema (sigue tu sistema)',
+  ph_example: 'Ejemplo',
 };
 
 const de: Dict = {
@@ -124,6 +136,10 @@ const de: Dict = {
   search_placeholder: 'Im Web suchen oder Karten filtern…', recent: 'Zuletzt',
   pin: 'Anheften',
   open_settings: 'Einstellungen öffnen', clock_settings: 'Uhr-Einstellungen',
+  aria_bg_color: 'Hintergrundfarbe', aria_bg_gradient: 'Hintergrundverlauf',
+  aria_bg_image: 'Hintergrundbild', aria_screenshot_tmpl: 'Screenshot-Dienst-Vorlage',
+  theme_system: 'System', theme_system_title: 'System (folgt dem Betriebssystem)',
+  ph_example: 'Beispiel',
 };
 
 const fr: Dict = {
@@ -155,6 +171,10 @@ const fr: Dict = {
   search_placeholder: 'Cherchez sur le web ou filtrez vos cartes…', recent: 'Récents',
   pin: 'Épingler',
   open_settings: 'Ouvrir les paramètres', clock_settings: "Réglages de l'horloge",
+  aria_bg_color: 'Couleur de fond', aria_bg_gradient: 'Dégradé de fond',
+  aria_bg_image: 'Image de fond', aria_screenshot_tmpl: 'Modèle du service de captures',
+  theme_system: 'Système', theme_system_title: 'Système (suit votre OS)',
+  ph_example: 'Exemple',
 };
 
 export const messages: Record<Lang, Dict> = { en, ru, es, de, fr };

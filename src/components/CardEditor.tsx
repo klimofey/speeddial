@@ -162,7 +162,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
         <input id="ce-url" value={url} onInput={(e) => setUrl((e.target as HTMLInputElement).value)} placeholder="https://example.com" />
 
         <label for="ce-title">{t('title')}</label>
-        <input id="ce-title" value={title} onInput={(e) => setTitle((e.target as HTMLInputElement).value)} placeholder="Example" />
+        <input id="ce-title" value={title} onInput={(e) => setTitle((e.target as HTMLInputElement).value)} placeholder={t('ph_example')} />
 
         <label for="ce-mode">{t('preview')}</label>
         <select id="ce-mode" value={mode} onChange={(e) => setMode((e.target as HTMLSelectElement).value as Mode)}>
@@ -199,9 +199,9 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
             ))}
           </div>
         )}
-        {mode === 'upload' && <input type="file" accept="image/*" aria-label="Upload image" onChange={onFile} />}
+        {mode === 'upload' && <input type="file" accept="image/*" aria-label={t('mode_upload')} onChange={onFile} />}
         {mode === 'url' && (
-          <input aria-label="Image URL" value={imageUrl} placeholder="https://.../image.png"
+          <input aria-label={t('mode_url')} value={imageUrl} placeholder="https://.../image.png"
             onInput={(e) => setImageUrl((e.target as HTMLInputElement).value)} />
         )}
 

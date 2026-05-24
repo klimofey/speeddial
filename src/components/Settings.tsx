@@ -86,16 +86,16 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           <option value="imageRef">{t('bg_image')}</option>
         </select>
         {settings.background.type === 'color' && (
-          <input type="color" aria-label="Background color" value={settings.background.value || '#000000'}
+          <input type="color" aria-label={t('aria_bg_color')} value={settings.background.value || '#000000'}
             onInput={(e) => onChange({ background: { type: 'color', value: (e.target as HTMLInputElement).value } })} />
         )}
         {settings.background.type === 'gradient' && (
-          <input aria-label="Background gradient" placeholder="linear-gradient(135deg,#6a5acd,#ec4899)"
+          <input aria-label={t('aria_bg_gradient')} placeholder="linear-gradient(135deg,#6a5acd,#ec4899)"
             value={settings.background.value}
             onInput={(e) => onChange({ background: { type: 'gradient', value: (e.target as HTMLInputElement).value } })} />
         )}
         {settings.background.type === 'imageRef' && (
-          <input type="file" accept="image/*" aria-label="Background image" onChange={onBgFile} />
+          <input type="file" accept="image/*" aria-label={t('aria_bg_image')} onChange={onBgFile} />
         )}
 
         <label for="se-engine">{t('search_engine')}</label>
@@ -121,7 +121,7 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
         </label>
         <p class="settings-warn">{t('screenshots_warn')}</p>
         {settings.useScreenshots && (
-          <input aria-label="Screenshot service template" placeholder="https://service.example/{url}"
+          <input aria-label={t('aria_screenshot_tmpl')} placeholder="https://service.example/{url}"
             value={settings.screenshotTemplate}
             onInput={(e) => onChange({ screenshotTemplate: (e.target as HTMLInputElement).value })} />
         )}
