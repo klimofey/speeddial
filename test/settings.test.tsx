@@ -37,3 +37,12 @@ describe('Settings without clock controls', () => {
     expect(screen.queryByLabelText('World clocks')).toBeNull();
   });
 });
+
+describe('Settings language picker', () => {
+  it('changes the language', () => {
+    const onChange = vi.fn();
+    render(<Settings settings={DEFAULT_SETTINGS} onChange={onChange} onClose={() => {}} onRestored={() => {}} />);
+    fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'ru' } });
+    expect(onChange).toHaveBeenCalledWith({ language: 'ru' });
+  });
+});

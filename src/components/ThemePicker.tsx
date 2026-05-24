@@ -1,5 +1,6 @@
 import { allThemes } from '../lib/themes';
 import { Settings, Theme } from '../lib/types';
+import { t } from '../lib/i18n';
 
 interface Props {
   settings: Settings;
@@ -42,7 +43,7 @@ export function ThemePicker({ settings, onPick, onAddCustom }: Props) {
           </button>
         ))}
       </div>
-      <button class="theme-add" onClick={cloneActive}>+ New theme from current</button>
+      <button class="theme-add" onClick={cloneActive}>{t('theme_new')}</button>
     </div>
   );
 }

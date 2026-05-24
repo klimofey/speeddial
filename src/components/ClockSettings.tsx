@@ -1,4 +1,5 @@
 import { Settings as SettingsType, WorldClock } from '../lib/types';
+import { t } from '../lib/i18n';
 import { listTimeZones, labelForZone } from '../lib/time';
 
 interface Props {
@@ -19,21 +20,21 @@ export function ClockSettings({ settings, onChange }: Props) {
     <div class="clock-settings">
       <label>
         <input type="checkbox" checked={settings.showClock}
-          onChange={(e) => onChange({ showClock: (e.target as HTMLInputElement).checked })} /> Show clock
+          onChange={(e) => onChange({ showClock: (e.target as HTMLInputElement).checked })} /> {t('show_clock')}
       </label>
 
-      <label for="cs-fmt">Clock format</label>
+      <label for="cs-fmt">{t('clock_format')}</label>
       <select id="cs-fmt" value={settings.clockFormat}
         onChange={(e) => onChange({ clockFormat: (e.target as HTMLSelectElement).value as '24h' | '12h' })}>
-        <option value="24h">24-hour</option>
-        <option value="12h">12-hour</option>
+        <option value="24h">{t('fmt_24')}</option>
+        <option value="12h">{t('fmt_12')}</option>
       </select>
 
-      <label for="cs-name">Greeting name</label>
+      <label for="cs-name">{t('greeting_name')}</label>
       <input id="cs-name" value={settings.greetingName ?? ''}
         onInput={(e) => onChange({ greetingName: (e.target as HTMLInputElement).value || null })} />
 
-      <label for="cs-tz">World clocks</label>
+      <label for="cs-tz">{t('world_clocks')}</label>
       {settings.worldClocks.length > 0 && (
         <div class="wc-list">
           {settings.worldClocks.map((c) => (
@@ -47,7 +48,7 @@ export function ClockSettings({ settings, onChange }: Props) {
         </div>
       )}
       <select id="cs-tz" value="" onChange={(e) => { const v = (e.target as HTMLSelectElement).value; if (v) addWorldClock(v); }}>
-        <option value="">Add a time zone…</option>
+        <option value="">{t('add_tz')}</option>
         {listTimeZones().map((tz) => <option value={tz} key={tz}>{tz}</option>)}
       </select>
     </div>

@@ -3,6 +3,7 @@ import { AppProvider, useApp } from '../state/AppState';
 import { applyTheme } from '../lib/themes';
 import { getImage } from '../lib/storage';
 import { Dial } from '../lib/types';
+import { setLang } from '../lib/i18n';
 import { Clock } from './Clock';
 import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
@@ -57,6 +58,8 @@ function Board() {
   }, [ready, settings.showRecent, dials]);
 
   if (!ready) return null;
+
+  setLang(settings.language);
 
   const { left: leftClocks, right: rightClocks } = splitWorldClocks(settings.worldClocks);
 

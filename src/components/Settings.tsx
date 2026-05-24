@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks';
-import { Settings as SettingsType, Theme, SearchEngine, CardSize, Background, SuggestProvider } from '../lib/types';
+import { Settings as SettingsType, Theme, SearchEngine, CardSize, Background, SuggestProvider, Lang } from '../lib/types';
+import { t, LANGS } from '../lib/i18n';
 import { ThemePicker } from './ThemePicker';
 import { buildSnapshot, serialize, parseSnapshot, restoreSnapshot } from '../lib/backup';
 import { ensureGooglePermission } from '../lib/permissions';
@@ -71,18 +72,18 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
   return (
     <div class="modal-backdrop" onClick={onClose}>
       <div class="modal settings" onClick={(e) => e.stopPropagation()}>
-        <h3>Settings</h3>
+        <h3>{t('settings_title')}</h3>
 
-        <label>Theme</label>
+        <label>{t('theme')}</label>
         <ThemePicker settings={settings} onPick={(id) => onChange({ activeThemeId: id })} onAddCustom={addCustom} />
 
-        <label for="se-bg">Background</label>
+        <label for="se-bg">{t('background')}</label>
         <select id="se-bg" value={settings.background.type}
           onChange={(e) => setBackgroundType((e.target as HTMLSelectElement).value as Background['type'])}>
-          <option value="theme">Theme default</option>
-          <option value="color">Solid color</option>
-          <option value="gradient">Gradient</option>
-          <option value="imageRef">Image</option>
+          <option value="theme">{t('bg_theme')}</option>
+          <option value="color">{t('bg_color')}</option>
+          <option value="gradient">{t('bg_gradient')}</option>
+          <option value="imageRef">{t('bg_image')}</option>
         </select>
         {settings.background.type === 'color' && (
           <input type="color" aria-label="Background color" value={settings.background.value || '#000000'}
@@ -97,7 +98,7 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           <input type="file" accept="image/*" aria-label="Background image" onChange={onBgFile} />
         )}
 
-        <label for="se-engine">Search engine</label>
+        <label for="se-engine">{t('search_engine')}</label>
         <select id="se-engine" value={settings.searchEngine}
           onChange={(e) => onChange({ searchEngine: (e.target as HTMLSelectElement).value as SearchEngine })}>
           <option value="google">Google</option>
@@ -105,20 +106,20 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           <option value="bing">Bing</option>
         </select>
 
-        <label for="se-size">Card size</label>
+        <label for="se-size">{t('card_size')}</label>
         <select id="se-size" value={settings.cardSize}
           onChange={(e) => onChange({ cardSize: (e.target as HTMLSelectElement).value as CardSize })}>
-          <option value="sm">Small</option>
-          <option value="md">Medium</option>
-          <option value="lg">Large</option>
+          <option value="sm">{t('size_sm')}</option>
+          <option value="md">{t('size_md')}</option>
+          <option value="lg">{t('size_lg')}</option>
         </select>
 
         <label>
           <input type="checkbox" checked={settings.useScreenshots}
             onChange={(e) => onChange({ useScreenshots: (e.target as HTMLInputElement).checked })} />
-          Use screenshot service for previews
+          {t('screenshots')}
         </label>
-        <p class="settings-warn">⚠ When on, the URLs of sites you add are sent to a third-party screenshot service. Off by default.</p>
+        <p class="settings-warn">{t('screenshots_warn')}</p>
         {settings.useScreenshots && (
           <input aria-label="Screenshot service template" placeholder="https://service.example/{url}"
             value={settings.screenshotTemplate}
@@ -127,25 +128,31 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
 
         <label>
           <input type="checkbox" checked={settings.showRecent}
-            onChange={(e) => onChange({ showRecent: (e.target as HTMLInputElement).checked })} /> Show recent sites
+            onChange={(e) => onChange({ showRecent: (e.target as HTMLInputElement).checked })} /> {t('show_recent')}
         </label>
 
-        <label for="se-suggest">Search suggestions</label>
+        <label for="se-suggest">{t('suggestions')}</label>
         <select id="se-suggest" value={settings.suggestProvider} onChange={onSuggestChange}>
-          <option value="off">Off</option>
+          <option value="off">{t('sugg_off')}</option>
           <option value="duckduckgo">DuckDuckGo</option>
           <option value="google">Google</option>
         </select>
-        <p class="settings-warn">⚠ Suggestions send what you type to the chosen provider. DuckDuckGo needs no extra permission; Google asks for one.</p>
+        <p class="settings-warn">{t('sugg_warn')}</p>
 
-        <label>Backup</label>
+        <label for="se-lang">{t('language')}</label>
+        <select id="se-lang" value={settings.language}
+          onChange={(e) => onChange({ language: (e.target as HTMLSelectElement).value as Lang })}>
+          {LANGS.map((l) => <option value={l.code} key={l.code}>{l.label}</option>)}
+        </select>
+
+        <label>{t('backup')}</label>
         <div class="settings-backup">
-          <button onClick={doExport}>Export</button>
-          <label class="import-btn">Import<input type="file" accept=".json,.zip" hidden onChange={doImport} /></label>
+          <button onClick={doExport}>{t('export')}</button>
+          <label class="import-btn">{t('import')}<input type="file" accept=".json,.zip" hidden onChange={doImport} /></label>
         </div>
         {importMsg && <p class="settings-msg">{importMsg}</p>}
 
-        <div class="modal-actions"><button onClick={onClose}>Close</button></div>
+        <div class="modal-actions"><button onClick={onClose}>{t('close')}</button></div>
       </div>
     </div>
   );
