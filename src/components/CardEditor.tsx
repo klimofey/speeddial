@@ -3,7 +3,7 @@ import { Dial, Settings, ImageRef } from '../lib/types';
 import { fileToDataUrl, cacheImageFromUrl } from '../lib/images';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
-import { ensureOriginPermission } from '../lib/permissions';
+import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
 import { scrapeBestImage } from '../lib/metascrape';
 
 interface Props {
@@ -34,6 +34,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [scrapeMsg, setScrapeMsg] = useState('');
+  const [scrapeStep, setScrapeStep] = useState<'idle' | 'need-perm' | 'searching' | 'denied'>('idle');
 
   const canSave = url.trim().length > 0 && !busy;
 
@@ -48,20 +49,43 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setBusy(false);
   };
 
-  const findBetterImage = async () => {
+  const hostOf = (raw: string) => {
+    try { return new URL(normalizeUrl(raw)).host; } catch { return raw; }
+  };
+
+  const doScrape = async () => {
     const finalUrl = normalizeUrl(url);
-    setBusy(true);
+    setScrapeStep('searching');
     setScrapeMsg('Searching…');
-    const ok = await ensureOriginPermission(finalUrl);
-    if (!ok) { setBusy(false); setScrapeMsg('Permission denied — keeping the current preview.'); return; }
+    setBusy(true);
     const img = await scrapeBestImage(finalUrl);
-    if (!img) { setBusy(false); setScrapeMsg('No better image found.'); return; }
+    if (!img) { setBusy(false); setScrapeStep('idle'); setScrapeMsg('No better image found.'); return; }
     const ref = 'meta-' + Date.now().toString(36);
     await setImage(ref, { data: img, source: 'url', srcUrl: img });
     setUploadRef(ref);
     setMode('upload');
-    setScrapeMsg('Found a better image ✓');
     setBusy(false);
+    setScrapeStep('idle');
+    setScrapeMsg('Found a better image ✓');
+  };
+
+  const findBetterImage = async () => {
+    setBusy(true);
+    setScrapeMsg('');
+    const granted = await hasOriginPermission(normalizeUrl(url));
+    setBusy(false);
+    if (granted) { await doScrape(); return; }
+    setScrapeStep('need-perm');
+    setScrapeMsg(`SpeedDial needs one-time access to ${hostOf(url)}. Chrome will ask — click Allow.`);
+  };
+
+  const allowAccess = async () => {
+    setBusy(true);
+    const granted = await ensureOriginPermission(normalizeUrl(url));
+    setBusy(false);
+    if (granted) { await doScrape(); return; }
+    setScrapeStep('denied');
+    setScrapeMsg('Access denied. Click "Allow access" to try again, or grant it manually in chrome://extensions → SpeedDial → Details → Site access.');
   };
 
   // Returns ImageRef synchronously for simple modes; returns a Promise for async modes.
@@ -122,7 +146,12 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
         </select>
 
         {url.trim() && (
-          <button type="button" class="ce-find" onClick={findBetterImage} disabled={busy}>Find better image</button>
+          <div class="ce-find-row">
+            <button type="button" class="ce-find" onClick={findBetterImage} disabled={busy}>Find better image</button>
+            {(scrapeStep === 'need-perm' || scrapeStep === 'denied') && (
+              <button type="button" class="ce-find" onClick={allowAccess} disabled={busy}>Allow access</button>
+            )}
+          </div>
         )}
         {scrapeMsg && <p class="settings-msg">{scrapeMsg}</p>}
         {mode === 'upload' && <input type="file" accept="image/*" aria-label="Upload image" onChange={onFile} />}
