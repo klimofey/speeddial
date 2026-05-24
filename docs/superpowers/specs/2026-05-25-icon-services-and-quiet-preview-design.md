@@ -74,7 +74,17 @@ When the user clicks **"Find better image"**:
   (no "Allow access" needed to see them); "Allow access" then appends scraped page
   images; picking a candidate yields a `meta-` imageRef on save; denial shows guidance.
 
-## 6. Out of scope
+## 6. Recent row: center + fill
+
+- The Recent strip currently left-aligns its pills, which looks off-center under the
+  now-wide grid. Center them: `.recent-tiles { justify-content: center; }`.
+- "Fill as much as possible": raise the recent count so the row uses the wider
+  layout — `NewTab` calls `getRecentSites({ excludeUrls, limit: 16 })` (was the
+  default 8). With `flex-wrap`, the centered pills fill the available width and wrap.
+- Test: `recent.ts` already covers the `limit` option; no new logic. The center is
+  CSS-only.
+
+## 7. Out of scope
 
 - Keyed services (logo.dev/Clearbit) — avoided to keep zero-config.
 - Sorting candidates by resolution / fetching dimensions (user eyeballs the gallery).
