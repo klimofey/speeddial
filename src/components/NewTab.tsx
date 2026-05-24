@@ -50,7 +50,7 @@ function Board() {
   useEffect(() => {
     if (!ready || !settings.showRecent) { setRecentSites([]); setRecentLoading(false); return; }
     setRecentLoading(true);
-    void getRecentSites({ excludeUrls: dials.map((d) => d.url) }).then((sites) => {
+    void getRecentSites({ excludeUrls: dials.map((d) => d.url), limit: 16 }).then((sites) => {
       setRecentSites(sites);
       setRecentLoading(false);
     });
