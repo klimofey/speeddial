@@ -23,3 +23,18 @@ export async function ensureOriginPermission(pageUrl: string): Promise<boolean> 
     return false;
   }
 }
+
+export async function hasOriginPermission(pageUrl: string): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.contains) return false;
+  let pattern: string;
+  try {
+    pattern = new URL(pageUrl).origin + '/*';
+  } catch {
+    return false;
+  }
+  try {
+    return await chrome.permissions.contains({ origins: [pattern] });
+  } catch {
+    return false;
+  }
+}
