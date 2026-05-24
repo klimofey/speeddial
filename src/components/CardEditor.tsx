@@ -6,6 +6,7 @@ import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
 import { scrapeImages, iconSources } from '../lib/metascrape';
 import { CardThumb } from './CardThumb';
+import { t } from '../lib/i18n';
 
 interface Props {
   settings: Settings;
@@ -60,13 +61,13 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
 
   const doScrape = async (base: string[]) => {
     setScrapeStep('searching');
-    setScrapeMsg('Scanning the page…');
+    setScrapeMsg(t('scrape_searching'));
     setBusy(true);
     const imgs = await scrapeImages(normalizeUrl(url));
     setBusy(false);
     setScrapeStep('idle');
     setCandidates(mergeUnique(base, imgs));
-    setScrapeMsg(imgs.length ? `Found ${imgs.length} more on the page — pick one.` : 'No extra images on the page.');
+    setScrapeMsg(imgs.length ? t('scrape_found_more', { n: imgs.length }) : t('scrape_no_extra'));
   };
 
   const selectCandidate = async (imgUrl: string) => {
@@ -75,7 +76,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setUploadRef(ref);
     setMode('upload');
     setSelectedUrl(imgUrl);
-    setScrapeMsg('Selected ✓');
+    setScrapeMsg(t('scrape_selected'));
   };
 
   const findBetterImage = async () => {
@@ -87,7 +88,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setBusy(false);
     if (granted) { await doScrape(icons); return; }
     setScrapeStep('need-perm');
-    setScrapeMsg('Pick an icon, or "Allow access" to scan the page for more.');
+    setScrapeMsg(t('scrape_pick_or_allow'));
   };
 
   const allowAccess = async () => {
@@ -96,7 +97,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setBusy(false);
     if (granted) { await doScrape(candidates); return; }
     setScrapeStep('denied');
-    setScrapeMsg('Access denied. Click "Allow access" to try again, or grant it manually in chrome://extensions → SpeedDial → Details → Site access.');
+    setScrapeMsg(t('scrape_denied'));
   };
 
   // Returns ImageRef synchronously for simple modes; returns a Promise for async modes.
@@ -149,7 +150,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   return (
     <div class="modal-backdrop" onClick={onClose}>
       <div class="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>{initial ? 'Edit card' : 'Add card'}</h3>
+        <h3>{initial ? t('edit_card') : t('add_card_title')}</h3>
 
         <div class="ce-preview">
           {mode === 'url' && imageUrl.trim()
@@ -157,26 +158,26 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
             : <CardThumb dial={previewDial} settings={settings} />}
         </div>
 
-        <label for="ce-url">URL</label>
+        <label for="ce-url">{t('url')}</label>
         <input id="ce-url" value={url} onInput={(e) => setUrl((e.target as HTMLInputElement).value)} placeholder="https://example.com" />
 
-        <label for="ce-title">Title</label>
+        <label for="ce-title">{t('title')}</label>
         <input id="ce-title" value={title} onInput={(e) => setTitle((e.target as HTMLInputElement).value)} placeholder="Example" />
 
-        <label for="ce-mode">Preview</label>
+        <label for="ce-mode">{t('preview')}</label>
         <select id="ce-mode" value={mode} onChange={(e) => setMode((e.target as HTMLSelectElement).value as Mode)}>
-          <option value="favicon">Site icon</option>
-          <option value="letter">Letter + color</option>
-          <option value="upload">Upload image</option>
-          <option value="url">Image URL</option>
-          {settings.useScreenshots && <option value="screenshot">Screenshot</option>}
+          <option value="favicon">{t('mode_favicon')}</option>
+          <option value="letter">{t('mode_letter')}</option>
+          <option value="upload">{t('mode_upload')}</option>
+          <option value="url">{t('mode_url')}</option>
+          {settings.useScreenshots && <option value="screenshot">{t('mode_screenshot')}</option>}
         </select>
 
         {url.trim() && (
           <div class="ce-find-row">
-            <button type="button" class="ce-find" onClick={findBetterImage} disabled={busy}>Find better image</button>
+            <button type="button" class="ce-find" onClick={findBetterImage} disabled={busy}>{t('find_better')}</button>
             {(scrapeStep === 'need-perm' || scrapeStep === 'denied') && (
-              <button type="button" class="ce-find" onClick={allowAccess} disabled={busy}>Allow access</button>
+              <button type="button" class="ce-find" onClick={allowAccess} disabled={busy}>{t('allow_access')}</button>
             )}
           </div>
         )}
@@ -206,8 +207,8 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
 
         {error && <p class="ce-error">{error}</p>}
         <div class="modal-actions">
-          <button onClick={onClose}>Cancel</button>
-          <button disabled={!canSave} onClick={save}>Save</button>
+          <button onClick={onClose}>{t('cancel')}</button>
+          <button disabled={!canSave} onClick={save}>{t('save')}</button>
         </div>
       </div>
     </div>
