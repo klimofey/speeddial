@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as storage from '../src/lib/storage';
 import { faviconUrl, resolvePreview, cacheImageFromUrl, fileToDataUrl } from '../src/lib/images';
 import { Dial, Settings } from '../src/lib/types';
@@ -10,6 +10,7 @@ const dial = (over: Partial<Dial> = {}): Dial => ({
 const settings: Settings = { ...DEFAULT_SETTINGS };
 
 beforeEach(() => { vi.restoreAllMocks(); });
+afterEach(() => { vi.unstubAllGlobals(); });
 
 describe('images', () => {
   it('builds an MV3 favicon URL', () => {
@@ -51,9 +52,17 @@ describe('images', () => {
   it('caches a fetched URL image into local storage', async () => {
     const blob = new Blob(['x'], { type: 'image/png' });
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, blob: async () => blob })));
-    vi.spyOn(globalThis, 'FileReader').mockImplementation(function (this: any) {
-      this.readAsDataURL = () => { this.result = 'data:cached'; this.onload?.(); };
-    } as never);
+    class FakeFileReader {
+      result: string | null = null;
+      error: unknown = null;
+      onload: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      readAsDataURL() {
+        this.result = 'data:cached';
+        this.onload?.();
+      }
+    }
+    vi.stubGlobal('FileReader', FakeFileReader);
     const ref = await cacheImageFromUrl('https://img/p.png');
     expect((await storage.getImage(ref))?.data).toBe('data:cached');
   });

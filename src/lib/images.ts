@@ -29,10 +29,8 @@ export async function cacheImageFromUrl(url: string): Promise<string> {
   const blob = await res.blob();
   const data: string = await new Promise((resolve, reject) => {
     const reader = new FileReader();
-    // Make result writable so test mocks (which set this.result directly) work in jsdom.
-    Object.defineProperty(reader, 'result', { writable: true, configurable: true, value: null });
-    Object.defineProperty(reader, 'onload', { value: () => resolve(reader.result as string), writable: true, configurable: true });
-    Object.defineProperty(reader, 'onerror', { value: () => reject((reader as any).error), writable: true, configurable: true });
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(blob);
   });
   const ref = 'url-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
