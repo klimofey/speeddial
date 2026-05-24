@@ -11,7 +11,7 @@ interface Props {
 export function ThemePicker({ settings, onPick, onAddCustom }: Props) {
   const themes = allThemes(settings.customThemes);
   const cloneActive = () => {
-    const base = themes.find((t) => t.id === settings.activeThemeId) ?? themes[0];
+    const base = themes.find((theme) => theme.id === settings.activeThemeId) ?? themes[0];
     const clone: Theme = {
       id: 'custom-' + Date.now().toString(36),
       name: base.name + ' (copy)',
@@ -31,15 +31,15 @@ export function ThemePicker({ settings, onPick, onAddCustom }: Props) {
         >
           <span style={{ color: '#888' }}>System</span>
         </button>
-        {themes.map((t) => (
+        {themes.map((theme) => (
           <button
-            key={t.id}
-            class={`theme-swatch${t.id === settings.activeThemeId ? ' active' : ''}`}
-            style={{ background: t.vars['--bg'] }}
-            title={t.name}
-            onClick={() => onPick(t.id)}
+            key={theme.id}
+            class={`theme-swatch${theme.id === settings.activeThemeId ? ' active' : ''}`}
+            style={{ background: theme.vars['--bg'] }}
+            title={theme.name}
+            onClick={() => onPick(theme.id)}
           >
-            <span style={{ color: t.vars['--accent'] }}>{t.name}</span>
+            <span style={{ color: theme.vars['--accent'] }}>{theme.name}</span>
           </button>
         ))}
       </div>
