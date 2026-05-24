@@ -1,30 +1,50 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { scrapeBestImage } from '../src/lib/metascrape';
+import { scrapeImages } from '../src/lib/metascrape';
 
 afterEach(() => vi.unstubAllGlobals());
 function stubHtml(html: string, ok = true) {
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok, text: async () => html })));
 }
 
-describe('scrapeBestImage', () => {
-  it('prefers og:image and resolves a relative URL against the page', async () => {
-    stubHtml('<html><head><meta property="og:image" content="/img/hero.png"><link rel="icon" href="/f.ico"></head></html>');
-    expect(await scrapeBestImage('https://site.com/page')).toBe('https://site.com/img/hero.png');
+describe('scrapeImages', () => {
+  it('collects og/twitter/apple/icon/mask-icon and <img>, resolved + deduped, SVG kept', async () => {
+    stubHtml(`<html><head>
+      <meta property="og:image" content="/hero.png">
+      <meta name="twitter:image" content="https://cdn.test/t.jpg">
+      <link rel="apple-touch-icon" href="/touch.png">
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+      <link rel="mask-icon" href="/mask.svg">
+    </head><body><img src="/a.png"><img src="/a.png"><img src="https://x.test/b.jpg"></body></html>`);
+    const r = await scrapeImages('https://site.com/page');
+    expect(r).toContain('https://site.com/hero.png');
+    expect(r).toContain('https://cdn.test/t.jpg');
+    expect(r).toContain('https://site.com/touch.png');
+    expect(r).toContain('https://site.com/favicon.svg');
+    expect(r).toContain('https://site.com/mask.svg');
+    expect(r).toContain('https://site.com/a.png');
+    expect(r).toContain('https://x.test/b.jpg');
+    expect(r.filter((u) => u.endsWith('/a.png'))).toHaveLength(1);
+    expect(r[0]).toBe('https://site.com/hero.png');
   });
-  it('falls back to apple-touch-icon when no og/twitter image', async () => {
-    stubHtml('<html><head><link rel="apple-touch-icon" href="https://cdn.x/t.png"></head></html>');
-    expect(await scrapeBestImage('https://site.com')).toBe('https://cdn.x/t.png');
+
+  it('caps at 12', async () => {
+    const imgs = Array.from({ length: 20 }, (_, i) => `<img src="/i${i}.png">`).join('');
+    stubHtml(`<html><body>${imgs}</body></html>`);
+    expect((await scrapeImages('https://s.com')).length).toBe(12);
   });
-  it('returns null when nothing matches', async () => {
-    stubHtml('<html><head></head></html>');
-    expect(await scrapeBestImage('https://site.com')).toBeNull();
+
+  it('returns [] when nothing matches', async () => {
+    stubHtml('<html><head></head><body></body></html>');
+    expect(await scrapeImages('https://s.com')).toEqual([]);
   });
-  it('returns null on a non-ok response', async () => {
+
+  it('returns [] on a non-ok response', async () => {
     stubHtml('x', false);
-    expect(await scrapeBestImage('https://site.com')).toBeNull();
+    expect(await scrapeImages('https://s.com')).toEqual([]);
   });
-  it('returns null on fetch error', async () => {
+
+  it('returns [] on fetch error', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('net'); }));
-    expect(await scrapeBestImage('https://site.com')).toBeNull();
+    expect(await scrapeImages('https://s.com')).toEqual([]);
   });
 });
