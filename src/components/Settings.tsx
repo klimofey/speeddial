@@ -127,6 +127,11 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
         )}
 
         <label>
+          <input type="checkbox" checked={settings.showSearch}
+            onChange={(e) => onChange({ showSearch: (e.target as HTMLInputElement).checked })} /> {t('show_search')}
+        </label>
+
+        <label>
           <input type="checkbox" checked={settings.showRecent}
             onChange={(e) => onChange({ showRecent: (e.target as HTMLInputElement).checked })} /> {t('show_recent')}
         </label>
