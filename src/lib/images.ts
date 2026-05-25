@@ -3,7 +3,7 @@ import { getImage, setImage } from './storage';
 import { colorForKey, initialFor } from './color';
 
 export type Preview =
-  | { kind: 'image'; src: string }
+  | { kind: 'image'; src: string; fallback?: string }
   | { kind: 'favicon'; src: string; next?: string }
   | { kind: 'letter'; letter: string; color: string };
 
@@ -75,7 +75,12 @@ export async function resolvePreview(dial: Dial, settings: Settings): Promise<Pr
   }
   if (dial.imageRef !== 'favicon') {
     const img = await getImage(dial.imageRef);
-    if (img) return { kind: 'image', src: img.data };
+    if (img) {
+      // For a link-sourced image, the URL is the source of truth (rendered live);
+      // the stored bytes are only an offline cache/fallback.
+      if (img.source === 'url' && img.srcUrl) return { kind: 'image', src: img.srcUrl, fallback: img.data };
+      return { kind: 'image', src: img.data };
+    }
   }
   return faviconPreview(dial.url);
 }

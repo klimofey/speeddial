@@ -13,6 +13,7 @@ export function CardThumb({ dial, settings }: { dial: Dial; settings: Settings }
 
   const onImgError = () => {
     if (preview?.kind === 'favicon' && preview.next) setPreview({ kind: 'favicon', src: preview.next });
+    else if (preview?.kind === 'image' && preview.fallback) setPreview({ kind: 'image', src: preview.fallback });
     else setPreview(letterFallback(dial));
   };
 
