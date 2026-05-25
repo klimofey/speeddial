@@ -1,0 +1,205 @@
+import { Lang } from './types';
+
+type Dict = Record<string, string>;
+
+const en: Dict = {
+  save: 'Save', cancel: 'Cancel', close: 'Close', edit: 'Edit', done: 'Done',
+  delete: 'Delete', add_card: '+ Add card',
+  edit_card: 'Edit card', add_card_title: 'Add card', url: 'URL', title: 'Title',
+  preview: 'Preview', mode_favicon: 'Site icon', mode_letter: 'Letter + color',
+  mode_upload: 'Upload image', mode_url: 'Image URL', mode_screenshot: 'Screenshot',
+  find_better: 'Find better image', allow_access: 'Allow access',
+  scrape_searching: 'Scanning the page…',
+  scrape_found_more: 'Found {n} more on the page — pick one.',
+  scrape_no_extra: 'No extra images on the page.',
+  scrape_pick_or_allow: 'Pick an icon, or "Allow access" to scan the page for more.',
+  scrape_denied: 'Access denied. Click "Allow access" to try again, or grant it manually in chrome://extensions → SpeedDial → Details → Site access.',
+  scrape_selected: 'Selected ✓',
+  settings_title: 'Settings', theme: 'Theme', theme_new: '+ New theme from current',
+  background: 'Background', bg_theme: 'Theme default', bg_color: 'Solid color',
+  bg_gradient: 'Gradient', bg_image: 'Image', search_engine: 'Search engine',
+  card_size: 'Card size', size_sm: 'Small', size_md: 'Medium', size_lg: 'Large',
+  show_recent: 'Show recent sites', suggestions: 'Search suggestions', sugg_off: 'Off',
+  sugg_warn: '⚠ Suggestions send what you type to the chosen provider. DuckDuckGo needs no extra permission; Google asks for one.',
+  screenshots: 'Use screenshot service for previews',
+  screenshots_warn: '⚠ When on, the URLs of sites you add are sent to a third-party screenshot service. Off by default.',
+  backup: 'Backup', export: 'Export', import: 'Import', language: 'Language',
+  clock: 'Clock', show_clock: 'Show clock', clock_format: 'Clock format',
+  fmt_24: '24-hour', fmt_12: '12-hour', greeting_name: 'Greeting name',
+  world_clocks: 'World clocks', add_tz: 'Add a time zone…',
+  greeting_morning: 'Good morning', greeting_afternoon: 'Good afternoon', greeting_evening: 'Good evening',
+  search_placeholder: 'Search the web or filter your cards…', recent: 'Recent',
+  pin: 'Pin',
+  open_settings: 'Open settings', clock_settings: 'Clock settings',
+  aria_bg_color: 'Background color', aria_bg_gradient: 'Background gradient',
+  aria_bg_image: 'Background image', aria_screenshot_tmpl: 'Screenshot service template',
+  theme_system: 'System', theme_system_title: 'System (follows your OS appearance)',
+  ph_example: 'Example',
+};
+
+const ru: Dict = {
+  save: 'Сохранить', cancel: 'Отмена', close: 'Закрыть', edit: 'Править', done: 'Готово',
+  delete: 'Удалить', add_card: '+ Добавить карточку',
+  edit_card: 'Изменить карточку', add_card_title: 'Добавить карточку', url: 'Ссылка', title: 'Название',
+  preview: 'Превью', mode_favicon: 'Иконка сайта', mode_letter: 'Буква + цвет',
+  mode_upload: 'Загрузить картинку', mode_url: 'Ссылка на картинку', mode_screenshot: 'Скриншот',
+  find_better: 'Найти лучшую картинку', allow_access: 'Разрешить доступ',
+  scrape_searching: 'Сканирую страницу…',
+  scrape_found_more: 'Найдено ещё {n} на странице — выберите.',
+  scrape_no_extra: 'На странице больше картинок нет.',
+  scrape_pick_or_allow: 'Выберите иконку или «Разрешить доступ», чтобы просканировать страницу.',
+  scrape_denied: 'Доступ запрещён. Нажмите «Разрешить доступ» ещё раз или выдайте вручную в chrome://extensions → SpeedDial → Details → Site access.',
+  scrape_selected: 'Выбрано ✓',
+  settings_title: 'Настройки', theme: 'Тема', theme_new: '+ Новая тема из текущей',
+  background: 'Фон', bg_theme: 'Как в теме', bg_color: 'Сплошной цвет',
+  bg_gradient: 'Градиент', bg_image: 'Картинка', search_engine: 'Поисковик',
+  card_size: 'Размер карточек', size_sm: 'Маленький', size_md: 'Средний', size_lg: 'Большой',
+  show_recent: 'Показывать недавние', suggestions: 'Подсказки поиска', sugg_off: 'Выкл',
+  sugg_warn: '⚠ Подсказки отправляют ваш ввод выбранному провайдеру. DuckDuckGo не требует доступа; Google запрашивает.',
+  screenshots: 'Скриншот-сервис для превью',
+  screenshots_warn: '⚠ При включении адреса добавляемых сайтов уходят стороннему скриншот-сервису. По умолчанию выключено.',
+  backup: 'Бэкап', export: 'Экспорт', import: 'Импорт', language: 'Язык',
+  clock: 'Часы', show_clock: 'Показывать часы', clock_format: 'Формат часов',
+  fmt_24: '24-часовой', fmt_12: '12-часовой', greeting_name: 'Имя для приветствия',
+  world_clocks: 'Мировые часы', add_tz: 'Добавить часовой пояс…',
+  greeting_morning: 'Доброе утро', greeting_afternoon: 'Добрый день', greeting_evening: 'Добрый вечер',
+  search_placeholder: 'Поиск в вебе или фильтр карточек…', recent: 'Недавние',
+  pin: 'Закрепить',
+  open_settings: 'Открыть настройки', clock_settings: 'Настройки часов',
+  aria_bg_color: 'Цвет фона', aria_bg_gradient: 'Градиент фона',
+  aria_bg_image: 'Картинка фона', aria_screenshot_tmpl: 'Шаблон скриншот-сервиса',
+  theme_system: 'Системная', theme_system_title: 'Системная (по теме ОС)',
+  ph_example: 'Пример',
+};
+
+const es: Dict = {
+  save: 'Guardar', cancel: 'Cancelar', close: 'Cerrar', edit: 'Editar', done: 'Listo',
+  delete: 'Eliminar', add_card: '+ Añadir tarjeta',
+  edit_card: 'Editar tarjeta', add_card_title: 'Añadir tarjeta', url: 'URL', title: 'Título',
+  preview: 'Vista previa', mode_favicon: 'Icono del sitio', mode_letter: 'Letra + color',
+  mode_upload: 'Subir imagen', mode_url: 'URL de imagen', mode_screenshot: 'Captura',
+  find_better: 'Buscar mejor imagen', allow_access: 'Permitir acceso',
+  scrape_searching: 'Analizando la página…',
+  scrape_found_more: 'Se encontraron {n} más en la página: elige una.',
+  scrape_no_extra: 'No hay más imágenes en la página.',
+  scrape_pick_or_allow: 'Elige un icono o «Permitir acceso» para analizar la página.',
+  scrape_denied: 'Acceso denegado. Pulsa «Permitir acceso» de nuevo o concédelo manualmente en chrome://extensions → SpeedDial → Details → Site access.',
+  scrape_selected: 'Seleccionado ✓',
+  settings_title: 'Ajustes', theme: 'Tema', theme_new: '+ Nuevo tema desde el actual',
+  background: 'Fondo', bg_theme: 'Según el tema', bg_color: 'Color sólido',
+  bg_gradient: 'Degradado', bg_image: 'Imagen', search_engine: 'Buscador',
+  card_size: 'Tamaño de tarjeta', size_sm: 'Pequeño', size_md: 'Mediano', size_lg: 'Grande',
+  show_recent: 'Mostrar recientes', suggestions: 'Sugerencias de búsqueda', sugg_off: 'Desactivado',
+  sugg_warn: '⚠ Las sugerencias envían lo que escribes al proveedor elegido. DuckDuckGo no necesita permiso; Google sí.',
+  screenshots: 'Servicio de capturas para vistas previas',
+  screenshots_warn: '⚠ Si se activa, las URL de los sitios que añadas se envían a un servicio externo de capturas. Desactivado por defecto.',
+  backup: 'Copia', export: 'Exportar', import: 'Importar', language: 'Idioma',
+  clock: 'Reloj', show_clock: 'Mostrar reloj', clock_format: 'Formato de hora',
+  fmt_24: '24 horas', fmt_12: '12 horas', greeting_name: 'Nombre para el saludo',
+  world_clocks: 'Relojes mundiales', add_tz: 'Añadir zona horaria…',
+  greeting_morning: 'Buenos días', greeting_afternoon: 'Buenas tardes', greeting_evening: 'Buenas noches',
+  search_placeholder: 'Busca en la web o filtra tus tarjetas…', recent: 'Recientes',
+  pin: 'Anclar',
+  open_settings: 'Abrir ajustes', clock_settings: 'Ajustes del reloj',
+  aria_bg_color: 'Color de fondo', aria_bg_gradient: 'Degradado de fondo',
+  aria_bg_image: 'Imagen de fondo', aria_screenshot_tmpl: 'Plantilla del servicio de capturas',
+  theme_system: 'Sistema', theme_system_title: 'Sistema (sigue tu sistema)',
+  ph_example: 'Ejemplo',
+};
+
+const de: Dict = {
+  save: 'Speichern', cancel: 'Abbrechen', close: 'Schließen', edit: 'Bearbeiten', done: 'Fertig',
+  delete: 'Löschen', add_card: '+ Karte hinzufügen',
+  edit_card: 'Karte bearbeiten', add_card_title: 'Karte hinzufügen', url: 'URL', title: 'Titel',
+  preview: 'Vorschau', mode_favicon: 'Website-Symbol', mode_letter: 'Buchstabe + Farbe',
+  mode_upload: 'Bild hochladen', mode_url: 'Bild-URL', mode_screenshot: 'Screenshot',
+  find_better: 'Besseres Bild finden', allow_access: 'Zugriff erlauben',
+  scrape_searching: 'Seite wird gescannt…',
+  scrape_found_more: '{n} weitere auf der Seite gefunden — wähle eins.',
+  scrape_no_extra: 'Keine weiteren Bilder auf der Seite.',
+  scrape_pick_or_allow: 'Wähle ein Symbol oder „Zugriff erlauben", um die Seite zu scannen.',
+  scrape_denied: 'Zugriff verweigert. Klicke erneut auf „Zugriff erlauben" oder erteile ihn manuell unter chrome://extensions → SpeedDial → Details → Site access.',
+  scrape_selected: 'Ausgewählt ✓',
+  settings_title: 'Einstellungen', theme: 'Thema', theme_new: '+ Neues Thema aus aktuellem',
+  background: 'Hintergrund', bg_theme: 'Wie im Thema', bg_color: 'Volltonfarbe',
+  bg_gradient: 'Verlauf', bg_image: 'Bild', search_engine: 'Suchmaschine',
+  card_size: 'Kartengröße', size_sm: 'Klein', size_md: 'Mittel', size_lg: 'Groß',
+  show_recent: 'Zuletzt besuchte zeigen', suggestions: 'Suchvorschläge', sugg_off: 'Aus',
+  sugg_warn: '⚠ Vorschläge senden deine Eingaben an den gewählten Anbieter. DuckDuckGo braucht keine Berechtigung; Google fragt danach.',
+  screenshots: 'Screenshot-Dienst für Vorschauen',
+  screenshots_warn: '⚠ Wenn aktiviert, werden die URLs hinzugefügter Seiten an einen Drittanbieter-Screenshot-Dienst gesendet. Standardmäßig aus.',
+  backup: 'Backup', export: 'Exportieren', import: 'Importieren', language: 'Sprache',
+  clock: 'Uhr', show_clock: 'Uhr anzeigen', clock_format: 'Uhrzeitformat',
+  fmt_24: '24-Stunden', fmt_12: '12-Stunden', greeting_name: 'Name für Begrüßung',
+  world_clocks: 'Weltuhren', add_tz: 'Zeitzone hinzufügen…',
+  greeting_morning: 'Guten Morgen', greeting_afternoon: 'Guten Tag', greeting_evening: 'Guten Abend',
+  search_placeholder: 'Im Web suchen oder Karten filtern…', recent: 'Zuletzt',
+  pin: 'Anheften',
+  open_settings: 'Einstellungen öffnen', clock_settings: 'Uhr-Einstellungen',
+  aria_bg_color: 'Hintergrundfarbe', aria_bg_gradient: 'Hintergrundverlauf',
+  aria_bg_image: 'Hintergrundbild', aria_screenshot_tmpl: 'Screenshot-Dienst-Vorlage',
+  theme_system: 'System', theme_system_title: 'System (folgt dem Betriebssystem)',
+  ph_example: 'Beispiel',
+};
+
+const fr: Dict = {
+  save: 'Enregistrer', cancel: 'Annuler', close: 'Fermer', edit: 'Modifier', done: 'Terminé',
+  delete: 'Supprimer', add_card: '+ Ajouter une carte',
+  edit_card: 'Modifier la carte', add_card_title: 'Ajouter une carte', url: 'URL', title: 'Titre',
+  preview: 'Aperçu', mode_favicon: 'Icône du site', mode_letter: 'Lettre + couleur',
+  mode_upload: 'Importer une image', mode_url: "URL d'image", mode_screenshot: "Capture d'écran",
+  find_better: 'Trouver une meilleure image', allow_access: "Autoriser l'accès",
+  scrape_searching: 'Analyse de la page…',
+  scrape_found_more: '{n} de plus trouvées sur la page — choisissez-en une.',
+  scrape_no_extra: "Pas d'autres images sur la page.",
+  scrape_pick_or_allow: "Choisissez une icône, ou « Autoriser l'accès » pour analyser la page.",
+  scrape_denied: "Accès refusé. Cliquez de nouveau sur « Autoriser l'accès » ou accordez-le manuellement dans chrome://extensions → SpeedDial → Details → Site access.",
+  scrape_selected: 'Sélectionné ✓',
+  settings_title: 'Paramètres', theme: 'Thème', theme_new: '+ Nouveau thème depuis l’actuel',
+  background: 'Arrière-plan', bg_theme: 'Selon le thème', bg_color: 'Couleur unie',
+  bg_gradient: 'Dégradé', bg_image: 'Image', search_engine: 'Moteur de recherche',
+  card_size: 'Taille des cartes', size_sm: 'Petite', size_md: 'Moyenne', size_lg: 'Grande',
+  show_recent: 'Afficher les récents', suggestions: 'Suggestions de recherche', sugg_off: 'Désactivé',
+  sugg_warn: '⚠ Les suggestions envoient ce que vous tapez au fournisseur choisi. DuckDuckGo ne demande aucune autorisation ; Google en demande une.',
+  screenshots: 'Service de captures pour les aperçus',
+  screenshots_warn: "⚠ Si activé, les URL des sites ajoutés sont envoyées à un service de captures tiers. Désactivé par défaut.",
+  backup: 'Sauvegarde', export: 'Exporter', import: 'Importer', language: 'Langue',
+  clock: 'Horloge', show_clock: "Afficher l'horloge", clock_format: "Format de l'heure",
+  fmt_24: '24 heures', fmt_12: '12 heures', greeting_name: 'Nom pour le message',
+  world_clocks: 'Horloges du monde', add_tz: 'Ajouter un fuseau horaire…',
+  greeting_morning: 'Bonjour', greeting_afternoon: 'Bon après-midi', greeting_evening: 'Bonsoir',
+  search_placeholder: 'Cherchez sur le web ou filtrez vos cartes…', recent: 'Récents',
+  pin: 'Épingler',
+  open_settings: 'Ouvrir les paramètres', clock_settings: "Réglages de l'horloge",
+  aria_bg_color: 'Couleur de fond', aria_bg_gradient: 'Dégradé de fond',
+  aria_bg_image: 'Image de fond', aria_screenshot_tmpl: 'Modèle du service de captures',
+  theme_system: 'Système', theme_system_title: 'Système (suit votre OS)',
+  ph_example: 'Exemple',
+};
+
+export const messages: Record<Lang, Dict> = { en, ru, es, de, fr };
+
+export const LANGS: { code: Lang; label: string }[] = [
+  { code: 'en', label: 'English' },
+  { code: 'ru', label: 'Русский' },
+  { code: 'es', label: 'Español' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'fr', label: 'Français' },
+];
+
+let current: Lang = 'en';
+
+export function setLang(lang: Lang): void {
+  current = lang;
+}
+
+export function t(key: string, vars?: Record<string, string | number>): string {
+  const raw = messages[current][key] ?? messages.en[key] ?? key;
+  if (!vars) return raw;
+  return raw.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
+}
+
+export function detectLang(locale: string = typeof navigator !== 'undefined' ? navigator.language : 'en'): Lang {
+  const code = (locale || 'en').slice(0, 2).toLowerCase();
+  return (['en', 'ru', 'es', 'de', 'fr'] as const).includes(code as Lang) ? (code as Lang) : 'en';
+}

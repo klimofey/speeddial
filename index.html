@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab</title>
+    <link rel="icon" type="image/png" href="/icons/icon-32.png" />
+    <!-- Critical, render-blocking defaults so the first paint matches the OS
+         scheme instead of flashing white before the theme loads from storage.
+         Inline styles are allowed under the MV3 CSP (only scripts are restricted). -->
+    <style>
+      :root { --bg: #f4f5f7; --fg: #1a1a1a; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #0d1117; --fg: #e6edf3; } }
+      html, body { margin: 0; height: 100%; }
+      body { background: var(--bg); color: var(--fg); }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
