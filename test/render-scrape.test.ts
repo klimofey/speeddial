@@ -71,4 +71,20 @@ describe('extractInPage', () => {
     expect(r).toContain(new URL('/pic.jpg', base).href);
     expect(r.filter((u) => u.startsWith('data:image/svg+xml'))).toHaveLength(1);
   });
+
+  it('extracts a logo set via a CSS class (computed background-image)', () => {
+    // jsdom does not cascade stylesheet rules into getComputedStyle, so simulate the
+    // computed background a class rule would produce (verified for real via Playwright).
+    add('a', { class: 'icon-logo', href: '/' }, document.body);
+    const spy = vi.spyOn(window, 'getComputedStyle').mockImplementation(
+      ((el: Element, pseudo?: string | null) => ({
+        backgroundImage: !pseudo && (el as HTMLElement).classList.contains('icon-logo')
+          ? 'url("https://bank.example/media/logo.svg")'
+          : 'none',
+      })) as typeof window.getComputedStyle,
+    );
+    const r = extractInPage();
+    spy.mockRestore();
+    expect(r).toContain('https://bank.example/media/logo.svg');
+  });
 });
