@@ -49,12 +49,17 @@ body {
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5);
   display: flex; align-items: center; justify-content: center; z-index: 50; }
 .modal { background: var(--card-bg, #fff); color: var(--card-fg, #1a1a1a);
-  padding: 20px; border-radius: 14px; width: min(420px, 92vw); display: flex; flex-direction: column; gap: 8px; }
+  padding: 20px; border-radius: 14px; width: min(420px, 92vw); display: flex; flex-direction: column; gap: 8px;
+  max-height: 88vh; overflow-y: auto; } /* scroll tall modals instead of overflowing the viewport */
 .modal h3 { margin: 0 0 8px; }
 .modal label { font-size: 12px; opacity: .7; margin-top: 6px; }
 .modal input, .modal select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--muted, #ccc);
   background: var(--search-bg, #fff); color: inherit; }
-.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+/* Stick the action buttons to the modal's bottom edge so Close/Save stay visible while
+   a tall modal scrolls. Negative margins span the modal padding; bg covers content. */
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px;
+  position: sticky; bottom: -20px; margin: 14px -20px -20px; padding: 12px 20px;
+  background: var(--card-bg, #fff); }
 .modal-actions button { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; }
 .modal-actions button:last-child { background: var(--accent, #4285f4); color: #fff; }
 .modal-actions button:disabled { opacity: .5; cursor: not-allowed; }
