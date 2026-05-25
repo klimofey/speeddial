@@ -2,6 +2,7 @@ export const GOOGLE_SUGGEST_ORIGIN = 'https://suggestqueries.google.com/*';
 export const MYMEMORY_ORIGIN = 'https://api.mymemory.translated.net/*';
 
 export async function ensureMyMemoryPermission(): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
   try {
     if (await chrome.permissions.contains({ origins: [MYMEMORY_ORIGIN] })) return true;
     return await chrome.permissions.request({ origins: [MYMEMORY_ORIGIN] });

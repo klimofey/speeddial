@@ -18,7 +18,8 @@ export function TranslatorRender({ config }: { config: TranslatorConfig }) {
       setBusy(true); setProgress(null);
       const r = await translate(input, config.target, {
         cloudFallback: config.cloudFallback,
-        onDownload: (p) => setProgress(Math.round(p * 100)),
+        // `p` is the downloadprogress `loaded` fraction (0..1); clamp to a sane percent.
+        onDownload: (p) => setProgress(Math.min(100, Math.max(0, Math.round(p * 100)))),
       });
       setOut(r); setBusy(false); setProgress(null);
     }, 500);

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/preact';
 import { TranslatorRender, TranslatorConfigEditor } from '../src/components/widgets/TranslatorWidget';
+import { mockChrome } from './setup';
 
 const g = globalThis as unknown as { Translator?: unknown; LanguageDetector?: unknown };
 
@@ -33,5 +34,14 @@ describe('TranslatorConfigEditor', () => {
     render(<TranslatorConfigEditor config={{ target: 'en', cloudFallback: false }} onChange={onChange} />);
     fireEvent.click(screen.getByLabelText('Allow cloud translation'));
     await waitFor(() => expect(onChange).toHaveBeenCalledWith({ target: 'en', cloudFallback: true }));
+  });
+
+  it('keeps cloud fallback off when permission is denied', async () => {
+    mockChrome.permissions.contains.mockResolvedValueOnce(false);
+    mockChrome.permissions.request.mockResolvedValueOnce(false);
+    const onChange = vi.fn();
+    render(<TranslatorConfigEditor config={{ target: 'en', cloudFallback: false }} onChange={onChange} />);
+    fireEvent.click(screen.getByLabelText('Allow cloud translation'));
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith({ target: 'en', cloudFallback: false }));
   });
 });
