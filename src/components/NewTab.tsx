@@ -14,9 +14,11 @@ import { WorldClocks } from './WorldClocks';
 import { splitWorldClocks } from '../lib/time';
 import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
+import { Store } from './widgets/Store';
+import { getWidget } from './widgets/registry';
 
 function Board() {
-  const { ready, dials, settings, addDial, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload } = useApp();
+  const { ready, dials, settings, addDial, addWidget, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload } = useApp();
   const [filter, setFilter] = useState('');
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
@@ -24,6 +26,8 @@ function Board() {
   const [showClockConfig, setShowClockConfig] = useState(false);
   const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
   const [recentLoading, setRecentLoading] = useState(true);
+  const [showStore, setShowStore] = useState(false);
+  const [configuring, setConfiguring] = useState<Dial | null>(null);
 
   // Apply theme + image background whenever settings change.
   useEffect(() => {
@@ -100,8 +104,8 @@ function Board() {
       {!filter && settings.showRecent && (
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
-      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} />
-      <button class="add-card" onClick={() => setEditing(null)}>{t('add_card')}</button>
+      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} />
+      <button class="add-card" onClick={() => setShowStore(true)}>{t('add')}</button>
 
       {editing !== undefined && (
         <CardEditor settings={settings} initial={editing ?? undefined} onSave={onSave} onClose={() => setEditing(undefined)} />
@@ -118,6 +122,34 @@ function Board() {
           </div>
         </div>
       )}
+      {showStore && (
+        <Store
+          onAddLink={() => { setShowStore(false); setEditing(null); }}
+          onAddWidget={async (type) => { setShowStore(false); await addWidget(type); }}
+          onClose={() => setShowStore(false)}
+        />
+      )}
+      {configuring?.widget && (() => {
+        const w = configuring.widget;
+        const def = getWidget(w.type);
+        const Editor = def?.ConfigEditor;
+        return (
+          <div class="modal-backdrop" onClick={() => setConfiguring(null)}>
+            <div class="modal" onClick={(e) => e.stopPropagation()}>
+              <h3>{def ? t(def.nameKey) : ''}</h3>
+              {Editor && (
+                <Editor config={w.config as never}
+                  onChange={(config: never) => {
+                    const updated: Dial = { ...configuring, widget: { type: w.type, config } as Dial['widget'] };
+                    setConfiguring(updated);
+                    void updateDial(updated);
+                  }} />
+              )}
+              <div class="modal-actions"><button onClick={() => setConfiguring(null)}>{t('close')}</button></div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

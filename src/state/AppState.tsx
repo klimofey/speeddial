@@ -1,15 +1,17 @@
 import { createContext } from 'preact';
 import { useContext, useEffect, useState, useCallback } from 'preact/hooks';
 import { ComponentChildren } from 'preact';
-import { Dial, Settings } from '../lib/types';
+import { Dial, Settings, WidgetType, WidgetInstance } from '../lib/types';
 import * as storage from '../lib/storage';
 import { DEFAULT_SETTINGS } from '../lib/defaults';
+import { getWidget } from '../components/widgets/registry';
 
 interface AppContextValue {
   ready: boolean;
   dials: Dial[];
   settings: Settings;
   addDial: (input: { url: string; title: string }) => Promise<void>;
+  addWidget: (type: WidgetType) => Promise<void>;
   updateDial: (dial: Dial) => Promise<void>;
   removeDial: (id: string) => Promise<void>;
   reorderDials: (orderedIds: string[]) => Promise<void>;
@@ -50,6 +52,16 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
     await persistDials(next);
   }, [dials, persistDials]);
 
+  const addWidget = useCallback(async (type: WidgetType) => {
+    const def = getWidget(type);
+    if (!def) return;
+    const item: Dial = {
+      id: uid(), url: '', title: '', imageRef: 'favicon' as const, color: '', order: dials.length,
+      size: def.defaultSize, widget: { type, config: structuredClone(def.defaultConfig) } as WidgetInstance,
+    };
+    await persistDials([...dials, item]);
+  }, [dials, persistDials]);
+
   const updateDial = useCallback(async (dial: Dial) => {
     await persistDials(dials.map((d) => (d.id === dial.id ? dial : d)));
   }, [dials, persistDials]);
@@ -75,7 +87,7 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
   }, [settings]);
 
   const value: AppContextValue = {
-    ready, dials, settings, addDial, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload,
+    ready, dials, settings, addDial, addWidget, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

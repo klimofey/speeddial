@@ -5,6 +5,7 @@ import { Dial } from '../src/lib/types';
 import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
 const dial: Dial = { id: 'a', url: 'https://github.com', title: 'GitHub', imageRef: 'letter', color: '#123456', order: 0 };
+const widgetDial: Dial = { id: 'w1', url: '', title: '', imageRef: 'favicon', color: '', order: 0, widget: { type: 'note', config: { text: 'x' } } };
 
 describe('DialCard', () => {
   it('renders the title', async () => {
@@ -48,6 +49,18 @@ describe('DialCard', () => {
     fireEvent.mouseMove(window, { clientX: 160, clientY: 0 });
     expect(onResize).toHaveBeenLastCalledWith('a', { w: 3, h: 1 });
     fireEvent.mouseUp(window);
+  });
+
+  it('renders a widget card with class widget-card, shows widget content, no anchor', async () => {
+    const onConfig = vi.fn();
+    const { container } = render(
+      <DialCard dial={widgetDial} settings={DEFAULT_SETTINGS} onEdit={() => {}} onDelete={() => {}} onConfig={onConfig} />,
+    );
+    expect(container.querySelector('.widget-card')).toBeTruthy();
+    expect(container.querySelector('a')).toBeNull();
+    await waitFor(() => expect(screen.getByText('x')).toBeTruthy());
+    fireEvent.click(screen.getByLabelText('Configure note'));
+    expect(onConfig).toHaveBeenCalledWith(widgetDial);
   });
 
   it('prevents navigation on click while editing', () => {

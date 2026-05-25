@@ -139,3 +139,10 @@ body {
 .w-clock-greeting, .w-clock-label { font-size: 11px; color: var(--muted); }
 .w-clock-edit { display: flex; flex-direction: column; gap: 6px; }
 .w-unknown { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--muted); font-size: 24px; }
+
+.store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.store-item { display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 10px; cursor: pointer;
+  border: var(--card-border); background: var(--search-bg); color: inherit; font-size: 14px; }
+.store-item:disabled { opacity: .5; cursor: not-allowed; }
+.store-icon { font-size: 18px; }
+.widget-card .dial-thumb { padding: 0; }

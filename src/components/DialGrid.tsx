@@ -8,12 +8,13 @@ interface Props {
   settings: Settings;
   onEdit: (dial: Dial) => void;
   onDelete: (id: string) => void;
+  onConfig?: (dial: Dial) => void;
   onReorder: (orderedIds: string[]) => void;
   editing?: boolean;
   onResize?: (id: string, size: { w: number; h: number }) => void;
 }
 
-export function DialGrid({ dials, settings, onEdit, onDelete, onReorder, editing = false, onResize }: Props) {
+export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorder, editing = false, onResize }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export function DialGrid({ dials, settings, onEdit, onDelete, onReorder, editing
           settings={settings}
           onEdit={onEdit}
           onDelete={onDelete}
+          onConfig={onConfig}
           editing={editing}
           onResize={onResize}
         />
