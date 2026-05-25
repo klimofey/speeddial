@@ -57,6 +57,7 @@ export interface Settings {
   showSearch: boolean;
   suggestProvider: SuggestProvider;
   language: Lang;
+  onboarded: boolean;
 }
 
 export interface StoredImage {

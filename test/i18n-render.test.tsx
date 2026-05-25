@@ -10,7 +10,7 @@ afterEach(() => setLang('en'));
 
 describe('localized render', () => {
   it('renders the add button in Russian when language is ru', async () => {
-    await storage.setSettings({ ...DEFAULT_SETTINGS, language: 'ru' });
+    await storage.setSettings({ ...DEFAULT_SETTINGS, language: 'ru', onboarded: true });
     render(<NewTab />);
     await waitFor(() => expect(screen.getByLabelText('+ Добавить')).toBeTruthy());
   });

@@ -156,6 +156,8 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           {LANGS.map((l) => <option value={l.code} key={l.code}>{l.label}</option>)}
         </select>
 
+        <button class="settings-intro-btn" onClick={() => { onChange({ onboarded: false }); onClose(); }}>{t('show_intro')}</button>
+
         <label>{t('backup')}</label>
         <div class="settings-backup">
           <button onClick={doExport}>{t('export')}</button>
