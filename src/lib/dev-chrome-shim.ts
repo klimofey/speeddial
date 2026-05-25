@@ -28,10 +28,23 @@ function area(initial: Store = {}) {
 
 const g = globalThis as unknown as { chrome?: { storage?: unknown } };
 
+// Fake browsing history so the Recent row populates under vite dev / Playwright.
+const fakeHistory = [
+  'github.com', 'stackoverflow.com', 'wikipedia.org', 'youtube.com', 'reddit.com',
+  'news.ycombinator.com', 'developer.mozilla.org', 'npmjs.com', 'figma.com', 'notion.so',
+  'google.com', 'gmail.com', 'twitter.com', 'linkedin.com', 'amazon.com',
+  'medium.com', 'dev.to', 'vercel.com', 'cloudflare.com', 'openai.com',
+].map((host, i) => ({
+  url: `https://${host}/`,
+  title: host,
+  lastVisitTime: Date.now() - i * 60_000,
+  visitCount: 20 - i,
+}));
+
 if (typeof g.chrome === 'undefined' || !g.chrome.storage) {
   g.chrome = {
     storage: { sync: area(), local: area() },
-    history: { async search() { return []; } },
+    history: { async search() { return fakeHistory; } },
     permissions: { async request() { return true; }, async contains() { return true; } },
     runtime: { getURL: (p: string) => p, lastError: undefined },
   } as never;
