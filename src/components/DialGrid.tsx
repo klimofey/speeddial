@@ -24,17 +24,29 @@ export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorde
   useEffect(() => {
     if (!ref.current || !editing) return;
     const el = ref.current;
+    // SortableJS mutates the DOM, but Preact owns these keyed nodes. After reading the
+    // new order, revert SortableJS's move so the DOM matches Preact's vdom; the new
+    // order is then applied via state and Preact re-renders as the sole DOM owner.
+    // Without this, cross-zone drags duplicate/overlap nodes.
+    const revert = (evt: { item?: HTMLElement; from?: HTMLElement; oldIndex?: number }) => {
+      const { item, from, oldIndex } = evt;
+      if (!item || !from) return;
+      const ref = oldIndex != null ? from.children[oldIndex] : null;
+      if (ref) from.insertBefore(item, ref);
+      else from.appendChild(item);
+    };
     const sortable = Sortable.create(el, {
-      animation: 150,
+      animation: 0, // FLIP transforms misbehave on CSS grid (leave nodes displaced)
       ghostClass: 'sortable-ghost',
       draggable: '.dial-card',
       group: 'dials', // shared so cards can be dragged between the top zone and the grid
       forceFallback: true, // pointer-based drag: consistent across browsers + works cross-zone
-      onEnd: () => {
-        if (onSorted) { onSorted(); return; }
+      onEnd: (evt) => {
+        if (onSorted) { onSorted(); revert(evt); return; }
         const ids = Array.from(el.querySelectorAll<HTMLElement>('.dial-card'))
           .map((node) => node.dataset.id!)
           .filter(Boolean);
+        revert(evt);
         onReorder?.(ids);
       },
     });
