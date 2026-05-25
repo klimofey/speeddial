@@ -30,6 +30,14 @@ describe('CardEditor', () => {
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ url: 'https://x.com', title: 'X', imageRef: 'favicon' }));
   });
 
+  it('keeps the title empty when left blank (no URL-host fallback)', () => {
+    const onSave = vi.fn();
+    render(<CardEditor settings={DEFAULT_SETTINGS} onSave={onSave} onClose={() => {}} />);
+    fireEvent.input(screen.getByLabelText('URL'), { target: { value: 'https://github.com' } });
+    fireEvent.click(screen.getByText('Save'));
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ title: '' }));
+  });
+
   it('re-enables Save and shows an error when an image URL fails to load', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('network down'); }));
     const onSave = vi.fn();

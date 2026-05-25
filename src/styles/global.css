@@ -76,8 +76,12 @@ body {
 
 .recent-row { max-width: min(1600px, 94vw); margin: 0 auto; padding: 4px 24px 0; }
 .recent-label { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; }
-.recent-tiles { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.recent-tile { position: relative; display: flex; align-items: center; gap: 8px;
+/* Strictly at most 2 rows: tiles have a fixed height and the container is clipped to
+   two rows + the gap between them (any overflow beyond that is hidden). */
+.recent-tiles { --recent-tile-h: 34px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  max-height: calc(2 * var(--recent-tile-h) + 10px); overflow: hidden; }
+.recent-tile { box-sizing: border-box; height: var(--recent-tile-h);
+  position: relative; display: flex; align-items: center; gap: 8px;
   background: var(--card-bg); border: var(--card-border); box-shadow: var(--card-shadow);
   backdrop-filter: var(--card-blur); border-radius: 999px; padding: 6px 12px 6px 10px; max-width: 200px; }
 .recent-link { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--fg); min-width: 0; }
