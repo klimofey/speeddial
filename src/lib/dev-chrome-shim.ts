@@ -38,3 +38,19 @@ if (typeof g.chrome === 'undefined' || !g.chrome.storage) {
   // eslint-disable-next-line no-console
   console.info('[dev-chrome-shim] installed in-memory chrome.* mock');
 }
+
+const gg = globalThis as unknown as { Translator?: unknown; LanguageDetector?: unknown };
+if (typeof gg.Translator === 'undefined') {
+  gg.Translator = {
+    async availability() { return 'available'; },
+    async create(opts: { sourceLanguage: string; targetLanguage: string }) {
+      return { async translate(text: string) { return `[${opts.sourceLanguage}→${opts.targetLanguage}] ${text}`; } };
+    },
+  };
+}
+if (typeof gg.LanguageDetector === 'undefined') {
+  gg.LanguageDetector = {
+    async availability() { return 'available'; },
+    async create() { return { async detect() { return [{ detectedLanguage: 'en', confidence: 1 }]; } }; },
+  };
+}
