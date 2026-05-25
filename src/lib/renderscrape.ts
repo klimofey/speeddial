@@ -23,6 +23,21 @@ export function extractInPage(): string[] {
     .querySelectorAll('link[rel~="apple-touch-icon"], link[rel~="icon"], link[rel="mask-icon"]')
     .forEach((l) => push(l.getAttribute('href')));
 
+  // Logos set via a CSS class (computed background-image), not an inline style or
+  // an <img>/<svg> — e.g. <a class="icon-logo"> backed by a stylesheet rule. Only
+  // resolvable from the live, styled DOM. Ranked high (logo-ish elements first).
+  const cssUrl = (v: string | null): string | null => {
+    const m = (v || '').match(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/i);
+    return m ? m[1] : null;
+  };
+  document
+    .querySelectorAll('[class*="logo" i],[id*="logo" i],header a,.brand,.navbar-brand,a[aria-label*="logo" i]')
+    .forEach((el) => {
+      push(cssUrl(getComputedStyle(el).backgroundImage));
+      push(cssUrl(getComputedStyle(el, '::before').backgroundImage));
+      push(cssUrl(getComputedStyle(el, '::after').backgroundImage));
+    });
+
   document.querySelectorAll('[style]').forEach((el) => {
     const style = el.getAttribute('style') || '';
     if (!/background/i.test(style)) return;
@@ -35,7 +50,7 @@ export function extractInPage(): string[] {
     if (svgCount >= 4) return;
     const w = parseFloat(svg.getAttribute('width') || '0');
     const h = parseFloat(svg.getAttribute('height') || '0');
-    let big = w >= 32 || h >= 32;
+    let big = /logo/i.test(svg.getAttribute('class') || '') || w >= 32 || h >= 32;
     if (!big) {
       const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
       if (vb.length === 4 && (vb[2] >= 64 || vb[3] >= 64)) big = true;
