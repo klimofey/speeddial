@@ -31,6 +31,16 @@ export async function ensureImageFetchPermission(url: string): Promise<boolean> 
   }
 }
 
+export async function hasBookmarksPermission(): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.contains) return false;
+  try { return await chrome.permissions.contains({ permissions: ['bookmarks'] }); } catch { return false; }
+}
+
+export async function ensureBookmarksPermission(): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
+  try { return await chrome.permissions.request({ permissions: ['bookmarks'] }); } catch { return false; }
+}
+
 export async function ensureGooglePermission(): Promise<boolean> {
   if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
   try {

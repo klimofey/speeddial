@@ -43,6 +43,10 @@ const tabs = {
   },
 };
 const scripting = { executeScript: vi.fn(async () => [{ result: [] as string[] }]) };
+const bookmarks = {
+  getTree: vi.fn(async () => [] as unknown[]),
+  getChildren: vi.fn(async () => [] as unknown[]),
+};
 
 (globalThis as unknown as { chrome: unknown }).chrome = {
   storage: { sync, local, onChanged: { addListener: vi.fn(), removeListener: vi.fn() } },
@@ -51,9 +55,10 @@ const scripting = { executeScript: vi.fn(async () => [{ result: [] as string[] }
   permissions,
   tabs,
   scripting,
+  bookmarks,
 };
 
-export const mockChrome = { sync, local, history, permissions, tabs, scripting };
+export const mockChrome = { sync, local, history, permissions, tabs, scripting, bookmarks };
 
 beforeEach(() => { sync._reset(); local._reset(); tabUpdateListeners.length = 0; vi.clearAllMocks(); });
 

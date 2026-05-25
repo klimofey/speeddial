@@ -46,6 +46,22 @@ if (typeof g.chrome === 'undefined' || !g.chrome.storage) {
     storage: { sync: area(), local: area() },
     history: { async search() { return fakeHistory; } },
     permissions: { async request() { return true; }, async contains() { return true; } },
+    bookmarks: {
+      async getChildren(id: string) {
+        if (id === 'f-dev') return [{ id: 'b3', title: 'Vite', url: 'https://vitejs.dev' }];
+        return [
+          { id: 'b1', title: 'GitHub', url: 'https://github.com' },
+          { id: 'b2', title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
+          { id: 'f-dev', title: 'Dev' },
+        ];
+      },
+      async getTree() {
+        return [{ id: '0', title: '', children: [
+          { id: '1', title: 'Bookmarks bar', children: [{ id: 'f-dev', title: 'Dev' }] },
+          { id: '2', title: 'Other bookmarks' },
+        ] }];
+      },
+    },
     runtime: { getURL: (p: string) => p, lastError: undefined },
   } as never;
   // eslint-disable-next-line no-console
