@@ -28,6 +28,21 @@ export function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
+// Fetches a remote image (or passes a data: URL through) and returns it as a data URL.
+// Cross-origin fetches need host permission (extensions bypass CORS with it).
+export async function urlToDataUrl(url: string): Promise<string> {
+  if (url.startsWith('data:')) return url;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`fetch failed: ${res.status}`);
+  const blob = await res.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
 // Fetches a remote image, stores it as a data URL in local, and returns its imageRef key.
 export async function cacheImageFromUrl(url: string): Promise<string> {
   const res = await fetch(url);
