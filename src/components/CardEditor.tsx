@@ -84,6 +84,14 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setBusy(true);
     setScrapeMsg('');
     try {
+      // Reading pixels requires fetching the image bytes; cross-origin fetch needs host
+      // permission for the candidate's origin (e.g. www.google.com for an s2 favicon),
+      // otherwise it's blocked by CORS. data: candidates need nothing.
+      if (!selectedUrl.startsWith('data:') && !(await ensureOriginPermission(selectedUrl))) {
+        setScrapeMsg(t('bg_remove_failed'));
+        setBusy(false);
+        return;
+      }
       const dataUrl = await urlToDataUrl(selectedUrl);
       const out = await removeBackground(dataUrl);
       const ref = 'cut-' + Date.now().toString(36);
