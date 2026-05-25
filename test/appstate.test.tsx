@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/preact';
 import { AppProvider, useApp } from '../src/state/AppState';
 import { getWidget } from '../src/components/widgets/registry';
+import * as storage from '../src/lib/storage';
 
 function Probe() {
   const { dials, addDial, ready } = useApp();
@@ -42,6 +43,10 @@ function ResizeProbe() {
 }
 
 describe('AppState', () => {
+  // Start each case from an explicitly-empty board so the default seed clock
+  // (returned by getDials when nothing is stored) doesn't skew the assertions.
+  beforeEach(async () => { await storage.setDials([]); });
+
   it('loads and exposes empty dials initially', async () => {
     render(<AppProvider><Probe /></AppProvider>);
     await waitFor(() => expect(screen.getByTestId('count').textContent).toBe('0'));

@@ -8,11 +8,11 @@ const dial: Dial = { id: 'a', url: 'https://a.com', title: 'A', imageRef: 'img1'
 
 describe('backup', () => {
   it('builds a snapshot from current storage', async () => {
-    await storage.setSettings({ ...DEFAULT_SETTINGS, greetingName: 'Alex' });
+    await storage.setSettings({ ...DEFAULT_SETTINGS, clockFormat: '12h' });
     await storage.setDials([dial]);
     await storage.setImage('img1', { data: 'data:x', source: 'upload' });
     const snap = await buildSnapshot();
-    expect(snap.settings.greetingName).toBe('Alex');
+    expect(snap.settings.clockFormat).toBe('12h');
     expect(snap.dials).toHaveLength(1);
     expect(snap.images.img1.data).toBe('data:x');
   });
@@ -45,9 +45,9 @@ describe('backup', () => {
   });
 
   it('restores a snapshot into storage', async () => {
-    const snap = { schemaVersion: 1, settings: { ...DEFAULT_SETTINGS, greetingName: 'Z' }, dials: [{ ...dial, imageRef: 'favicon' }], images: {} };
+    const snap = { schemaVersion: 1, settings: { ...DEFAULT_SETTINGS, clockFormat: '12h' as const }, dials: [{ ...dial, imageRef: 'favicon' }], images: {} };
     await restoreSnapshot(snap);
-    expect((await storage.getSettings()).greetingName).toBe('Z');
+    expect((await storage.getSettings()).clockFormat).toBe('12h');
     expect((await storage.getDials())[0].id).toBe('a');
   });
 });

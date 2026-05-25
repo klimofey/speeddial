@@ -1,4 +1,4 @@
-import { Settings, Theme, SCHEMA_VERSION } from './types';
+import { Settings, Theme, Dial, SCHEMA_VERSION } from './types';
 import { detectLang } from './i18n';
 
 export const BUILTIN_THEMES: Theme[] = [
@@ -41,8 +41,6 @@ export const DEFAULT_SETTINGS: Settings = {
   customThemes: [],
   searchEngine: 'google',
   cardSize: 'md',
-  showClock: true,
-  greetingName: null,
   background: { type: 'theme', value: '' },
   useScreenshots: false,
   screenshotTemplate: '',
@@ -50,5 +48,9 @@ export const DEFAULT_SETTINGS: Settings = {
   suggestProvider: 'duckduckgo',
   language: detectLang(),
   clockFormat: '24h',
-  worldClocks: [],
 };
+
+export const DEFAULT_DIALS: Dial[] = [
+  { id: 'seed-clock', url: '', title: '', imageRef: 'favicon', color: '', order: 0,
+    size: { w: 2, h: 1 }, widget: { type: 'clock', config: { timeZone: '', label: '', showGreeting: true } } },
+];

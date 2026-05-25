@@ -4,14 +4,10 @@ import { applyTheme } from '../lib/themes';
 import { getImage } from '../lib/storage';
 import { Dial } from '../lib/types';
 import { setLang, t } from '../lib/i18n';
-import { Clock } from './Clock';
 import { SearchBar } from './SearchBar';
 import { DialGrid } from './DialGrid';
 import { CardEditor } from './CardEditor';
 import { Settings } from './Settings';
-import { ClockSettings } from './ClockSettings';
-import { WorldClocks } from './WorldClocks';
-import { splitWorldClocks } from '../lib/time';
 import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
 import { Store } from './widgets/Store';
@@ -23,7 +19,6 @@ function Board() {
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [showClockConfig, setShowClockConfig] = useState(false);
   const [recentSites, setRecentSites] = useState<RecentSite[]>([]);
   const [recentLoading, setRecentLoading] = useState(true);
   const [showStore, setShowStore] = useState(false);
@@ -65,8 +60,6 @@ function Board() {
 
   setLang(settings.language);
 
-  const { left: leftClocks, right: rightClocks } = splitWorldClocks(settings.worldClocks);
-
   const visible = filter
     ? dials.filter((d) => (d.title + ' ' + d.url).toLowerCase().includes(filter.toLowerCase()))
     : dials;
@@ -87,18 +80,6 @@ function Board() {
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? t('done') : t('edit')}</button>
 
       <div class="header">
-        {settings.showClock && (
-          <div class={`clock-widget${editMode ? ' widget-edit' : ''}`}>
-            {editMode && (
-              <button class="widget-gear" aria-label={t('clock_settings')} onClick={() => setShowClockConfig(true)}>⚙</button>
-            )}
-            <div class="clock-row">
-              <WorldClocks clocks={leftClocks} format={settings.clockFormat} />
-              <Clock name={settings.greetingName} format={settings.clockFormat} />
-              <WorldClocks clocks={rightClocks} format={settings.clockFormat} />
-            </div>
-          </div>
-        )}
         <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
       </div>
       {!filter && settings.showRecent && (
@@ -112,15 +93,6 @@ function Board() {
       )}
       {showSettings && (
         <Settings settings={settings} onChange={updateSettings} onClose={() => setShowSettings(false)} onRestored={() => { void reload(); }} />
-      )}
-      {showClockConfig && (
-        <div class="modal-backdrop" onClick={() => setShowClockConfig(false)}>
-          <div class="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{t('clock')}</h3>
-            <ClockSettings settings={settings} onChange={updateSettings} />
-            <div class="modal-actions"><button onClick={() => setShowClockConfig(false)}>{t('close')}</button></div>
-          </div>
-        </div>
       )}
       {showStore && (
         <Store

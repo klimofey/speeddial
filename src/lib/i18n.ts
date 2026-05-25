@@ -4,7 +4,7 @@ type Dict = Record<string, string>;
 
 const en: Dict = {
   save: 'Save', cancel: 'Cancel', close: 'Close', edit: 'Edit', done: 'Done',
-  delete: 'Delete', add_card: '+ Add card',
+  delete: 'Delete',
   edit_card: 'Edit card', add_card_title: 'Add card', url: 'URL', title: 'Title',
   preview: 'Preview', mode_favicon: 'Site icon', mode_letter: 'Letter + color',
   mode_upload: 'Upload image', mode_url: 'Image URL', mode_screenshot: 'Screenshot',
@@ -43,7 +43,7 @@ const en: Dict = {
 
 const ru: Dict = {
   save: 'Сохранить', cancel: 'Отмена', close: 'Закрыть', edit: 'Править', done: 'Готово',
-  delete: 'Удалить', add_card: '+ Добавить карточку',
+  delete: 'Удалить',
   edit_card: 'Изменить карточку', add_card_title: 'Добавить карточку', url: 'Ссылка', title: 'Название',
   preview: 'Превью', mode_favicon: 'Иконка сайта', mode_letter: 'Буква + цвет',
   mode_upload: 'Загрузить картинку', mode_url: 'Ссылка на картинку', mode_screenshot: 'Скриншот',
@@ -82,7 +82,7 @@ const ru: Dict = {
 
 const es: Dict = {
   save: 'Guardar', cancel: 'Cancelar', close: 'Cerrar', edit: 'Editar', done: 'Listo',
-  delete: 'Eliminar', add_card: '+ Añadir tarjeta',
+  delete: 'Eliminar',
   edit_card: 'Editar tarjeta', add_card_title: 'Añadir tarjeta', url: 'URL', title: 'Título',
   preview: 'Vista previa', mode_favicon: 'Icono del sitio', mode_letter: 'Letra + color',
   mode_upload: 'Subir imagen', mode_url: 'URL de imagen', mode_screenshot: 'Captura',
@@ -121,7 +121,7 @@ const es: Dict = {
 
 const de: Dict = {
   save: 'Speichern', cancel: 'Abbrechen', close: 'Schließen', edit: 'Bearbeiten', done: 'Fertig',
-  delete: 'Löschen', add_card: '+ Karte hinzufügen',
+  delete: 'Löschen',
   edit_card: 'Karte bearbeiten', add_card_title: 'Karte hinzufügen', url: 'URL', title: 'Titel',
   preview: 'Vorschau', mode_favicon: 'Website-Symbol', mode_letter: 'Buchstabe + Farbe',
   mode_upload: 'Bild hochladen', mode_url: 'Bild-URL', mode_screenshot: 'Screenshot',
@@ -160,7 +160,7 @@ const de: Dict = {
 
 const fr: Dict = {
   save: 'Enregistrer', cancel: 'Annuler', close: 'Fermer', edit: 'Modifier', done: 'Terminé',
-  delete: 'Supprimer', add_card: '+ Ajouter une carte',
+  delete: 'Supprimer',
   edit_card: 'Modifier la carte', add_card_title: 'Ajouter une carte', url: 'URL', title: 'Titre',
   preview: 'Aperçu', mode_favicon: 'Icône du site', mode_letter: 'Lettre + couleur',
   mode_upload: 'Importer une image', mode_url: "URL d'image", mode_screenshot: "Capture d'écran",

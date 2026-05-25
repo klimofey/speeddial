@@ -25,8 +25,3 @@ export function labelForZone(tz: string): string {
   const seg = tz.includes('/') ? tz.slice(tz.lastIndexOf('/') + 1) : tz;
   return seg.replace(/_/g, ' ');
 }
-
-export function splitWorldClocks<T>(clocks: T[]): { left: T[]; right: T[] } {
-  const mid = Math.ceil(clocks.length / 2);
-  return { left: clocks.slice(0, mid), right: clocks.slice(mid) };
-}

@@ -14,11 +14,18 @@ describe('storage', () => {
   });
 
   it('round-trips settings through sync', async () => {
-    await storage.setSettings({ ...DEFAULT_SETTINGS, greetingName: 'Alex' });
-    expect((await storage.getSettings()).greetingName).toBe('Alex');
+    await storage.setSettings({ ...DEFAULT_SETTINGS, clockFormat: '12h' });
+    expect((await storage.getSettings()).clockFormat).toBe('12h');
   });
 
-  it('returns [] for dials when nothing is stored', async () => {
+  it('seeds the default clock widget when nothing is stored', async () => {
+    const dials = await storage.getDials();
+    expect(dials).toHaveLength(1);
+    expect(dials[0].widget?.type).toBe('clock');
+  });
+
+  it('returns an empty list when dials are explicitly stored as []', async () => {
+    await storage.setDials([]);
     expect(await storage.getDials()).toEqual([]);
   });
 

@@ -13,12 +13,6 @@ export type WidgetInstance =
   | { type: 'note'; config: NoteConfig }
   | { type: 'clock'; config: ClockConfig };
 
-export interface WorldClock {
-  id: string;
-  timeZone: string;
-  label: string;
-}
-
 export interface Dial {
   id: string;
   url: string;
@@ -48,8 +42,6 @@ export interface Settings {
   customThemes: Theme[];
   searchEngine: SearchEngine;
   cardSize: CardSize;
-  showClock: boolean;
-  greetingName: string | null;
   background: Background;
   useScreenshots: boolean;       // off by default; sends URLs to a 3rd party when on
   screenshotTemplate: string;    // e.g. "https://service.example/{url}"
@@ -57,7 +49,6 @@ export interface Settings {
   suggestProvider: SuggestProvider;
   language: Lang;
   clockFormat: '24h' | '12h';
-  worldClocks: WorldClock[];
 }
 
 export interface StoredImage {

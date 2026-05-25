@@ -40,12 +40,10 @@ describe('NewTab', () => {
     expect(screen.getByText('Done')).toBeTruthy();
   });
 
-  it('opens clock config from the gear in edit mode', async () => {
+  it('no longer renders a header clock gear', async () => {
     render(<NewTab />);
     await waitFor(() => screen.getByText('Edit'));
     fireEvent.click(screen.getByText('Edit'));
-    expect(screen.queryByText('Clock')).toBeNull();
-    fireEvent.click(screen.getByLabelText('Clock settings'));
-    expect(screen.getByLabelText('Show clock')).toBeTruthy();
+    expect(screen.queryByLabelText('Clock settings')).toBeNull();
   });
 });
