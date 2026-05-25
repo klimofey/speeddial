@@ -14,7 +14,7 @@ export interface WidgetDef {
 }
 
 const noteDefault: NoteConfig = { text: '' };
-const clockDefault: ClockConfig = { timeZone: '', label: '', showGreeting: true };
+const clockDefault: ClockConfig = { timeZone: '', label: '', showGreeting: true, format: '24h' };
 
 export const WIDGETS: WidgetDef[] = [
   { type: 'note', nameKey: 'widget_note', icon: '📝', defaultSize: { w: 2, h: 1 }, defaultConfig: noteDefault,

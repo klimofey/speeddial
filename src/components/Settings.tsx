@@ -114,13 +114,6 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           <option value="lg">{t('size_lg')}</option>
         </select>
 
-        <label for="se-clock-format">{t('clock_format')}</label>
-        <select id="se-clock-format" value={settings.clockFormat}
-          onChange={(e) => onChange({ clockFormat: (e.target as HTMLSelectElement).value as SettingsType['clockFormat'] })}>
-          <option value="24h">{t('fmt_24')}</option>
-          <option value="12h">{t('fmt_12')}</option>
-        </select>
-
         <label>
           <input type="checkbox" checked={settings.useScreenshots}
             onChange={(e) => onChange({ useScreenshots: (e.target as HTMLInputElement).checked })} />

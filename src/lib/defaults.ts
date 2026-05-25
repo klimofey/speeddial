@@ -47,10 +47,9 @@ export const DEFAULT_SETTINGS: Settings = {
   showRecent: true,
   suggestProvider: 'duckduckgo',
   language: detectLang(),
-  clockFormat: '24h',
 };
 
 export const DEFAULT_DIALS: Dial[] = [
   { id: 'seed-clock', url: '', title: '', imageRef: 'favicon', color: '', order: 0,
-    size: { w: 2, h: 1 }, widget: { type: 'clock', config: { timeZone: '', label: '', showGreeting: true } } },
+    size: { w: 2, h: 1 }, widget: { type: 'clock', config: { timeZone: '', label: '', showGreeting: true, format: '24h' } } },
 ];

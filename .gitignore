@@ -11,6 +11,13 @@ dist/
 # Brainstorm visual companion (local, ephemeral)
 .superpowers/
 
+# Playwright MCP scratch output + ad-hoc screenshots (local self-testing)
+.playwright-mcp/
+/*.png
+
+# Claude Code local session state
+.claude/
+
 # Logs
 *.log
 npm-debug.log*

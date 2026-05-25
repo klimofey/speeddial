@@ -12,7 +12,7 @@
     "noUnusedParameters": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["chrome", "vitest/globals"],
+    "types": ["chrome", "vitest/globals", "vite/client"],
     "paths": { "react": ["./node_modules/preact/compat"], "react-dom": ["./node_modules/preact/compat"] }
   },
   "include": ["src", "test", "manifest.config.ts", "vite.config.ts"]
