@@ -27,6 +27,17 @@ describe('scrapeImages', () => {
     expect(r[0]).toBe('https://site.com/hero.png');
   });
 
+  it('extracts logos from inline background-image style attributes', async () => {
+    stubHtml(`<html><body>
+      <a title="Home" href="/he" style="background-image: url(/sites/default/files/logo.png)">Home</a>
+      <div style="color:red">no bg</div>
+      <span style="background: url('https://cdn.test/bg.svg') no-repeat">x</span>
+    </body></html>`);
+    const r = await scrapeImages('https://bank.example/he/page');
+    expect(r).toContain('https://bank.example/sites/default/files/logo.png');
+    expect(r).toContain('https://cdn.test/bg.svg');
+  });
+
   it('caps at 12', async () => {
     const imgs = Array.from({ length: 20 }, (_, i) => `<img src="/i${i}.png">`).join('');
     stubHtml(`<html><body>${imgs}</body></html>`);

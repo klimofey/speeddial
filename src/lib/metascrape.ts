@@ -5,6 +5,24 @@ function attrsAll(doc: Document, selector: string, name: string): string[] {
     .map((v) => v.trim());
 }
 
+// Pulls url(...) targets out of inline `style` attributes that set a background
+// (e.g. a logo declared as `<a style="background-image: url(/logo.png)">`), which
+// the meta/icon/img selectors miss.
+function backgroundUrls(doc: Document): string[] {
+  const re = /url\(\s*['"]?([^'")]+?)['"]?\s*\)/gi;
+  const out: string[] = [];
+  for (const el of Array.from(doc.querySelectorAll('[style]'))) {
+    const style = el.getAttribute('style') || '';
+    if (!/background/i.test(style)) continue;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(style))) {
+      const u = m[1].trim();
+      if (u) out.push(u);
+    }
+  }
+  return out;
+}
+
 // Fetches a page and returns candidate image URLs (meta/icons first, then page
 // <img>), resolved to absolute, de-duped, capped. SVGs are kept (no extension filter).
 export async function scrapeImages(pageUrl: string): Promise<string[]> {
@@ -28,6 +46,7 @@ export async function scrapeImages(pageUrl: string): Promise<string[]> {
     ...attrsAll(doc, 'link[rel~="apple-touch-icon"]', 'href'),
     ...attrsAll(doc, 'link[rel~="icon"]', 'href'),
     ...attrsAll(doc, 'link[rel="mask-icon"]', 'href'),
+    ...backgroundUrls(doc),
     ...attrsAll(doc, 'img[src]', 'src'),
   ];
   const seen = new Set<string>();
