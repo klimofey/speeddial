@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks';
 import { Dial, Settings, ImageRef } from '../lib/types';
-import { fileToDataUrl, cacheImageFromUrl } from '../lib/images';
+import { fileToDataUrl, cacheImageFromUrl, urlToDataUrl } from '../lib/images';
+import { removeBackground } from '../lib/bgremove';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
@@ -76,6 +77,26 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setScrapeStep('idle');
     const extra = merged.length - base.length;
     setScrapeMsg(extra ? t('scrape_found_more', { n: extra }) : t('scrape_no_extra'));
+  };
+
+  const removeBg = async () => {
+    if (!selectedUrl) return;
+    setBusy(true);
+    setScrapeMsg('');
+    try {
+      const dataUrl = await urlToDataUrl(selectedUrl);
+      const out = await removeBackground(dataUrl);
+      const ref = 'cut-' + Date.now().toString(36);
+      await setImage(ref, { data: out, source: 'upload' });
+      setUploadRef(ref);
+      setMode('upload');
+      setSelectedUrl(out);
+      setScrapeMsg(t('bg_removed'));
+    } catch {
+      setScrapeMsg(t('bg_remove_failed'));
+    } finally {
+      setBusy(false);
+    }
   };
 
   const selectCandidate = async (imgUrl: string) => {
@@ -208,6 +229,9 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
               </button>
             ))}
           </div>
+        )}
+        {selectedUrl && (
+          <button type="button" class="ce-find ce-removebg" onClick={removeBg} disabled={busy}>{t('remove_bg')}</button>
         )}
         {mode === 'upload' && <input type="file" accept="image/*" aria-label={t('mode_upload')} onChange={onFile} />}
         {mode === 'url' && (
