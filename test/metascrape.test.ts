@@ -38,6 +38,17 @@ describe('scrapeImages', () => {
     expect(r).toContain('https://cdn.test/bg.svg');
   });
 
+  it('serializes a logo-sized inline <svg> to a data URI and skips tiny ones', async () => {
+    stubHtml(`<html><body>
+      <svg viewBox="0 0 1660 290" height="22"><path d="M0 0h10v10z"></path></svg>
+      <svg width="16" height="16"><circle cx="8" cy="8" r="4"></circle></svg>
+    </body></html>`);
+    const r = await scrapeImages('https://site.com/page');
+    const svgs = r.filter((u) => u.startsWith('data:image/svg+xml'));
+    expect(svgs).toHaveLength(1);
+    expect(decodeURIComponent(svgs[0])).toContain('viewBox="0 0 1660 290"');
+  });
+
   it('caps at 12', async () => {
     const imgs = Array.from({ length: 20 }, (_, i) => `<img src="/i${i}.png">`).join('');
     stubHtml(`<html><body>${imgs}</body></html>`);

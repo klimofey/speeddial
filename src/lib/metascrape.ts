@@ -23,6 +23,31 @@ function backgroundUrls(doc: Document): string[] {
   return out;
 }
 
+// Serializes logo-sized inline <svg> elements into data: URIs so they can be used
+// as candidates. Tiny icon SVGs are skipped; capped to avoid icon-sprite flooding.
+function svgDataUris(doc: Document): string[] {
+  if (typeof XMLSerializer === 'undefined') return [];
+  const serializer = new XMLSerializer();
+  const out: string[] = [];
+  for (const svg of Array.from(doc.querySelectorAll('svg'))) {
+    const w = parseFloat(svg.getAttribute('width') || '0');
+    const h = parseFloat(svg.getAttribute('height') || '0');
+    let big = w >= 32 || h >= 32;
+    if (!big) {
+      const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+      if (vb.length === 4 && (vb[2] >= 64 || vb[3] >= 64)) big = true;
+    }
+    if (!big) continue;
+    try {
+      out.push(`data:image/svg+xml;utf8,${encodeURIComponent(serializer.serializeToString(svg))}`);
+    } catch {
+      continue;
+    }
+    if (out.length >= 4) break;
+  }
+  return out;
+}
+
 // Fetches a page and returns candidate image URLs (meta/icons first, then page
 // <img>), resolved to absolute, de-duped, capped. SVGs are kept (no extension filter).
 export async function scrapeImages(pageUrl: string): Promise<string[]> {
@@ -47,6 +72,7 @@ export async function scrapeImages(pageUrl: string): Promise<string[]> {
     ...attrsAll(doc, 'link[rel~="icon"]', 'href'),
     ...attrsAll(doc, 'link[rel="mask-icon"]', 'href'),
     ...backgroundUrls(doc),
+    ...svgDataUris(doc),
     ...attrsAll(doc, 'img[src]', 'src'),
   ];
   const seen = new Set<string>();
