@@ -26,8 +26,10 @@ export function TranslatorRender({ config }: { config: TranslatorConfig }) {
     return () => clearTimeout(timer.current);
   }, [input, config.target, config.cloudFallback]);
 
+  const targetLabel = TRANSLATE_LANGS.find((l) => l.code === config.target)?.label ?? config.target;
   return (
     <div class="w-translate">
+      <div class="w-translate-target">{t('translate_to')}: {targetLabel}</div>
       <textarea class="w-translate-in" rows={2} value={input} placeholder={t('translate_placeholder')}
         onInput={(e) => setInput((e.target as HTMLTextAreaElement).value)} />
       <div class="w-translate-out">

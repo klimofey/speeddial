@@ -79,9 +79,11 @@ function Board() {
       <button class="settings-gear" aria-label={t('open_settings')} onClick={() => setShowSettings(true)}>⚙</button>
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? t('done') : t('edit')}</button>
 
-      <div class="header">
-        <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
-      </div>
+      {settings.showSearch && (
+        <div class="header">
+          <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
+        </div>
+      )}
       {!filter && settings.showRecent && (
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
