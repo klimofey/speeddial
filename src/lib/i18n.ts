@@ -38,6 +38,15 @@ const en: Dict = {
   store_title: 'Add a tile', add: '+ Add', note_placeholder: 'Write a note…',
   clock_zone: 'Time zone', clock_label: 'Label', clock_show_greeting: 'Show greeting',
   coming_soon: 'coming soon',
+  widget_translator: 'Translator',
+  translate_placeholder: 'Enter text…',
+  translate_to: 'Translate to',
+  detected: 'Detected',
+  translating: 'Translating…',
+  downloading_model: 'Downloading model',
+  translator_unavailable: 'Translation unavailable — enable cloud fallback in ⚙',
+  cloud_fallback: 'Allow cloud translation',
+  cloud_fallback_warn: 'When on-device translation is unavailable, your text is sent to MyMemory.',
 };
 
 const ru: Dict = {
@@ -76,6 +85,15 @@ const ru: Dict = {
   store_title: 'Добавить плитку', add: '+ Добавить', note_placeholder: 'Напишите заметку…',
   clock_zone: 'Часовой пояс', clock_label: 'Метка', clock_show_greeting: 'Показывать приветствие',
   coming_soon: 'скоро',
+  widget_translator: 'Переводчик',
+  translate_placeholder: 'Введите текст…',
+  translate_to: 'Перевести на',
+  detected: 'Определено',
+  translating: 'Перевод…',
+  downloading_model: 'Загрузка модели',
+  translator_unavailable: 'Перевод недоступен — включите облако в ⚙',
+  cloud_fallback: 'Разрешить облачный перевод',
+  cloud_fallback_warn: 'Когда перевод на устройстве недоступен, ваш текст отправляется в MyMemory.',
 };
 
 const es: Dict = {
@@ -114,6 +132,15 @@ const es: Dict = {
   store_title: 'Añadir un mosaico', add: '+ Añadir', note_placeholder: 'Escribe una nota…',
   clock_zone: 'Zona horaria', clock_label: 'Etiqueta', clock_show_greeting: 'Mostrar saludo',
   coming_soon: 'próximamente',
+  widget_translator: 'Traductor',
+  translate_placeholder: 'Escribe el texto…',
+  translate_to: 'Traducir a',
+  detected: 'Detectado',
+  translating: 'Traduciendo…',
+  downloading_model: 'Descargando modelo',
+  translator_unavailable: 'Traducción no disponible — activa la nube en ⚙',
+  cloud_fallback: 'Permitir traducción en la nube',
+  cloud_fallback_warn: 'Cuando la traducción en el dispositivo no está disponible, tu texto se envía a MyMemory.',
 };
 
 const de: Dict = {
@@ -152,6 +179,15 @@ const de: Dict = {
   store_title: 'Kachel hinzufügen', add: '+ Hinzufügen', note_placeholder: 'Notiz schreiben…',
   clock_zone: 'Zeitzone', clock_label: 'Beschriftung', clock_show_greeting: 'Begrüßung anzeigen',
   coming_soon: 'demnächst',
+  widget_translator: 'Übersetzer',
+  translate_placeholder: 'Text eingeben…',
+  translate_to: 'Übersetzen nach',
+  detected: 'Erkannt',
+  translating: 'Übersetze…',
+  downloading_model: 'Modell wird geladen',
+  translator_unavailable: 'Übersetzung nicht verfügbar — Cloud in ⚙ aktivieren',
+  cloud_fallback: 'Cloud-Übersetzung erlauben',
+  cloud_fallback_warn: 'Wenn die Übersetzung auf dem Gerät nicht verfügbar ist, wird dein Text an MyMemory gesendet.',
 };
 
 const fr: Dict = {
@@ -190,6 +226,15 @@ const fr: Dict = {
   store_title: 'Ajouter une tuile', add: '+ Ajouter', note_placeholder: 'Écrire une note…',
   clock_zone: 'Fuseau horaire', clock_label: 'Étiquette', clock_show_greeting: 'Afficher le message',
   coming_soon: 'bientôt',
+  widget_translator: 'Traducteur',
+  translate_placeholder: 'Saisir le texte…',
+  translate_to: 'Traduire en',
+  detected: 'Détecté',
+  translating: 'Traduction…',
+  downloading_model: 'Téléchargement du modèle',
+  translator_unavailable: 'Traduction indisponible — activez le cloud dans ⚙',
+  cloud_fallback: 'Autoriser la traduction cloud',
+  cloud_fallback_warn: "Quand la traduction sur l'appareil est indisponible, votre texte est envoyé à MyMemory.",
 };
 
 export const messages: Record<Lang, Dict> = { en, ru, es, de, fr };
