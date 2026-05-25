@@ -24,6 +24,7 @@ export interface Dial {
   order: number;
   size?: { w: number; h: number }; // grid span in cells; defaults to 1x1
   widget?: WidgetInstance;
+  zone?: 'top' | 'grid'; // 'top' = the row above the search bar; default/absent = main grid
 }
 
 export interface Theme {

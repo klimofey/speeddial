@@ -42,6 +42,19 @@ function ResizeProbe() {
   );
 }
 
+function LayoutProbe() {
+  const { dials, applyLayout, ready } = useApp();
+  if (!ready) return <span>loading</span>;
+  const byId = (id: string) => dials.find((d) => d.id === id);
+  return (
+    <div>
+      <span data-testid="zones">{dials.map((d) => `${d.id}:${d.zone ?? 'grid'}:${d.order}`).sort().join(',')}</span>
+      <button onClick={() => applyLayout(['b'], ['a'])}>layout</button>
+      <span data-testid="ok">{byId('a') && byId('b') ? 'y' : 'n'}</span>
+    </div>
+  );
+}
+
 describe('AppState', () => {
   // Start each case from an explicitly-empty board so the default seed clock
   // (returned by getDials when nothing is stored) doesn't skew the assertions.
@@ -67,6 +80,18 @@ describe('AppState', () => {
     expect(screen.getByTestId('wtype').textContent).toBe('note');
     const noteDefault = getWidget('note')!.defaultConfig;
     expect(screen.getByTestId('wconfig').textContent).toBe(JSON.stringify(noteDefault));
+  });
+
+  it('applyLayout assigns zone + order from the two id lists', async () => {
+    await storage.setDials([
+      { id: 'a', url: 'https://a.com', title: 'A', imageRef: 'letter', color: '#111', order: 0 },
+      { id: 'b', url: 'https://b.com', title: 'B', imageRef: 'letter', color: '#222', order: 1 },
+    ]);
+    render(<AppProvider><LayoutProbe /></AppProvider>);
+    await waitFor(() => screen.getByText('layout'));
+    fireEvent.click(screen.getByText('layout'));
+    // b -> top@0, a -> grid@0
+    await waitFor(() => expect(screen.getByTestId('zones').textContent).toBe('a:grid:0,b:top:0'));
   });
 
   it('resizes a dial and persists the new size', async () => {
