@@ -14,6 +14,9 @@ body {
   grid-template-columns: repeat(auto-fill, 120px); grid-auto-rows: 120px; justify-content: center; grid-auto-flow: dense; }
 .dial-grid[data-size="sm"] { grid-template-columns: repeat(auto-fill, 92px); grid-auto-rows: 92px; }
 .dial-grid[data-size="lg"] { grid-template-columns: repeat(auto-fill, 156px); grid-auto-rows: 156px; }
+/* Top zone (above the search bar): in edit mode it's a visible dashed drop area even
+   when empty, so widgets can be dragged up into it. */
+.dial-grid[data-zone="top"][data-editing="true"] { min-height: 96px; border: 2px dashed var(--muted); border-radius: 14px; margin-bottom: 8px; }
 .dial-card { position: relative; height: 100%; }
 .dial-link { position: relative; display: flex; flex-direction: column; align-items: center;
   text-decoration: none; color: var(--fg); height: 100%; }

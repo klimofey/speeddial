@@ -10,33 +10,39 @@ interface Props {
   onEdit: (dial: Dial) => void;
   onDelete: (id: string) => void;
   onConfig?: (dial: Dial) => void;
-  onReorder: (orderedIds: string[]) => void;
+  onReorder?: (orderedIds: string[]) => void;
+  onSorted?: () => void;
   onAdd?: () => void;
+  zone?: 'top' | 'grid';
   editing?: boolean;
   onResize?: (id: string, size: { w: number; h: number }) => void;
 }
 
-export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorder, onAdd, editing = false, onResize }: Props) {
+export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorder, onSorted, onAdd, zone = 'grid', editing = false, onResize }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current || !editing) return;
-    const sortable = Sortable.create(ref.current, {
+    const el = ref.current;
+    const sortable = Sortable.create(el, {
       animation: 150,
       ghostClass: 'sortable-ghost',
       draggable: '.dial-card',
+      group: 'dials', // shared so cards can be dragged between the top zone and the grid
+      forceFallback: true, // pointer-based drag: consistent across browsers + works cross-zone
       onEnd: () => {
-        const ids = Array.from(ref.current!.querySelectorAll<HTMLElement>('.dial-card'))
-          .map((el) => el.dataset.id!)
+        if (onSorted) { onSorted(); return; }
+        const ids = Array.from(el.querySelectorAll<HTMLElement>('.dial-card'))
+          .map((node) => node.dataset.id!)
           .filter(Boolean);
-        onReorder(ids);
+        onReorder?.(ids);
       },
     });
     return () => sortable.destroy();
-  }, [editing, onReorder]);
+  }, [editing, onReorder, onSorted]);
 
   return (
-    <div class="dial-grid" data-size={settings.cardSize} ref={ref}>
+    <div class="dial-grid" data-size={settings.cardSize} data-zone={zone} data-editing={editing} ref={ref}>
       {dials.map((dial) => (
         <DialCard
           key={dial.id}

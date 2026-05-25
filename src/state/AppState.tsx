@@ -15,6 +15,7 @@ interface AppContextValue {
   updateDial: (dial: Dial) => Promise<void>;
   removeDial: (id: string) => Promise<void>;
   reorderDials: (orderedIds: string[]) => Promise<void>;
+  applyLayout: (topIds: string[], gridIds: string[]) => Promise<void>;
   resizeDial: (id: string, size: { w: number; h: number }) => Promise<void>;
   updateSettings: (patch: Partial<Settings>) => Promise<void>;
   reload: () => Promise<void>;
@@ -76,6 +77,19 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
     await persistDials(next);
   }, [dials, persistDials]);
 
+  // Reconciles the two zones after a drag: each id gets its new zone + order by the
+  // position it landed in. Ids missing from both lists are preserved (safety).
+  const applyLayout = useCallback(async (topIds: string[], gridIds: string[]) => {
+    const byId = new Map(dials.map((d) => [d.id, d]));
+    const placed = new Set([...topIds, ...gridIds]);
+    const next: Dial[] = [
+      ...topIds.flatMap((id, i) => { const d = byId.get(id); return d ? [{ ...d, zone: 'top' as const, order: i }] : []; }),
+      ...gridIds.flatMap((id, i) => { const d = byId.get(id); return d ? [{ ...d, zone: 'grid' as const, order: i }] : []; }),
+      ...dials.filter((d) => !placed.has(d.id)),
+    ];
+    await persistDials(next);
+  }, [dials, persistDials]);
+
   const resizeDial = useCallback(async (id: string, size: { w: number; h: number }) => {
     await persistDials(dials.map((d) => (d.id === id ? { ...d, size } : d)));
   }, [dials, persistDials]);
@@ -87,7 +101,7 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
   }, [settings]);
 
   const value: AppContextValue = {
-    ready, dials, settings, addDial, addWidget, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload,
+    ready, dials, settings, addDial, addWidget, updateDial, removeDial, reorderDials, applyLayout, resizeDial, updateSettings, reload,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

@@ -14,7 +14,7 @@ import { Store } from './widgets/Store';
 import { getWidget } from './widgets/registry';
 
 function Board() {
-  const { ready, dials, settings, addDial, addWidget, updateDial, removeDial, reorderDials, resizeDial, updateSettings, reload } = useApp();
+  const { ready, dials, settings, addDial, addWidget, updateDial, removeDial, applyLayout, resizeDial, updateSettings, reload } = useApp();
   const [filter, setFilter] = useState('');
   const [editing, setEditing] = useState<Dial | null | undefined>(undefined); // undefined=closed, null=new
   const [showSettings, setShowSettings] = useState(false);
@@ -60,9 +60,19 @@ function Board() {
 
   setLang(settings.language);
 
-  const visible = filter
-    ? dials.filter((d) => (d.title + ' ' + d.url).toLowerCase().includes(filter.toLowerCase()))
-    : dials;
+  const byOrder = (a: Dial, b: Dial) => a.order - b.order;
+  const matches = (d: Dial) => (d.title + ' ' + d.url).toLowerCase().includes(filter.toLowerCase());
+  const topDials = dials.filter((d) => d.zone === 'top').sort(byOrder);
+  // While searching, ignore zones and show all matches in the main grid.
+  const gridDials = (filter ? dials.filter(matches) : dials.filter((d) => d.zone !== 'top')).sort(byOrder);
+  const showTop = !filter && (editMode || topDials.length > 0);
+
+  // After any drag, rebuild both zones' order from the live DOM (cards may have moved
+  // between the top zone and the grid via the shared SortableJS group).
+  const handleSorted = () => {
+    const idsIn = (z: string) => Array.from(document.querySelectorAll<HTMLElement>(`.dial-grid[data-zone="${z}"] .dial-card`)).map((el) => el.dataset.id!).filter(Boolean);
+    void applyLayout(idsIn('top'), idsIn('grid'));
+  };
 
   const onPinRecent = async (site: RecentSite) => {
     await addDial({ url: site.url, title: site.title });
@@ -79,6 +89,9 @@ function Board() {
       <button class="settings-gear" aria-label={t('open_settings')} onClick={() => setShowSettings(true)}>⚙</button>
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? t('done') : t('edit')}</button>
 
+      {showTop && (
+        <DialGrid dials={topDials} settings={settings} editing={editMode} zone="top" onEdit={(d) => setEditing(d)} onDelete={removeDial} onSorted={handleSorted} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} />
+      )}
       {settings.showSearch && (
         <div class="header">
           <SearchBar engine={settings.searchEngine} suggestProvider={settings.suggestProvider} onFilter={setFilter} />
@@ -87,7 +100,7 @@ function Board() {
       {!filter && settings.showRecent && (
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
-      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} onAdd={() => setShowStore(true)} />
+      <DialGrid dials={gridDials} settings={settings} editing={editMode} zone="grid" onEdit={(d) => setEditing(d)} onDelete={removeDial} onSorted={handleSorted} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} onAdd={() => setShowStore(true)} />
 
       {editing !== undefined && (
         <CardEditor settings={settings} initial={editing ?? undefined} onSave={onSave} onClose={() => setEditing(undefined)} />
