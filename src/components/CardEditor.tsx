@@ -1,8 +1,8 @@
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { Dial, Settings, ImageRef } from '../lib/types';
 import { fileToDataUrl, cacheImageFromUrl, urlToDataUrl } from '../lib/images';
 import { removeBackground } from '../lib/bgremove';
-import { setImage } from '../lib/storage';
+import { setImage, getImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission, ensureImageFetchPermission } from '../lib/permissions';
 import { scrapeImages, iconSources } from '../lib/metascrape';
@@ -41,6 +41,16 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
   const [scrapeStep, setScrapeStep] = useState<'idle' | 'need-perm' | 'searching' | 'denied'>('idle');
   const [candidates, setCandidates] = useState<string[]>([]);
   const [selectedUrl, setSelectedUrl] = useState('');
+
+  // When editing a card whose image came from a link, restore the "Image URL" mode and
+  // the original link (the stored bytes are just a cache) instead of showing "Upload".
+  useEffect(() => {
+    const ref = initial?.imageRef;
+    if (!ref || ['favicon', 'letter', 'screenshot'].includes(ref)) return;
+    void getImage(ref).then((img) => {
+      if (img?.source === 'url' && img.srcUrl) { setMode('url'); setImageUrl(img.srcUrl); }
+    });
+  }, [initial]);
 
   const canSave = url.trim().length > 0 && !busy;
 

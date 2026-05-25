@@ -33,6 +33,15 @@ describe('CardEditor', () => {
     expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ url: 'https://x.com', title: 'X', imageRef: 'favicon' }));
   });
 
+  it('restores Image-URL mode + the original link when editing a url-sourced card', async () => {
+    const storage = await import('../src/lib/storage');
+    await storage.setImage('url-x', { data: 'data:cached', source: 'url', srcUrl: 'https://img.example/logo.png' });
+    render(<CardEditor settings={DEFAULT_SETTINGS}
+      initial={{ id: '1', url: 'https://x.com', title: 'X', imageRef: 'url-x', color: '', order: 0 }}
+      onSave={() => {}} onClose={() => {}} />);
+    await waitFor(() => expect((screen.getByLabelText('Image URL') as HTMLInputElement).value).toBe('https://img.example/logo.png'));
+  });
+
   it('keeps the title empty when left blank (no URL-host fallback)', () => {
     const onSave = vi.fn();
     render(<CardEditor settings={DEFAULT_SETTINGS} onSave={onSave} onClose={() => {}} />);
