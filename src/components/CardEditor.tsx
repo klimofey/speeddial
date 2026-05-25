@@ -5,6 +5,7 @@ import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
 import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
 import { scrapeImages, iconSources } from '../lib/metascrape';
+import { scrapeRendered } from '../lib/renderscrape';
 import { CardThumb } from './CardThumb';
 import { t } from '../lib/i18n';
 
@@ -63,11 +64,18 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
     setScrapeStep('searching');
     setScrapeMsg(t('scrape_searching'));
     setBusy(true);
+    // Static HTML first (instant), then the JS-rendered DOM (opens a background tab)
+    // to catch SPA logos the static fetch can't see. Merge the union.
     const imgs = await scrapeImages(normalizeUrl(url));
+    let merged = mergeUnique(base, imgs);
+    setCandidates(merged);
+    const rendered = await scrapeRendered(normalizeUrl(url));
+    merged = mergeUnique(merged, rendered);
+    setCandidates(merged);
     setBusy(false);
     setScrapeStep('idle');
-    setCandidates(mergeUnique(base, imgs));
-    setScrapeMsg(imgs.length ? t('scrape_found_more', { n: imgs.length }) : t('scrape_no_extra'));
+    const extra = merged.length - base.length;
+    setScrapeMsg(extra ? t('scrape_found_more', { n: extra }) : t('scrape_no_extra'));
   };
 
   const selectCandidate = async (imgUrl: string) => {
