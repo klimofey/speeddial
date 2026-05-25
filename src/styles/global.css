@@ -147,4 +147,9 @@ body {
   border: var(--card-border); background: var(--search-bg); color: inherit; font-size: 14px; }
 .store-item:disabled { opacity: .5; cursor: not-allowed; }
 .store-icon { font-size: 18px; }
-.widget-card .dial-thumb { padding: 0; }
+/* Widget tiles have no inner flex column (unlike link cards), so make the card
+   itself a flex container and let the thumb fill the whole grid cell. Without
+   this the thumb collapses to its content height and the resize handle/actions
+   detach from the (full-height) cell. */
+.widget-card { display: flex; }
+.widget-card .dial-thumb { flex: 1 1 auto; height: 100%; padding: 0; }
