@@ -111,7 +111,9 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
 
   const doSave = (imageRef: ImageRef) => {
     const finalUrl = normalizeUrl(url);
-    const finalTitle = title.trim() || finalUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+    // WYSIWYG: an empty title stays empty (the card shows no label), rather than
+    // falling back to the URL host.
+    const finalTitle = title.trim();
     onSave({
       id: initial?.id ?? '',
       url: finalUrl,
