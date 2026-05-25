@@ -60,7 +60,7 @@ export function DialCard({ dial, settings, onEdit, onDelete, onConfig, editing =
     >
       <a class="dial-link" href={dial.url} onClick={(e) => { if (editing) e.preventDefault(); }}>
         <CardThumb dial={dial} settings={settings} />
-        <span class="dial-title">{dial.title}</span>
+        {dial.title && <span class="dial-title">{dial.title}</span>}
       </a>
       <div class="dial-actions">
         <button aria-label={`${t('edit')} ${dial.title}`} onClick={() => onEdit(dial)}>✎</button>
