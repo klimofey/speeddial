@@ -38,3 +38,19 @@ if (typeof g.chrome === 'undefined' || !g.chrome.storage) {
   // eslint-disable-next-line no-console
   console.info('[dev-chrome-shim] installed in-memory chrome.* mock');
 }
+
+// Force-override the on-device translation APIs in dev. Real Chrome (138+) exposes
+// these, but the language models usually aren't downloaded in a throwaway/dev browser,
+// so the real APIs would just report "unavailable". Replacing them with working stubs
+// makes the Translator widget demoable under vite dev / Playwright. Dev-only — never ships.
+const gg = globalThis as unknown as { Translator?: unknown; LanguageDetector?: unknown };
+gg.Translator = {
+  async availability() { return 'available'; },
+  async create(opts: { sourceLanguage: string; targetLanguage: string }) {
+    return { async translate(text: string) { return `[${opts.sourceLanguage}→${opts.targetLanguage}] ${text}`; } };
+  },
+};
+gg.LanguageDetector = {
+  async availability() { return 'available'; },
+  async create() { return { async detect() { return [{ detectedLanguage: 'ru', confidence: 1 }]; } }; },
+};
