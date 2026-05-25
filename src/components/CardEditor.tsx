@@ -4,7 +4,7 @@ import { fileToDataUrl, cacheImageFromUrl, urlToDataUrl } from '../lib/images';
 import { removeBackground } from '../lib/bgremove';
 import { setImage } from '../lib/storage';
 import { colorForKey } from '../lib/color';
-import { ensureOriginPermission, hasOriginPermission } from '../lib/permissions';
+import { ensureOriginPermission, hasOriginPermission, ensureImageFetchPermission } from '../lib/permissions';
 import { scrapeImages, iconSources } from '../lib/metascrape';
 import { scrapeRendered } from '../lib/renderscrape';
 import { CardThumb } from './CardThumb';
@@ -87,7 +87,7 @@ export function CardEditor({ settings, initial, onSave, onClose }: Props) {
       // Reading pixels requires fetching the image bytes; cross-origin fetch needs host
       // permission for the candidate's origin (e.g. www.google.com for an s2 favicon),
       // otherwise it's blocked by CORS. data: candidates need nothing.
-      if (!selectedUrl.startsWith('data:') && !(await ensureOriginPermission(selectedUrl))) {
+      if (!selectedUrl.startsWith('data:') && !(await ensureImageFetchPermission(selectedUrl))) {
         setScrapeMsg(t('bg_remove_failed'));
         setBusy(false);
         return;

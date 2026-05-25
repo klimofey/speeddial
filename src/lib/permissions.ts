@@ -11,6 +11,26 @@ export async function ensureMyMemoryPermission(): Promise<boolean> {
   }
 }
 
+// Requests host permission needed to FETCH an image's bytes (for canvas readback).
+// Includes the gstatic CDN that Google's favicon endpoint redirects to — a
+// cross-origin redirect needs the target origin's permission too.
+export async function ensureImageFetchPermission(url: string): Promise<boolean> {
+  if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
+  let origins: string[];
+  try {
+    const u = new URL(url);
+    origins = [u.origin + '/*'];
+    if (/(^|\.)google\.com$/i.test(u.hostname)) origins.push('https://*.gstatic.com/*');
+  } catch {
+    return false;
+  }
+  try {
+    return await chrome.permissions.request({ origins });
+  } catch {
+    return false;
+  }
+}
+
 export async function ensureGooglePermission(): Promise<boolean> {
   if (typeof chrome === 'undefined' || !chrome.permissions?.request) return false;
   try {
