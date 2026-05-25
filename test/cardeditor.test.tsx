@@ -14,6 +14,9 @@ vi.mock('../src/lib/metascrape', async (importActual) => {
     scrapeImages: vi.fn(async () => ['https://cdn.example/a.png', 'https://cdn.example/b.png']),
   };
 });
+// The rendered (background-tab) scrape is exercised in render-scrape.test.ts; here it
+// would just block on the load timeout, so stub it to resolve to no extra candidates.
+vi.mock('../src/lib/renderscrape', () => ({ scrapeRendered: vi.fn(async () => []) }));
 
 describe('CardEditor', () => {
   it('disables save when URL is empty', () => {

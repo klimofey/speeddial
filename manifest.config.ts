@@ -6,7 +6,7 @@ export default defineManifest({
   version: '0.1.0',
   description: 'Free, private, beautiful speed dial new tab.',
   minimum_chrome_version: '110',
-  permissions: ['storage', 'unlimitedStorage', 'favicon', 'history'],
+  permissions: ['storage', 'unlimitedStorage', 'favicon', 'history', 'scripting'],
   chrome_url_overrides: { newtab: 'index.html' },
   optional_host_permissions: ['https://suggestqueries.google.com/*', 'https://api.mymemory.translated.net/*', 'https://*/*', 'http://*/*'],
   icons: {

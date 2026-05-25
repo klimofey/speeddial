@@ -28,16 +28,34 @@ const local = createArea();
 const history = { search: vi.fn(async () => [] as Array<{ url?: string; title?: string; lastVisitTime?: number; visitCount?: number }>) };
 const permissions = { request: vi.fn(async () => true), contains: vi.fn(async () => false) };
 
+type UpdateListener = (id: number, info: { status?: string }) => void;
+const tabUpdateListeners: UpdateListener[] = [];
+const tabs = {
+  create: vi.fn(async (_opts: unknown) => ({ id: 1 }) as { id?: number }),
+  remove: vi.fn(async (_id: number) => {}),
+  onUpdated: {
+    addListener: vi.fn((fn: UpdateListener) => { tabUpdateListeners.push(fn); }),
+    removeListener: vi.fn((fn: UpdateListener) => {
+      const i = tabUpdateListeners.indexOf(fn);
+      if (i >= 0) tabUpdateListeners.splice(i, 1);
+    }),
+    _emit: (id: number, info: { status?: string }) => { tabUpdateListeners.slice().forEach((l) => l(id, info)); },
+  },
+};
+const scripting = { executeScript: vi.fn(async () => [{ result: [] as string[] }]) };
+
 (globalThis as unknown as { chrome: unknown }).chrome = {
   storage: { sync, local, onChanged: { addListener: vi.fn(), removeListener: vi.fn() } },
   runtime: { getURL: (p: string) => 'chrome-extension://test' + p },
   history,
   permissions,
+  tabs,
+  scripting,
 };
 
-export const mockChrome = { sync, local, history, permissions };
+export const mockChrome = { sync, local, history, permissions, tabs, scripting };
 
-beforeEach(() => { sync._reset(); local._reset(); vi.clearAllMocks(); });
+beforeEach(() => { sync._reset(); local._reset(); tabUpdateListeners.length = 0; vi.clearAllMocks(); });
 
 // jsdom in this version ships a Blob without text()/arrayBuffer(); polyfill them
 // for tests that serialize/parse Blobs. Real browsers provide these natively.
