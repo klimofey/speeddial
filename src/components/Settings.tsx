@@ -135,6 +135,12 @@ export function Settings({ settings, onChange, onClose, onRestored }: Props) {
           <input type="checkbox" checked={settings.showRecent}
             onChange={(e) => onChange({ showRecent: (e.target as HTMLInputElement).checked })} /> {t('show_recent')}
         </label>
+        {settings.showRecent && (
+          <label>
+            <input type="checkbox" checked={settings.showRecentLabel}
+              onChange={(e) => onChange({ showRecentLabel: (e.target as HTMLInputElement).checked })} /> {t('show_recent_label')}
+          </label>
+        )}
 
         <label for="se-suggest">{t('suggestions')}</label>
         <select id="se-suggest" value={settings.suggestProvider} onChange={onSuggestChange}>
