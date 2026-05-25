@@ -2,7 +2,7 @@ import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
   manifest_version: 3,
-  name: 'Dialy — Speed Dial New Tab',
+  name: 'Speed Dial - New Tab',
   version: '0.1.0',
   description: 'Free, private, beautiful speed dial new tab.',
   minimum_chrome_version: '110',

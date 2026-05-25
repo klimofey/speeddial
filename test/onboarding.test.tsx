@@ -6,7 +6,7 @@ describe('Onboarding wizard', () => {
   it('steps through to the footer tip and finishes', () => {
     const onDone = vi.fn();
     render(<Onboarding onDone={onDone} />);
-    expect(screen.getByText('Welcome to Dialy')).toBeTruthy();
+    expect(screen.getByText('Welcome to Speed Dial')).toBeTruthy();
     fireEvent.click(screen.getByText('Next'));
     expect(screen.getByText(/Hide Chrome/)).toBeTruthy(); // the key footer step
     fireEvent.click(screen.getByText('Next'));

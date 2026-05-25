@@ -1,13 +1,13 @@
-# Dialy — Privacy Policy
+# Speed Dial - New Tab — Privacy Policy
 
 _Last updated: 2026‑05‑25_
 
-Dialy ("the extension") replaces Chrome's New Tab page with a customizable dashboard.
+Speed Dial ("the extension") replaces Chrome's New Tab page with a customizable dashboard.
 It is designed to be private by default.
 
 ## What we collect
 
-**Nothing.** Dialy has no servers, no accounts, and no analytics. The developer does
+**Nothing.** Speed Dial has no servers, no accounts, and no analytics. The developer does
 not collect, receive, store, sell, or share any of your data.
 
 ## Where your data lives
@@ -23,7 +23,7 @@ account; the developer never has access to it.
 - **favicon** — show each site's icon using Chrome's built‑in local favicon service.
 - **history** — read your local browsing history to populate the optional "Recent
   sites" row. It is read on your device and is never transmitted anywhere.
-- **scripting** + host access — only when you click "Find a better image": Dialy opens
+- **scripting** + host access — only when you click "Find a better image": Speed Dial opens
   the site you are adding in a background tab and reads its logo to suggest a tile icon.
 - **bookmarks** (optional) — the Bookmarks widget lists a bookmark folder you choose.
   Requested only when you add that widget.
@@ -34,7 +34,7 @@ Optional permissions are requested only at the moment you first use the related 
 
 ## Third‑party services (only when you turn a feature on)
 
-Some features send data **directly from your browser to a third party** to work. Dialy
+Some features send data **directly from your browser to a third party** to work. Speed Dial
 has no servers of its own, so nothing is routed through us:
 
 - **Search suggestions** (optional): the text you type in the search box is sent to your
