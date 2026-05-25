@@ -6,6 +6,13 @@ export type CardSize = 'sm' | 'md' | 'lg';
 export type SuggestProvider = 'off' | 'duckduckgo' | 'google';
 export type Lang = 'en' | 'ru' | 'es' | 'de' | 'fr';
 
+export type WidgetType = 'note' | 'clock';
+export interface NoteConfig { text: string; }
+export interface ClockConfig { timeZone: string; label: string; showGreeting: boolean; }
+export type WidgetInstance =
+  | { type: 'note'; config: NoteConfig }
+  | { type: 'clock'; config: ClockConfig };
+
 export interface WorldClock {
   id: string;
   timeZone: string;
@@ -20,6 +27,7 @@ export interface Dial {
   color: string; // used for the 'letter' preview mode
   order: number;
   size?: { w: number; h: number }; // grid span in cells; defaults to 1x1
+  widget?: WidgetInstance;
 }
 
 export interface Theme {

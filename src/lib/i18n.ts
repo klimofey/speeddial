@@ -35,6 +35,10 @@ const en: Dict = {
   aria_bg_image: 'Background image', aria_screenshot_tmpl: 'Screenshot service template',
   theme_system: 'System', theme_system_title: 'System (follows your OS appearance)',
   ph_example: 'Example',
+  widget_note: 'Note', widget_clock: 'Clock', widget_link: 'Link card',
+  store_title: 'Add a tile', add: '+ Add', note_placeholder: 'Write a note…',
+  clock_zone: 'Time zone', clock_label: 'Label', clock_show_greeting: 'Show greeting',
+  coming_soon: 'coming soon',
 };
 
 const ru: Dict = {
@@ -70,6 +74,10 @@ const ru: Dict = {
   aria_bg_image: 'Картинка фона', aria_screenshot_tmpl: 'Шаблон скриншот-сервиса',
   theme_system: 'Системная', theme_system_title: 'Системная (по теме ОС)',
   ph_example: 'Пример',
+  widget_note: 'Заметка', widget_clock: 'Часы', widget_link: 'Карточка-ссылка',
+  store_title: 'Добавить плитку', add: '+ Добавить', note_placeholder: 'Напишите заметку…',
+  clock_zone: 'Часовой пояс', clock_label: 'Метка', clock_show_greeting: 'Показывать приветствие',
+  coming_soon: 'скоро',
 };
 
 const es: Dict = {
@@ -105,6 +113,10 @@ const es: Dict = {
   aria_bg_image: 'Imagen de fondo', aria_screenshot_tmpl: 'Plantilla del servicio de capturas',
   theme_system: 'Sistema', theme_system_title: 'Sistema (sigue tu sistema)',
   ph_example: 'Ejemplo',
+  widget_note: 'Nota', widget_clock: 'Reloj', widget_link: 'Tarjeta de enlace',
+  store_title: 'Añadir un mosaico', add: '+ Añadir', note_placeholder: 'Escribe una nota…',
+  clock_zone: 'Zona horaria', clock_label: 'Etiqueta', clock_show_greeting: 'Mostrar saludo',
+  coming_soon: 'próximamente',
 };
 
 const de: Dict = {
@@ -140,6 +152,10 @@ const de: Dict = {
   aria_bg_image: 'Hintergrundbild', aria_screenshot_tmpl: 'Screenshot-Dienst-Vorlage',
   theme_system: 'System', theme_system_title: 'System (folgt dem Betriebssystem)',
   ph_example: 'Beispiel',
+  widget_note: 'Notiz', widget_clock: 'Uhr', widget_link: 'Link-Karte',
+  store_title: 'Kachel hinzufügen', add: '+ Hinzufügen', note_placeholder: 'Notiz schreiben…',
+  clock_zone: 'Zeitzone', clock_label: 'Beschriftung', clock_show_greeting: 'Begrüßung anzeigen',
+  coming_soon: 'demnächst',
 };
 
 const fr: Dict = {
@@ -175,6 +191,10 @@ const fr: Dict = {
   aria_bg_image: 'Image de fond', aria_screenshot_tmpl: 'Modèle du service de captures',
   theme_system: 'Système', theme_system_title: 'Système (suit votre OS)',
   ph_example: 'Exemple',
+  widget_note: 'Note', widget_clock: 'Horloge', widget_link: 'Carte de lien',
+  store_title: 'Ajouter une tuile', add: '+ Ajouter', note_placeholder: 'Écrire une note…',
+  clock_zone: 'Fuseau horaire', clock_label: 'Étiquette', clock_show_greeting: 'Afficher le message',
+  coming_soon: 'bientôt',
 };
 
 export const messages: Record<Lang, Dict> = { en, ru, es, de, fr };
