@@ -1,9 +1,9 @@
-# Dialy — Speed Dial New Tab
+# Speed Dial - New Tab
 
 A fast, private, beautiful new‑tab dashboard for Chrome (Manifest V3). Speed‑dial tiles,
 widgets, and search in one clean page — **no ads, no tracking, completely free.**
 
-![Dialy](docs/dialy.jpg)
+![Speed Dial - New Tab](docs/screenshot.jpg)
 
 ## Features
 
