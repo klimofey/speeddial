@@ -49,6 +49,7 @@ export interface Settings {
   useScreenshots: boolean;       // off by default; sends URLs to a 3rd party when on
   screenshotTemplate: string;    // e.g. "https://service.example/{url}"
   showRecent: boolean;
+  showRecentLabel: boolean;
   showSearch: boolean;
   suggestProvider: SuggestProvider;
   language: Lang;

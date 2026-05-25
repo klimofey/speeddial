@@ -6,15 +6,16 @@ interface Props {
   sites: RecentSite[];
   onPin: (site: RecentSite) => void;
   loading?: boolean;
+  showLabel?: boolean;
 }
 
 const SKELETON_COUNT = 6;
 
-export function RecentRow({ sites, onPin, loading = false }: Props) {
+export function RecentRow({ sites, onPin, loading = false, showLabel = true }: Props) {
   if (loading) {
     return (
       <div class="recent-row">
-        <div class="recent-label">{t('recent')}</div>
+        {showLabel && <div class="recent-label">{t('recent')}</div>}
         <div class="recent-tiles">
           {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
             <div class="recent-tile recent-tile--skeleton" key={i} aria-hidden="true">
@@ -31,7 +32,7 @@ export function RecentRow({ sites, onPin, loading = false }: Props) {
 
   return (
     <div class="recent-row">
-      <div class="recent-label">{t('recent')}</div>
+      {showLabel && <div class="recent-label">{t('recent')}</div>}
       <div class="recent-tiles">
         {sites.map((s) => (
           <div class="recent-tile" key={s.origin}>

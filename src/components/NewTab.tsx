@@ -98,7 +98,7 @@ function Board() {
         </div>
       )}
       {!filter && settings.showRecent && (
-        <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
+        <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} showLabel={settings.showRecentLabel} />
       )}
       <DialGrid dials={gridDials} settings={settings} editing={editMode} zone="grid" onEdit={(d) => setEditing(d)} onDelete={removeDial} onSorted={handleSorted} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} onAdd={() => setShowStore(true)} />
 

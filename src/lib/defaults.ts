@@ -45,6 +45,7 @@ export const DEFAULT_SETTINGS: Settings = {
   useScreenshots: false,
   screenshotTemplate: '',
   showRecent: true,
+  showRecentLabel: true,
   showSearch: true,
   suggestProvider: 'duckduckgo',
   language: detectLang(),
