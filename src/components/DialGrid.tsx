@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import Sortable from 'sortablejs';
 import { Dial, Settings } from '../lib/types';
 import { DialCard } from './DialCard';
+import { t } from '../lib/i18n';
 
 interface Props {
   dials: Dial[];
@@ -10,11 +11,12 @@ interface Props {
   onDelete: (id: string) => void;
   onConfig?: (dial: Dial) => void;
   onReorder: (orderedIds: string[]) => void;
+  onAdd?: () => void;
   editing?: boolean;
   onResize?: (id: string, size: { w: number; h: number }) => void;
 }
 
-export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorder, editing = false, onResize }: Props) {
+export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorder, onAdd, editing = false, onResize }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,6 +49,9 @@ export function DialGrid({ dials, settings, onEdit, onDelete, onConfig, onReorde
           onResize={onResize}
         />
       ))}
+      {onAdd && (
+        <button type="button" class="dial-add" aria-label={t('add')} onClick={onAdd}>+</button>
+      )}
     </div>
   );
 }

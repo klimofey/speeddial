@@ -7,28 +7,28 @@ vi.mock('sortablejs', () => ({ default: { create: vi.fn(() => ({ destroy: vi.fn(
 describe('NewTab', () => {
   it('renders the add button after load', async () => {
     render(<NewTab />);
-    await waitFor(() => expect(screen.getByText('+ Add')).toBeTruthy());
+    await waitFor(() => expect(screen.getByLabelText('+ Add')).toBeTruthy());
   });
 
   it('opens the Store when add is clicked', async () => {
     render(<NewTab />);
-    await waitFor(() => screen.getByText('+ Add'));
-    fireEvent.click(screen.getByText('+ Add'));
+    await waitFor(() => screen.getByLabelText('+ Add'));
+    fireEvent.click(screen.getByLabelText('+ Add'));
     expect(screen.getByText('Add a tile')).toBeTruthy();
   });
 
   it('opens card editor when Link card is chosen from Store', async () => {
     render(<NewTab />);
-    await waitFor(() => screen.getByText('+ Add'));
-    fireEvent.click(screen.getByText('+ Add'));
+    await waitFor(() => screen.getByLabelText('+ Add'));
+    fireEvent.click(screen.getByLabelText('+ Add'));
     fireEvent.click(screen.getByText('Link card'));
     expect(screen.getByText('Add card')).toBeTruthy();
   });
 
   it('adds a widget tile when Note is chosen from Store', async () => {
     render(<NewTab />);
-    await waitFor(() => screen.getByText('+ Add'));
-    fireEvent.click(screen.getByText('+ Add'));
+    await waitFor(() => screen.getByLabelText('+ Add'));
+    fireEvent.click(screen.getByLabelText('+ Add'));
     fireEvent.click(screen.getByText('Note'));
     await waitFor(() => expect(document.querySelector('.widget-card')).toBeTruthy());
   });
