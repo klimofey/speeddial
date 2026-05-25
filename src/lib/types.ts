@@ -6,16 +6,18 @@ export type CardSize = 'sm' | 'md' | 'lg';
 export type SuggestProvider = 'off' | 'duckduckgo' | 'google';
 export type Lang = 'en' | 'ru' | 'es' | 'de' | 'fr';
 
-export type WidgetType = 'note' | 'clock' | 'translator' | 'bookmarks';
+export type WidgetType = 'note' | 'clock' | 'translator' | 'bookmarks' | 'tabgroups';
 export interface NoteConfig { text: string; }
 export interface ClockConfig { timeZone: string; label: string; showGreeting: boolean; format: '24h' | '12h'; }
 export interface TranslatorConfig { target: string; cloudFallback: boolean; }
 export interface BookmarksConfig { folderId: string; }
+export type TabGroupsConfig = Record<string, never>;
 export type WidgetInstance =
   | { type: 'note'; config: NoteConfig }
   | { type: 'clock'; config: ClockConfig }
   | { type: 'translator'; config: TranslatorConfig }
-  | { type: 'bookmarks'; config: BookmarksConfig };
+  | { type: 'bookmarks'; config: BookmarksConfig }
+  | { type: 'tabgroups'; config: TabGroupsConfig };
 
 export interface Dial {
   id: string;

@@ -175,6 +175,12 @@ body {
 .w-bm-fav { width: 16px; height: 16px; border-radius: 4px; flex: 0 0 auto; }
 .w-bm-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .w-bm-edit { display: flex; flex-direction: column; gap: 6px; }
+.w-tg { width: 100%; height: 100%; overflow: auto; padding: 6px; box-sizing: border-box; }
+.w-tg-center { display: flex; align-items: center; justify-content: center; }
+.w-tg-group { margin-bottom: 8px; }
+.w-tg-head { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 2px 6px; }
+.w-tg-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.w-tg-edit { display: flex; flex-direction: column; gap: 6px; }
 .w-grant { padding: 8px 14px; border-radius: 8px; border: var(--card-border); background: var(--accent); color: #fff; cursor: pointer; }
 
 .store-section { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 10px 0 4px; }

@@ -4,6 +4,7 @@ import { NoteRender, NoteConfigEditor } from './NoteWidget';
 import { ClockRender, ClockConfigEditor } from './ClockWidget';
 import { TranslatorRender, TranslatorConfigEditor } from './TranslatorWidget';
 import { BookmarksRender, BookmarksConfigEditor } from './BookmarksWidget';
+import { TabGroupsRender, TabGroupsConfigEditor } from './TabGroupsWidget';
 
 export interface WidgetDef {
   type: WidgetType;
@@ -29,6 +30,8 @@ export const WIDGETS: WidgetDef[] = [
     Render: TranslatorRender as unknown as WidgetDef['Render'], ConfigEditor: TranslatorConfigEditor as unknown as WidgetDef['ConfigEditor'] },
   { type: 'bookmarks', nameKey: 'widget_bookmarks', icon: '🔖', defaultSize: { w: 2, h: 2 }, defaultConfig: bookmarksDefault,
     Render: BookmarksRender as unknown as WidgetDef['Render'], ConfigEditor: BookmarksConfigEditor as unknown as WidgetDef['ConfigEditor'] },
+  { type: 'tabgroups', nameKey: 'widget_tabgroups', icon: '🗂️', defaultSize: { w: 2, h: 2 }, defaultConfig: {},
+    Render: TabGroupsRender as unknown as WidgetDef['Render'], ConfigEditor: TabGroupsConfigEditor as unknown as WidgetDef['ConfigEditor'] },
 ];
 
 export function getWidget(type: WidgetType): WidgetDef | undefined {
