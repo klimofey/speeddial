@@ -12,6 +12,7 @@ import { getRecentSites, RecentSite } from '../lib/recent';
 import { RecentRow } from './RecentRow';
 import { Store } from './widgets/Store';
 import { getWidget } from './widgets/registry';
+import { Onboarding } from './Onboarding';
 
 function Board() {
   const { ready, dials, settings, addDial, addWidget, updateDial, removeDial, applyLayout, resizeDial, updateSettings, reload } = useApp();
@@ -86,6 +87,7 @@ function Board() {
 
   return (
     <div class="board">
+      {!settings.onboarded && <Onboarding onDone={() => updateSettings({ onboarded: true })} />}
       <button class="settings-gear" aria-label={t('open_settings')} onClick={() => setShowSettings(true)}>⚙</button>
       <button class="edit-toggle" onClick={() => setEditMode((v) => !v)}>{editMode ? t('done') : t('edit')}</button>
 

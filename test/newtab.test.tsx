@@ -1,10 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/preact';
 import { NewTab } from '../src/components/NewTab';
+import * as storage from '../src/lib/storage';
+import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
 vi.mock('sortablejs', () => ({ default: { create: vi.fn(() => ({ destroy: vi.fn() })) } }));
 
 describe('NewTab', () => {
+  beforeEach(async () => { await storage.setSettings({ ...DEFAULT_SETTINGS, onboarded: true }); });
+
   it('renders the add button after load', async () => {
     render(<NewTab />);
     await waitFor(() => expect(screen.getByLabelText('+ Add')).toBeTruthy());

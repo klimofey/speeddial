@@ -49,6 +49,7 @@ export const DEFAULT_SETTINGS: Settings = {
   showSearch: true,
   suggestProvider: 'duckduckgo',
   language: detectLang(),
+  onboarded: false,
 };
 
 export const DEFAULT_DIALS: Dial[] = [
