@@ -158,8 +158,11 @@ body {
 .w-note-edit { width: 100%; }
 /* container-type lets the children size in cq units, so the clock scales with the cell. */
 .w-clock { container-type: size; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.w-clock-time { font-size: clamp(18px, 26cqmin, 84px); font-weight: 700; line-height: 1.1; }
-.w-clock-greeting, .w-clock-label { font-size: clamp(9px, 9cqmin, 24px); color: var(--muted); }
+/* Scale by BOTH width and height (min so it never overflows): widening OR heightening
+   the clock grows the text, instead of only the smaller side (cqmin) counting. */
+.w-clock-time { font-size: clamp(16px, min(36cqw, 52cqh), 160px); font-weight: 700; line-height: 1.05; }
+.w-clock-greeting, .w-clock-label { font-size: clamp(9px, min(11cqw, 16cqh), 22px); color: var(--muted);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .w-clock-edit { display: flex; flex-direction: column; gap: 6px; }
 .w-unknown { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--muted); font-size: 24px; }
 
