@@ -62,6 +62,23 @@ if (typeof g.chrome === 'undefined' || !g.chrome.storage) {
         ] }];
       },
     },
+    tabGroups: {
+      async query() {
+        return [
+          { id: 1, title: 'Work', color: 'blue' },
+          { id: 2, title: 'Reading', color: 'red' },
+        ];
+      },
+    },
+    tabs: {
+      async query({ groupId }: { groupId?: number } = {}) {
+        if (groupId === 2) return [{ title: 'Hacker News', url: 'https://news.ycombinator.com' }];
+        return [
+          { title: 'Gmail', url: 'https://mail.google.com' },
+          { title: 'Google Calendar', url: 'https://calendar.google.com' },
+        ];
+      },
+    },
     runtime: { getURL: (p: string) => p, lastError: undefined },
   } as never;
   // eslint-disable-next-line no-console

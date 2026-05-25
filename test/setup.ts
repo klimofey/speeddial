@@ -30,9 +30,11 @@ const permissions = { request: vi.fn(async () => true), contains: vi.fn(async ()
 
 type UpdateListener = (id: number, info: { status?: string }) => void;
 const tabUpdateListeners: UpdateListener[] = [];
+const tabGroups = { query: vi.fn(async () => [] as unknown[]) };
 const tabs = {
   create: vi.fn(async (_opts: unknown) => ({ id: 1 }) as { id?: number }),
   remove: vi.fn(async (_id: number) => {}),
+  query: vi.fn(async (_info?: unknown) => [] as unknown[]),
   onUpdated: {
     addListener: vi.fn((fn: UpdateListener) => { tabUpdateListeners.push(fn); }),
     removeListener: vi.fn((fn: UpdateListener) => {
@@ -54,11 +56,12 @@ const bookmarks = {
   history,
   permissions,
   tabs,
+  tabGroups,
   scripting,
   bookmarks,
 };
 
-export const mockChrome = { sync, local, history, permissions, tabs, scripting, bookmarks };
+export const mockChrome = { sync, local, history, permissions, tabs, tabGroups, scripting, bookmarks };
 
 beforeEach(() => { sync._reset(); local._reset(); tabUpdateListeners.length = 0; vi.clearAllMocks(); });
 
