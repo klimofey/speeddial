@@ -8,7 +8,7 @@ import { DEFAULT_SETTINGS } from '../src/lib/defaults';
 
 describe('widget registry', () => {
   it('lists note and clock with default sizes', () => {
-    expect(WIDGETS.map((w) => w.type).sort()).toEqual(['clock', 'note', 'translator']);
+    expect(WIDGETS.map((w) => w.type).sort()).toEqual(['bookmarks', 'clock', 'note', 'translator']);
     expect(getWidget('note')?.defaultSize).toEqual({ w: 2, h: 1 });
   });
   it('getWidget returns undefined for unknown', () => {

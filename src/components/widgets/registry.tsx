@@ -1,8 +1,9 @@
 import { ComponentType } from 'preact';
-import { WidgetType, WidgetInstance, Settings, NoteConfig, ClockConfig, TranslatorConfig } from '../../lib/types';
+import { WidgetType, WidgetInstance, Settings, NoteConfig, ClockConfig, TranslatorConfig, BookmarksConfig } from '../../lib/types';
 import { NoteRender, NoteConfigEditor } from './NoteWidget';
 import { ClockRender, ClockConfigEditor } from './ClockWidget';
 import { TranslatorRender, TranslatorConfigEditor } from './TranslatorWidget';
+import { BookmarksRender, BookmarksConfigEditor } from './BookmarksWidget';
 
 export interface WidgetDef {
   type: WidgetType;
@@ -17,6 +18,7 @@ export interface WidgetDef {
 const noteDefault: NoteConfig = { text: '' };
 const clockDefault: ClockConfig = { timeZone: '', label: '', showGreeting: true, format: '24h' };
 const translatorDefault: TranslatorConfig = { target: 'en', cloudFallback: false };
+const bookmarksDefault: BookmarksConfig = { folderId: '' };
 
 export const WIDGETS: WidgetDef[] = [
   { type: 'note', nameKey: 'widget_note', icon: '📝', defaultSize: { w: 2, h: 1 }, defaultConfig: noteDefault,
@@ -25,6 +27,8 @@ export const WIDGETS: WidgetDef[] = [
     Render: ClockRender as unknown as WidgetDef['Render'], ConfigEditor: ClockConfigEditor as unknown as WidgetDef['ConfigEditor'] },
   { type: 'translator', nameKey: 'widget_translator', icon: '🌐', defaultSize: { w: 2, h: 2 }, defaultConfig: translatorDefault,
     Render: TranslatorRender as unknown as WidgetDef['Render'], ConfigEditor: TranslatorConfigEditor as unknown as WidgetDef['ConfigEditor'] },
+  { type: 'bookmarks', nameKey: 'widget_bookmarks', icon: '🔖', defaultSize: { w: 2, h: 2 }, defaultConfig: bookmarksDefault,
+    Render: BookmarksRender as unknown as WidgetDef['Render'], ConfigEditor: BookmarksConfigEditor as unknown as WidgetDef['ConfigEditor'] },
 ];
 
 export function getWidget(type: WidgetType): WidgetDef | undefined {
