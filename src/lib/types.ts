@@ -8,7 +8,7 @@ export type Lang = 'en' | 'ru' | 'es' | 'de' | 'fr';
 
 export type WidgetType = 'note' | 'clock';
 export interface NoteConfig { text: string; }
-export interface ClockConfig { timeZone: string; label: string; showGreeting: boolean; }
+export interface ClockConfig { timeZone: string; label: string; showGreeting: boolean; format: '24h' | '12h'; }
 export type WidgetInstance =
   | { type: 'note'; config: NoteConfig }
   | { type: 'clock'; config: ClockConfig };
@@ -48,7 +48,6 @@ export interface Settings {
   showRecent: boolean;
   suggestProvider: SuggestProvider;
   language: Lang;
-  clockFormat: '24h' | '12h';
 }
 
 export interface StoredImage {

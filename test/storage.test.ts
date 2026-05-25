@@ -14,8 +14,8 @@ describe('storage', () => {
   });
 
   it('round-trips settings through sync', async () => {
-    await storage.setSettings({ ...DEFAULT_SETTINGS, clockFormat: '12h' });
-    expect((await storage.getSettings()).clockFormat).toBe('12h');
+    await storage.setSettings({ ...DEFAULT_SETTINGS, showRecent: false });
+    expect((await storage.getSettings()).showRecent).toBe(false);
   });
 
   it('seeds the default clock widget when nothing is stored', async () => {
