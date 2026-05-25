@@ -87,8 +87,7 @@ function Board() {
       {!filter && settings.showRecent && (
         <RecentRow sites={recentSites} onPin={onPinRecent} loading={recentLoading} />
       )}
-      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} />
-      <button class="add-card" onClick={() => setShowStore(true)}>{t('add')}</button>
+      <DialGrid dials={visible} settings={settings} editing={editMode} onEdit={(d) => setEditing(d)} onDelete={removeDial} onReorder={reorderDials} onResize={resizeDial} onConfig={(d) => setConfiguring(d)} onAdd={() => setShowStore(true)} />
 
       {editing !== undefined && (
         <CardEditor settings={settings} initial={editing ?? undefined} onSave={onSave} onClose={() => setEditing(undefined)} />

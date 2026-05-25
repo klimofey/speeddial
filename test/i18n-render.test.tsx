@@ -12,6 +12,6 @@ describe('localized render', () => {
   it('renders the add button in Russian when language is ru', async () => {
     await storage.setSettings({ ...DEFAULT_SETTINGS, language: 'ru' });
     render(<NewTab />);
-    await waitFor(() => expect(screen.getByText('+ Добавить')).toBeTruthy());
+    await waitFor(() => expect(screen.getByLabelText('+ Добавить')).toBeTruthy());
   });
 });
