@@ -9,9 +9,9 @@ vi.mock('sortablejs', () => ({ default: { create: vi.fn(() => ({ destroy: vi.fn(
 afterEach(() => setLang('en'));
 
 describe('localized render', () => {
-  it('renders the add-card button in Russian when language is ru', async () => {
+  it('renders the add button in Russian when language is ru', async () => {
     await storage.setSettings({ ...DEFAULT_SETTINGS, language: 'ru' });
     render(<NewTab />);
-    await waitFor(() => expect(screen.getByText('+ Добавить карточку')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('+ Добавить')).toBeTruthy());
   });
 });

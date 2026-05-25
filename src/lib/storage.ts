@@ -1,5 +1,5 @@
 import { Settings, Dial, StoredImage } from './types';
-import { DEFAULT_SETTINGS } from './defaults';
+import { DEFAULT_SETTINGS, DEFAULT_DIALS } from './defaults';
 
 const K_SETTINGS = 'settings';
 const K_DIALS = 'dials';
@@ -42,8 +42,11 @@ export async function setSettings(settings: Settings): Promise<void> {
 }
 
 export async function getDials(): Promise<Dial[]> {
-  const dials = await getSynced<Dial[]>(K_DIALS, []);
-  return [...dials]
+  // `undefined` distinguishes "never stored" (seed the default) from an
+  // explicitly-stored empty array (respect the user's empty board).
+  const stored = await getSynced<Dial[] | undefined>(K_DIALS, undefined);
+  const base = stored ?? DEFAULT_DIALS;
+  return [...base]
     .sort((a, b) => a.order - b.order)
     .map((d) => ({ ...d, size: d.size ?? { w: 1, h: 1 } }));
 }

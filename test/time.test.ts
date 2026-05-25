@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatTime, listTimeZones, labelForZone, splitWorldClocks } from '../src/lib/time';
+import { formatTime, listTimeZones, labelForZone } from '../src/lib/time';
 
 describe('formatTime', () => {
   const noonUtc = new Date('2026-05-24T12:00:00Z');
@@ -29,17 +29,5 @@ describe('listTimeZones', () => {
     const zones = listTimeZones();
     expect(zones.length).toBeGreaterThan(0);
     expect(zones).toContain('UTC');
-  });
-});
-
-describe('splitWorldClocks', () => {
-  it('splits an even count in half', () => {
-    expect(splitWorldClocks([1, 2, 3, 4])).toEqual({ left: [1, 2], right: [3, 4] });
-  });
-  it('puts the extra item on the left for an odd count', () => {
-    expect(splitWorldClocks([1, 2, 3])).toEqual({ left: [1, 2], right: [3] });
-  });
-  it('handles an empty list', () => {
-    expect(splitWorldClocks([])).toEqual({ left: [], right: [] });
   });
 });

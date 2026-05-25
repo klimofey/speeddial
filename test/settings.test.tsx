@@ -30,11 +30,18 @@ describe('Settings background picker', () => {
   });
 });
 
-describe('Settings without clock controls', () => {
-  it('no longer renders clock controls', () => {
+describe('Settings clock format control', () => {
+  it('no longer renders the old world-clock controls', () => {
     render(<Settings settings={DEFAULT_SETTINGS} onChange={() => {}} onClose={() => {}} onRestored={() => {}} />);
-    expect(screen.queryByLabelText('Clock format')).toBeNull();
     expect(screen.queryByLabelText('World clocks')).toBeNull();
+    expect(screen.queryByLabelText('Show clock')).toBeNull();
+  });
+
+  it('renders the clock-format select and emits the chosen format', () => {
+    const onChange = vi.fn();
+    render(<Settings settings={DEFAULT_SETTINGS} onChange={onChange} onClose={() => {}} onRestored={() => {}} />);
+    fireEvent.change(screen.getByLabelText('Clock format'), { target: { value: '12h' } });
+    expect(onChange).toHaveBeenCalledWith({ clockFormat: '12h' });
   });
 });
 
